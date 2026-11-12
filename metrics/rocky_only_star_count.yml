@@ -1,0 +1,9 @@
+unique_name: Rocky Only Star Count
+object_type: metric
+label: Rocky Only Star Count
+description: How many of the selected stars have one or more rocky planets and no gas giant - System Composition
+  'Rocky Only'. 27 of 2509 warehouse-wide.
+dataset: Star Detail
+column: rocky_only_indicator
+calculation_method: sum
+unrelated_dimensions_handling: error

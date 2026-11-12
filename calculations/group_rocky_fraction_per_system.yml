@@ -1,0 +1,9 @@
+unique_name: Group Rocky Fraction Per System
+object_type: metric_calc
+label: Group Rocky Fraction Per System
+description: Rocky planets divided by planets with a density, for the selected stars - the rocky fraction
+  of a system's measured planets. Warehouse-wide 74/388, or 0.19072. At a single star it is that star's
+  own fraction, which is 1 for the 49 stars whose every measured planet is rocky.
+expression: CASE WHEN ISEMPTY([Measures].[Total Star Planets With Density]) OR [Measures].[Total Star
+  Planets With Density] = 0 THEN NULL ELSE [Measures].[Total Star Rocky Planets] / [Measures].[Total Star
+  Planets With Density] END

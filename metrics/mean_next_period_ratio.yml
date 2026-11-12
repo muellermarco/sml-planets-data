@@ -1,0 +1,9 @@
+unique_name: Mean Next Period Ratio
+object_type: metric
+label: Mean Next Period Ratio
+description: Mean ratio between adjacent planets' periods, over planets. 20.361 across 861 planets. For
+  the per-system figure use the star-level measures, which average the ratios inside each system first.
+dataset: Planet Detail
+column: next_planet_period_ratio_measure
+calculation_method: average
+unrelated_dimensions_handling: error

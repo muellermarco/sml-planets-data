@@ -1,0 +1,8 @@
+unique_name: TTV Observed Planet Count
+object_type: metric
+label: TTV Observed Planet Count
+description: How many of the selected planets carry a TTV observation record. 225 of 3372 warehouse-wide.
+dataset: Planet Detail
+column: ttv_observation_indicator_measure
+calculation_method: sum
+unrelated_dimensions_handling: error

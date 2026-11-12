@@ -1,0 +1,8 @@
+unique_name: Mean Mass Relative Uncertainty
+object_type: metric
+label: Mean Mass Relative Uncertainty
+description: Mean relative uncertainty in the planet mass, as a percentage. 30.343 across 987 planets.
+dataset: Planet Detail
+column: mass_relative_uncertainty_measure
+calculation_method: average
+unrelated_dimensions_handling: error

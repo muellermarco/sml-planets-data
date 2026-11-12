@@ -1,0 +1,7 @@
+unique_name: Inflated Gas Giant Rate
+object_type: metric_calc
+label: Inflated Gas Giant Rate
+description: Among planets carrying a density, the share that are inflated gas giants. A FRACTION from
+  0 to 1.
+expression: CASE WHEN ISEMPTY([Measures].[Planets With A Density]) OR [Measures].[Planets With A Density]
+  = 0 THEN NULL ELSE [Measures].[Inflated Gas Giant Count] / [Measures].[Planets With A Density] END

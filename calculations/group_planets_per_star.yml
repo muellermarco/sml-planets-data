@@ -1,0 +1,8 @@
+unique_name: Group Planets Per Star
+object_type: metric_calc
+label: Group Planets Per Star
+description: Planets divided by host stars, for the current selection - planets per system. Warehouse-wide
+  3372/2509, or 1.344.
+expression: CASE WHEN ISEMPTY([Measures].[Distinct Star Count On Planets]) OR [Measures].[Distinct Star
+  Count On Planets] = 0 THEN NULL ELSE [Measures].[Planet Count] / [Measures].[Distinct Star Count On
+  Planets] END

@@ -1,0 +1,9 @@
+unique_name: Star Count
+object_type: metric
+label: Star Count
+description: How many host stars, number of stars, number of systems. All 2509, each hosting at least
+  one planet.
+dataset: Star Detail
+column: star_row_count
+calculation_method: sum
+unrelated_dimensions_handling: error

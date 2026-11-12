@@ -1,0 +1,8 @@
+unique_name: Mean Orbital Velocity
+object_type: metric
+label: Mean Orbital Velocity
+description: Mean orbital velocity in kilometres per second. 82.094 across 1593 planets.
+dataset: Planet Detail
+column: orbital_velocity_kms_measure
+calculation_method: average
+unrelated_dimensions_handling: error

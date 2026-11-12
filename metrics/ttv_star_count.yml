@@ -1,0 +1,8 @@
+unique_name: TTV Star Count
+object_type: metric
+label: TTV Star Count
+description: How many of the selected stars carry a planet with a TTV observation record, over the 2509 host stars.
+dataset: Star Detail
+column: ttv_observation_indicator_measure
+calculation_method: sum
+unrelated_dimensions_handling: error

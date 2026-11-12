@@ -1,0 +1,9 @@
+unique_name: Rocky Planet Count
+object_type: metric
+label: Rocky Planet Count
+description: How many of the selected planets are rocky - a density above 3. 74 of the 388 with a density
+  warehouse-wide.
+dataset: Planet Detail
+column: rocky_indicator
+calculation_method: sum
+unrelated_dimensions_handling: error

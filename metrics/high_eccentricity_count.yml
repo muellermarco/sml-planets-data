@@ -1,0 +1,9 @@
+unique_name: High Eccentricity Count
+object_type: metric
+label: High Eccentricity Count
+description: How many of the selected planets have an eccentricity above 0.25. 249 of the 974 with an
+  eccentricity warehouse-wide.
+dataset: Planet Detail
+column: high_eccentricity_indicator
+calculation_method: sum
+unrelated_dimensions_handling: error

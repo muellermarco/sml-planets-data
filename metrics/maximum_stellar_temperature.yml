@@ -1,0 +1,8 @@
+unique_name: Maximum Stellar Temperature
+object_type: metric
+label: Maximum Stellar Temperature
+description: Hottest star among the selection. 57,000 K warehouse-wide.
+dataset: Star Detail
+column: stellar_temperature
+calculation_method: maximum
+unrelated_dimensions_handling: error

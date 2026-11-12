@@ -1,0 +1,8 @@
+unique_name: Distance Upper Limit Count
+object_type: metric
+label: Distance Upper Limit Count
+description: How many of the selected planets have a host-star distance that is an upper limit. ZERO warehouse-wide.
+dataset: Planet Detail
+column: distance_upper_limit_indicator
+calculation_method: sum
+unrelated_dimensions_handling: error

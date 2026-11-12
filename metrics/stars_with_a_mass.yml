@@ -1,0 +1,9 @@
+unique_name: Stars With A Mass
+object_type: metric
+label: Stars With A Mass
+description: How many of the selected stars record a mass. 2357 of 2509 warehouse-wide - the support set
+  for the gravitational parameter.
+dataset: Star Detail
+column: has_stellar_mass
+calculation_method: sum
+unrelated_dimensions_handling: error

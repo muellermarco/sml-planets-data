@@ -1,0 +1,9 @@
+unique_name: Planets With A Next Period Ratio
+object_type: metric
+label: Planets With A Next Period Ratio
+description: How many of the selected planets have a longer-period sibling, and so an adjacent period
+  ratio. 861 of 3372 warehouse-wide.
+dataset: Planet Detail
+column: has_next_planet_period_ratio
+calculation_method: sum
+unrelated_dimensions_handling: error

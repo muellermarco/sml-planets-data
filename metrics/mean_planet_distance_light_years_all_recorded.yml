@@ -1,0 +1,10 @@
+unique_name: Mean Planet Distance Light Years (All Recorded)
+object_type: metric
+label: Mean Planet Distance Light Years (All Recorded)
+description: Mean distance to the selected planets' host stars, in light-years. 2035.0 across the 2296
+  planets whose star records a distance, whatever its quality flags say. Mean Planet Distance Light Years is the same mean over only the flag-clean measurements; a question that wants
+  solid, reliable distances may mean either screen - ask which.
+dataset: Planet Detail
+column: stellar_distance_ly_measure
+calculation_method: average
+unrelated_dimensions_handling: error

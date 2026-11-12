@@ -1,0 +1,9 @@
+unique_name: Kepler Star Count
+object_type: metric
+label: Kepler Star Count
+description: How many of the selected stars have a planet observed by the Kepler mission. 1644 of 2509
+  warehouse-wide.
+dataset: Star Detail
+column: kepler_observation_indicator_measure
+calculation_method: sum
+unrelated_dimensions_handling: error

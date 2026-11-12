@@ -1,0 +1,9 @@
+unique_name: Mean Planet Mass Earth
+object_type: metric
+label: Mean Planet Mass Earth
+description: Mean planet mass in Earth masses. 835.37 across 1174 planets - the same figure multiplied
+  by 317.83.
+dataset: Planet Detail
+column: planet_mass_earth_measure
+calculation_method: average
+unrelated_dimensions_handling: error

@@ -1,0 +1,9 @@
+unique_name: Gas Giant Count
+object_type: metric
+label: Gas Giant Count
+description: How many of the selected planets are gas giants - a mass above 0.1 Jupiter masses. 929 of
+  the 1174 planets with a mass warehouse-wide.
+dataset: Planet Detail
+column: gas_giant_indicator
+calculation_method: sum
+unrelated_dimensions_handling: error

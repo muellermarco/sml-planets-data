@@ -1,0 +1,9 @@
+unique_name: Group Surface Gravity (Pooled)
+object_type: metric_calc
+label: Group Surface Gravity (Pooled)
+description: Surface gravity recomputed for the whole selected group from the mean mass and mean radius
+  in Earth units, rather than averaged per planet. Warehouse-wide 835.37 / 3.8333 squared, or 56.85, against
+  a per-planet mean of 22.225. The two differ because the ratio of means is not the mean of ratios.
+expression: CASE WHEN ISEMPTY([Measures].[Mean Planet Radius Earth]) OR [Measures].[Mean Planet Radius
+  Earth] = 0 THEN NULL ELSE [Measures].[Mean Planet Mass Earth] / ([Measures].[Mean Planet Radius Earth]
+  * [Measures].[Mean Planet Radius Earth]) END

@@ -1,0 +1,9 @@
+unique_name: Hot Jupiter Count
+object_type: metric
+label: Hot Jupiter Count
+description: How many of the selected planets are hot Jupiters - both a gas giant and short-period. None
+  of them is also retrograde.
+dataset: Planet Detail
+column: hot_jupiter_indicator
+calculation_method: sum
+unrelated_dimensions_handling: error

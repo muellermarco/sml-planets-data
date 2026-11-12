@@ -1,0 +1,8 @@
+unique_name: Survey Facility Count
+object_type: metric
+label: Survey Facility Count
+description: 'How many observing facilities. Exactly 3: ''kep'', ''k2'' and ''ttv''.'
+dataset: Survey Facility Detail
+column: facility_row_count
+calculation_method: sum
+unrelated_dimensions_handling: error

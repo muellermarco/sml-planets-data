@@ -1,0 +1,8 @@
+unique_name: Stars With A Density
+object_type: metric
+label: Stars With A Density
+description: How many of the selected stars have a computable mean density. 2117 of 2509 warehouse-wide.
+dataset: Star Detail
+column: has_stellar_density_solar
+calculation_method: sum
+unrelated_dimensions_handling: error

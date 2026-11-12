@@ -1,0 +1,12 @@
+unique_name: Group Mass Ratio (Pooled)
+object_type: metric_calc
+label: Group Mass Ratio (Pooled)
+description: 'The planet-to-star mass ratio recomputed for the WHOLE selected group from aggregated masses
+  rather than averaged per planet: the mean planet mass in kilograms (Jupiter masses times 1.898E27) over
+  the mean stellar mass in kilograms (solar masses times 1.98847E30). Warehouse-wide 2.6284 x 1.898E27
+  / (0.99986 x 1.98847E30), or 0.0025091, against a per-planet mean of 0.0058646 - the gap is large because
+  the per-planet mean is pulled up by low-mass hosts. Quote the pooled figure for a population and the
+  mean for a typical planet.'
+expression: CASE WHEN ISEMPTY([Measures].[Mean Stellar Mass]) OR [Measures].[Mean Stellar Mass] = 0 THEN
+  NULL ELSE [Measures].[Mean Planet Mass Jupiter] * 1898.0 / 1988470.0 / [Measures].[Mean Stellar Mass]
+  END

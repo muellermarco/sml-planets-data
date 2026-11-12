@@ -1,0 +1,8 @@
+unique_name: Stars With A Temperature
+object_type: metric
+label: Stars With A Temperature
+description: How many of the selected stars record an effective temperature. 2379 of 2509 warehouse-wide.
+dataset: Star Detail
+column: has_stellar_temperature
+calculation_method: sum
+unrelated_dimensions_handling: error

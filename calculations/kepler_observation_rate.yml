@@ -1,0 +1,7 @@
+unique_name: Kepler Observation Rate
+object_type: metric_calc
+label: Kepler Observation Rate
+description: The proportion of the selected planets observed by the Kepler mission. A FRACTION from 0
+  to 1; warehouse-wide 2329/3372, or 0.69069.
+expression: CASE WHEN ISEMPTY([Measures].[Planet Count]) OR [Measures].[Planet Count] = 0 THEN NULL ELSE
+  [Measures].[Kepler Observed Planet Count] / [Measures].[Planet Count] END

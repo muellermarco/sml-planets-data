@@ -1,0 +1,10 @@
+unique_name: Temperature Blend Count
+object_type: metric
+label: Temperature Blend Count
+description: How many of the selected planets have a host-star temperature flagged as contaminated by
+  companion light. ZERO warehouse-wide - the flag is 0 on all 3219 planets that carry it. So no planet
+  has a bad temperature reading in this warehouse, whichever survey found it.
+dataset: Planet Detail
+column: temperature_blend_indicator
+calculation_method: sum
+unrelated_dimensions_handling: error

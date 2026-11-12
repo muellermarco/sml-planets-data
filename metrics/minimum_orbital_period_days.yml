@@ -1,0 +1,9 @@
+unique_name: Minimum Orbital Period Days
+object_type: metric
+label: Minimum Orbital Period Days
+description: Shortest orbital period among the selected planets. 0.0907 days warehouse-wide - about two
+  hours.
+dataset: Planet Detail
+column: orbital_period_days
+calculation_method: minimum
+unrelated_dimensions_handling: error

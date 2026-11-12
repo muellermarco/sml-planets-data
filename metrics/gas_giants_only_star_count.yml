@@ -1,0 +1,9 @@
+unique_name: Gas Giants Only Star Count
+object_type: metric
+label: Gas Giants Only Star Count
+description: How many of the selected stars have one or more gas giants and no rocky planet - System Composition
+  'Gas Giants Only'. 782 of 2509 warehouse-wide.
+dataset: Star Detail
+column: gas_giants_only_indicator
+calculation_method: sum
+unrelated_dimensions_handling: error

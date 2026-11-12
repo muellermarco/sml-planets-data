@@ -1,0 +1,9 @@
+unique_name: Maximum Surface Gravity
+object_type: metric
+label: Maximum Surface Gravity
+description: Strongest surface gravity among the selection. 1254.7 Earth gravities warehouse-wide; among
+  super-Earths the strongest is 11.693, on Kepler-131 c.
+dataset: Planet Detail
+column: surface_gravity
+calculation_method: maximum
+unrelated_dimensions_handling: error

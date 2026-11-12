@@ -1,0 +1,8 @@
+unique_name: Total Star Gas Giants
+object_type: metric
+label: Total Star Gas Giants
+description: Gas giants added across the selected stars. 929 warehouse-wide.
+dataset: Star Detail
+column: star_gas_giant_count_measure
+calculation_method: sum
+unrelated_dimensions_handling: error

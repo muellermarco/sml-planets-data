@@ -1,0 +1,8 @@
+unique_name: Stars With A Radius
+object_type: metric
+label: Stars With A Radius
+description: How many of the selected stars record a radius. 2228 of 2509 warehouse-wide.
+dataset: Star Detail
+column: has_stellar_radius
+calculation_method: sum
+unrelated_dimensions_handling: error

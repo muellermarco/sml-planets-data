@@ -1,0 +1,8 @@
+unique_name: Total Star Transit Discoveries
+object_type: metric
+label: Total Star Transit Discoveries
+description: Transit discoveries added across the selected stars. 2664 warehouse-wide.
+dataset: Star Detail
+column: star_transit_discovery_count_measure
+calculation_method: sum
+unrelated_dimensions_handling: error

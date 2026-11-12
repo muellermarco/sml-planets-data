@@ -1,0 +1,9 @@
+unique_name: Planets With A Surface Gravity
+object_type: metric
+label: Planets With A Surface Gravity
+description: How many of the selected planets have a computable surface gravity, which needs both a mass
+  and a radius. 509 of 3372 warehouse-wide. The same 509 have an escape velocity and a mass-radius ratio.
+dataset: Planet Detail
+column: has_surface_gravity
+calculation_method: sum
+unrelated_dimensions_handling: error

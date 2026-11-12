@@ -1,0 +1,8 @@
+unique_name: Planets With An Orbital Velocity
+object_type: metric
+label: Planets With An Orbital Velocity
+description: How many of the selected planets have a computable orbital velocity. 1593 of 3372 warehouse-wide.
+dataset: Planet Detail
+column: has_orbital_velocity_ms
+calculation_method: sum
+unrelated_dimensions_handling: error

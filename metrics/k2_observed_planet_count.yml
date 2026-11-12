@@ -1,0 +1,8 @@
+unique_name: K2 Observed Planet Count
+object_type: metric
+label: K2 Observed Planet Count
+description: How many of the selected planets were observed by K2. 129 of 3372 warehouse-wide.
+dataset: Planet Detail
+column: k2_observation_indicator_measure
+calculation_method: sum
+unrelated_dimensions_handling: error

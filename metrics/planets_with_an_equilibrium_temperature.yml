@@ -1,0 +1,10 @@
+unique_name: Planets With An Equilibrium Temperature
+object_type: metric
+label: Planets With An Equilibrium Temperature
+description: How many of the selected planets have a computable equilibrium temperature, which needs a
+  stellar temperature, a stellar radius and a semi-major axis. 1533 of 3372 warehouse-wide. The same 1533
+  have a Goldilocks value.
+dataset: Planet Detail
+column: has_equilibrium_temperature
+calculation_method: sum
+unrelated_dimensions_handling: error

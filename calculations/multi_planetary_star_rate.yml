@@ -1,0 +1,7 @@
+unique_name: Multi Planetary Star Rate
+object_type: metric_calc
+label: Multi Planetary Star Rate
+description: The proportion of the selected stars that declare more than one companion. A FRACTION from
+  0 to 1; warehouse-wide 569/2509, or 0.22678.
+expression: CASE WHEN ISEMPTY([Measures].[Star Count]) OR [Measures].[Star Count] = 0 THEN NULL ELSE [Measures].[Multi
+  Planetary Star Count] / [Measures].[Star Count] END

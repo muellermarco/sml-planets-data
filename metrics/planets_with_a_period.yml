@@ -1,0 +1,8 @@
+unique_name: Planets With A Period
+object_type: metric
+label: Planets With A Period
+description: How many of the selected planets record an orbital period. 3305 of 3372 warehouse-wide.
+dataset: Planet Detail
+column: has_orbital_period_days
+calculation_method: sum
+unrelated_dimensions_handling: error

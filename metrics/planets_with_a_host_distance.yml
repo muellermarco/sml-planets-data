@@ -1,0 +1,8 @@
+unique_name: Planets With A Host Distance
+object_type: metric
+label: Planets With A Host Distance
+description: How many of the selected planets have a host-star distance. 2296 of 3372 warehouse-wide.
+dataset: Planet Detail
+column: has_stellar_distance_pc
+calculation_method: sum
+unrelated_dimensions_handling: error

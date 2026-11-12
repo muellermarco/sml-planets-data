@@ -1,0 +1,8 @@
+unique_name: Total Star Radial Velocity Discoveries
+object_type: metric
+label: Total Star Radial Velocity Discoveries
+description: Radial-velocity discoveries added across the selected stars. 591 warehouse-wide.
+dataset: Star Detail
+column: star_radial_velocity_count_measure
+calculation_method: sum
+unrelated_dimensions_handling: error

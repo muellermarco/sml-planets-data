@@ -1,0 +1,160 @@
+unique_name: Star Record
+object_type: dimension
+label: Star Record
+type: standard
+description: 'A host star - 2509 rows, every one of them hosting at least one planet. Coverage again decides
+  the answers: a distance exists for 1996 stars, a temperature for 2379, a mass for 2357, a magnitude
+  and a photometric band for 2400, a radius for 2228, and therefore a luminosity for 2207 and a density
+  for 2117. The star''s own companion count and the number of planet rows it actually carries agree on
+  all but ONE star, so the two readings of ''multi-planetary'' differ by a single row.'
+level_attributes:
+- unique_name: Star
+  label: Star
+  dataset: Star Detail
+  key_columns:
+  - star
+  name_column: star_name
+  description: Host star, keyed on its record number and displayed by name - star, host, catalogue name.
+    2509 distinct names, e.g. 11 Com, 55 Cnc, alf Tau, PSR J1719-1438. Names are stored in catalogue form,
+    so 'alf Tau' rather than 'Aldebaran'.
+  is_unique_key: true
+hierarchies:
+- unique_name: Star Record Hierarchy
+  label: Star Record
+  filter_empty: 'yes'
+  folder: Star Record
+  levels:
+  - unique_name: Star
+    secondary_attributes:
+    - unique_name: Stellar Distance Parsecs
+      label: Stellar Distance Parsecs
+      dataset: Star Detail
+      key_columns:
+      - stellar_distance_pc
+      name_column: stellar_distance_pc
+      folder: Star Record
+      description: Distance to the star in parsecs - distance, how far away. 3.21 to 8500 pc on the 1996
+        stars that record one, averaging 660.4. One parsec is about 3.26 light-years. This figure is computed
+        at the Star Detail grain; 'Planet Distance Parsecs' is the same quantity at the Planet Detail
+        grain, where it averages 623.9. The readings disagree because the grains differ, so say which
+        basis you mean, and ask if the question does not.
+    - unique_name: Stellar Distance Light Years
+      label: Stellar Distance Light Years
+      dataset: Star Detail
+      key_columns:
+      - stellar_distance_ly
+      name_column: stellar_distance_ly
+      folder: Star Record
+      description: The Distance in Light-Years - the parsec figure multiplied by 3.26156. 10.47 to 27723
+        ly on 1996 stars, averaging 2153.8. This figure is computed at the Star Detail grain; 'Planet Distance Light Years (All Recorded)' is the same quantity at the Planet Detail grain, where it averages 2035.
+        The readings disagree because the grains differ, so say which basis you mean, and ask if the question
+        does not.
+    - unique_name: Star Companion Count
+      label: Star Companion Count
+      dataset: Star Detail
+      key_columns:
+      - companion_count
+      name_column: companion_count
+      folder: Star Record
+      description: Number of confirmed planetary companions the star record declares - companion count.
+        1 to 7 on all 2509 stars, averaging 1.344. More than 1 is the multi-planetary condition, met by
+        569 stars. This figure is computed at the Star Detail grain; 'Planet Companion Count' is the same
+        quantity at the Planet Detail grain, where it averages 1.765. The readings disagree because the
+        grains differ, so say which basis you mean, and ask if the question does not.
+    - unique_name: Stellar Mass
+      label: Stellar Mass
+      dataset: Star Detail
+      key_columns:
+      - stellar_mass
+      name_column: stellar_mass
+      folder: Star Record
+      description: Mass of the star in solar masses. 0.02 to 3.9 on the 2357 stars that record one, averaging
+        1.000 - so the typical host is Sun-like.
+    - unique_name: Stellar Radius
+      label: Stellar Radius
+      dataset: Star Detail
+      key_columns:
+      - stellar_radius
+      name_column: stellar_radius
+      folder: Star Record
+      description: Radius of the star in solar radii. 0.04 to 51.1 on 2228 stars, averaging 1.610.
+    - unique_name: Stellar Temperature
+      label: Stellar Temperature
+      dataset: Star Detail
+      key_columns:
+      - stellar_temperature
+      name_column: stellar_temperature
+      folder: Star Record
+      description: Effective surface temperature in Kelvin. 575 to 57000 K on 2379 stars, averaging 5545
+        - just below the Sun's 5778 K, which is the reference this model uses for the luminosity formula.
+    - unique_name: Optical Magnitude
+      label: Optical Magnitude
+      dataset: Star Detail
+      key_columns:
+      - optical_magnitude
+      name_column: optical_magnitude
+      folder: Star Record
+      description: Apparent visual magnitude of the star as seen from Earth - an observed magnitude, not
+        a luminosity. 0.85 to 20.15 on 2400 stars, averaging 12.89. The scale is INVERTED and logarithmic,
+        so the smallest number is the star that looks brightest, and 'the brightest star' means the MINIMUM
+        of this column, not the maximum. A star's intrinsic output relative to the Sun is Stellar Luminosity
+        (Intrinsic Brightness, Solar Units).
+    - unique_name: Photometric Band
+      label: Photometric Band
+      dataset: Star Detail
+      key_columns:
+      - photometric_band
+      name_column: photometric_band
+      folder: Star Record
+      description: Photometric band the magnitude was measured through, folded to one spelling per band.
+        The labels 'Johnson V', 'Kepler' and 'K-band' are THIS MODEL'S OWN spellings, so a question that
+        prints band names has its own wording to supply. Three labels here - Kepler (1306 stars), Johnson
+        V (779) and K-band (315, stored one way only); Photometric Band (Folded Groups Only) is the two-group
+        reading that nulls K-band and the 109 stars with no band. The raw column holds 10 spellings. This
+        reading folds 'V-band' into Johnson V; the column meaning lists 'V-band' AFTER the Johnson group
+        rather than inside it, and the stricter reading that keeps it separate is published beside this
+        one - it moves a block of stars. Photometric Band (Folded Groups Only) keeps just the two folded
+        groups, labelled 'V-Band' and 'Kepler-Band', with K-band null.
+    - unique_name: Photometric Band Strict
+      label: Photometric Band Strict
+      dataset: Star Detail
+      key_columns:
+      - photometric_band_strict
+      name_column: photometric_band_strict
+      folder: Star Record
+      description: The same folding but with 'V-band' kept as its own category.
+    - unique_name: Photometric Band (Folded Groups Only)
+      label: Photometric Band (Folded Groups Only)
+      dataset: Star Detail
+      key_columns:
+      - photometric_band_group
+      name_column: photometric_band_group
+      folder: Star Record
+      description: 'Only the two bands the warehouse spells several ways, each folded to one label: ''V-Band''
+        for the Johnson/V spellings, V-band included, and ''Kepler-Band'' for the Kepler spellings. K-band,
+        stored one way only, and the stars with no band are null here, so a count of stars by this column
+        has exactly two groups. Use it when a question asks to consolidate the spellings into groups and
+        count the stars in each; Photometric Band keeps K-band as a third label and Photometric Band Strict
+        keeps ''V-band'' apart.'
+    - unique_name: Photometric Band Stored
+      label: Photometric Band Stored
+      dataset: Star Detail
+      key_columns:
+      - photometric_band_stored
+      name_column: photometric_band_stored
+      folder: Star Record
+      description: 'The photometric band exactly as stored, in one of 10 spellings: Kepler, Kep-b, Kepler-band,
+        K-band, Kep, V, V (Johnson), V-band, Johnson, Johnson V (in descending order of frequency). Folding
+        these by hand in a CASE reproduces what the folded attributes already publish - prefer Photometric
+        Band (Folded Groups Only), Photometric Band or Photometric Band Strict, and note their shared
+        fork: whether K-band, which has nothing to fold, appears in a consolidated report is a choice
+        to put to the user explicitly.'
+    - unique_name: Star Name
+      label: Star Name
+      dataset: Star Detail
+      key_columns:
+      - star_name
+      name_column: star_name
+      folder: Star Record
+      description: Alias for the Star level's own star_name column, published under the name a question
+        is likely to use. Identical values to Star; grouping on either gives the same result.

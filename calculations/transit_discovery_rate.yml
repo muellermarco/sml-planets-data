@@ -1,0 +1,7 @@
+unique_name: Transit Discovery Rate
+object_type: metric_calc
+label: Transit Discovery Rate
+description: The proportion of the selected planets discovered by transit. A FRACTION from 0 to 1; warehouse-wide
+  2664/3372, or 0.79004.
+expression: CASE WHEN ISEMPTY([Measures].[Planet Count]) OR [Measures].[Planet Count] = 0 THEN NULL ELSE
+  [Measures].[Transit Discovery Count] / [Measures].[Planet Count] END

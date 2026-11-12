@@ -1,0 +1,10 @@
+unique_name: Planets With A Semi Major Axis
+object_type: metric
+label: Planets With A Semi Major Axis
+description: How many of the selected planets record a semi-major axis. 1897 of 3372 warehouse-wide -
+  the binding constraint on the equilibrium temperature, the orbital velocity, the habitable-zone test
+  and the Kepler's-law check.
+dataset: Planet Detail
+column: has_semi_major_axis_au
+calculation_method: sum
+unrelated_dimensions_handling: error

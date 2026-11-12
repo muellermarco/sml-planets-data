@@ -1,0 +1,10 @@
+unique_name: Planets With A Density
+object_type: metric
+label: Planets With A Density
+description: How many of the selected planets record a bulk density. 388 of 3372 warehouse-wide - the
+  scarcest physical measurement, and the ceiling on every rocky, super-Earth, inflated-giant and potentially-habitable
+  answer.
+dataset: Planet Detail
+column: has_planet_density
+calculation_method: sum
+unrelated_dimensions_handling: error

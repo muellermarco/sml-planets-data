@@ -1,0 +1,9 @@
+unique_name: Group Mass Radius Ratio (Pooled)
+object_type: metric_calc
+label: Group Mass Radius Ratio (Pooled)
+description: 'The mass-radius relationship recomputed for the whole selected group: the mean mass in Earth
+  units over the mean radius in Earth units. Warehouse-wide 835.37 / 3.8333, or 217.93, against a per-planet
+  mean of 81.316.'
+expression: CASE WHEN ISEMPTY([Measures].[Mean Planet Radius Earth]) OR [Measures].[Mean Planet Radius
+  Earth] = 0 THEN NULL ELSE [Measures].[Mean Planet Mass Earth] / [Measures].[Mean Planet Radius Earth]
+  END

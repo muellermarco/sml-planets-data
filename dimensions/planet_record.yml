@@ -1,0 +1,129 @@
+unique_name: Planet Record
+object_type: dimension
+label: Planet Record
+type: standard
+description: 'A confirmed exoplanet - the grain of this model''s fact, 3372 rows. This is a clean star
+  schema: the orbital record covers 3371 planets, the physical record 3359 and the data-quality record
+  all 3372, and each is exactly 1:1 with a planet, so all three fold onto this row. Every planet names
+  a host star and every host resolves; 2509 distinct stars carry 1 to 7 planets each. COVERAGE IS THE
+  FIRST THING TO CHECK because the physical measurements are far sparser than the orbital ones: a period
+  exists for 3305 planets, a radius for 2694, a semi-major axis for 1897, a mass for 1174, an eccentricity
+  for 974, an inclination for 502 and a density for only 388. Every derived quantity inherits the scarcest
+  input it needs, so the surface gravity and the escape velocity exist for 509 planets and the equilibrium
+  temperature for 1533.'
+level_attributes:
+- unique_name: Discovery Method
+  label: Discovery Method
+  dataset: Planet Detail
+  key_columns:
+  - discovery_method
+  name_column: discovery_method
+  description: 'The knowledge base defines the Transit Timing Variation (TTV) method as a planet whose observation record is linked to the ''ttv'' facility - that is TTV Observation (1 on 225 planets), not this column''s ''TTV'' category (15 planets); a planet found or discovered via timing variations or the TTV method reads TTV Observation = 1. Standardised discovery method - how the planet was found. Six categories on all 3372 planets:
+    Transit 2664, Radial Velocity 591, Imaging 42, Microlensing 39, Other 21 and TTV 15. The RAW column
+    holds 38 different spellings of these six, so grouping by the stored text splits Transit across five
+    buckets - ''Photometric'' 578, ''TR'' 536, ''Transit Method'' 523, ''Photometry'' 516 and ''Transit''
+    511. Membership is EXACT, matching the label lists the knowledge base gives: Radial Velocity covers
+    RadVel, RV, RV Method, Radial Velocity and Doppler; Transit covers Transit, TR, Transit Method, Photometry
+    and Photometric; Imaging covers Direct Imaging, DI, Imaging, IMG and Direct; TTV covers TTV, TTV Method,
+    Transit Timing, Transit Timing Variations and Timing Var; and Microlensing covers Microlensing, ML,
+    Lensing, Gravitational and a Greek-mu abbreviation. A substring reading would pull other timing labels
+    into TTV, which those lists do not. Anything outside the five named groups is ''Other''.'
+- unique_name: Planet
+  label: Planet
+  dataset: Planet Detail
+  key_columns:
+  - planet
+  name_column: planet_name
+  description: 'A planet, keyed on its record number and displayed as the host star name followed by its
+    companion letter - planet name, planet ID. THREE printable identifications of a planet exist here
+    and they are DIFFERENT strings: this combined name (3372 distinct values, e.g. Kepler-57 b, HD 209458
+    b, 55 Cnc e), Planet Host Star Name on its own (2509 distinct values, shared by the 1433 planets whose
+    host carries more than one planet row), and Companion Letter on its own (''b'' on 2504 of the 3372).
+    The warehouse stores only the last two and never the combination, which is built here. If the question''s
+    wording does not settle which, ask the user which they mean by a planet''s name - this combined host-star-and-letter
+    name (3372 distinct), Planet Host Star Name alone (2509 distinct) or Companion Letter alone (''b''
+    on 2504 of 3372). Whether the star''s name prints before or after it is likewise the caller''s. A
+    list of planets has no inherent row order either; which column orders it is the caller''s whenever
+    that is unstated. If the caller declines to choose a name form and the star''s name is asked for as
+    its own column, the planet''s name is Companion Letter beside Planet Host Star Name, since this combined
+    name would repeat the star''s name.'
+  is_unique_key: true
+hierarchies:
+- unique_name: Planet Record Hierarchy
+  label: Planet Record
+  filter_empty: 'yes'
+  folder: Planet Record
+  levels:
+  - unique_name: Discovery Method
+  - unique_name: Planet
+    secondary_attributes:
+    - unique_name: Planet Host Star Name
+      label: Planet Host Star Name
+      dataset: Planet Detail
+      key_columns:
+      - host_star_name
+      name_column: host_star_name
+      folder: Planet Record
+      description: 'Name of the planet''s host star, carried onto the planet row. 2509 distinct values
+        over 3372 planets, e.g. 11 Com, 14 Her, 55 Cnc. It names the STAR, not the planet: 1433 planets
+        share theirs with a sibling. It is one of the two name columns the warehouse itself stores, and
+        Planet Name is this one with Companion Letter appended.'
+    - unique_name: Companion Letter
+      label: Companion Letter
+      dataset: Planet Detail
+      key_columns:
+      - companion_letter
+      name_column: companion_letter
+      folder: Planet Record
+      description: 'Letter distinguishing the planet within its system - companion letter. Seven values
+        on all 3372 planets: ''b'' on 2504, ''c'' on 572, ''d'' on 192, ''e'' on 71, ''f'' on 24, ''g''
+        on 6 and ''h'' on 3. Lower case, so a filter written as ''B'' matches nothing. With Planet Host
+        Star Name it is the other of the two name columns the warehouse stores, and printed beside a host
+        star''s name it identifies the planet exactly, without the combined Planet Name. When the caller
+        declines to choose a name form and the question asks for the planet''s name AND its star''s name
+        as separate columns, print this letter as the planet''s name beside Planet Host Star Name as the
+        star - the combined Planet Name would repeat the star''s name in the planet column.'
+    - unique_name: Note Count
+      label: Note Count
+      dataset: Planet Detail
+      key_columns:
+      - note_count
+      name_column: note_count
+      folder: Planet Record
+      description: How many notes are attached to the planet record. 0 to 3 on all 3372 planets, averaging
+        0.705.
+    - unique_name: Discovery Method Stored
+      label: Discovery Method Stored
+      dataset: Planet Detail
+      key_columns:
+      - discovery_method_stored
+      name_column: discovery_method_stored
+      folder: Planet Record
+      description: The discovery method exactly as stored, in one of 38 spellings. Published for a question
+        explicitly about the raw label; for analysis group by Discovery Method.
+    - unique_name: Record Update Date
+      label: Record Update Date
+      dataset: Planet Detail
+      key_columns:
+      - record_update_date
+      name_column: record_update_date
+      folder: Planet Record
+      description: Date the planet's record was last updated. Present on all 3372 planets with 82 distinct
+        dates from 2014-05-14 to 2016-08-12. The column meaning says the range ends 2016-07-07; the stored
+        data runs five weeks later. It is a real date column, not text.
+    - unique_name: Record Update Year
+      label: Record Update Year
+      dataset: Planet Detail
+      key_columns:
+      - record_update_year
+      name_column: record_update_year
+      folder: Planet Record
+      description: Calendar year of the last update. 2014, 2015 or 2016 on all 3372 planets.
+    - unique_name: Planet Name
+      label: Planet Name
+      dataset: Planet Detail
+      key_columns:
+      - host_star_name
+      name_column: host_star_name
+      folder: Planet Record
+      description: 'Published under the name a question is likely to use; reads the host_star_name column. The plain reading of a planet''s name is its host star''s name (''WASP-1'', 2509 distinct over 3372 planets), the same values as Planet Host Star Name: the warehouse stores a host star name and a companion letter and no separate planet-name column. The combined ''star + letter'' string (''WASP-1 b'', 3372 distinct) is the Planet level itself, and Companion Letter (''b'' on 2504 of 3372) is the letter alone. When the caller requests a planet''s name AND its star as separate output columns, use Companion Letter for the planet beside Planet Host Star Name for the star, since this name would repeat the star.'

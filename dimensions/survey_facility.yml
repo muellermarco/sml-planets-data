@@ -1,0 +1,46 @@
+unique_name: Survey Facility
+object_type: dimension
+label: Survey Facility
+type: standard
+description: 'An observing survey or mission - only THREE rows. They are the three flags the source catalogue
+  carried: ''kep'' for the Kepler mission, ''k2'' for the K2 mission and ''ttv'' for the transit-timing
+  survey. The observation bridge holds 2683 rows over 2460 planets, so 912 of the 3372 planets were observed
+  by none of the three and no planet was observed by more than two. By facility: ''kep'' on 2329 observations
+  over 1644 stars, ''ttv'' on 225 observations and ''k2'' on 129 over 94 stars.'
+level_attributes:
+- unique_name: Facility Name
+  label: Facility Name
+  dataset: Survey Facility Detail
+  key_columns:
+  - facility
+  name_column: facility
+  description: 'Survey or mission that made the observation - facility, survey, telescope, mission. Exactly
+    three stored values, all lower case: ''kep'', ''k2'' and ''ttv''. A filter written as ''Kepler'' or
+    ''K2'' matches nothing - use the stored codes, or read Facility Description for the expansion.'
+  is_unique_key: true
+hierarchies:
+- unique_name: Survey Facility Hierarchy
+  label: Survey Facility
+  filter_empty: 'yes'
+  folder: Survey Facility
+  levels:
+  - unique_name: Facility Name
+    secondary_attributes:
+    - unique_name: Facility Description
+      label: Facility Description
+      dataset: Survey Facility Detail
+      key_columns:
+      - facility_description
+      name_column: facility_description
+      folder: Survey Facility
+      description: 'What the facility code stands for: ''kep'' is the Kepler mission, ''k2'' is the K2
+        mission and ''ttv'' is the transit-timing survey. Published because the stored codes are opaque
+        abbreviations.'
+    - unique_name: Facility Key
+      label: Facility Key
+      dataset: Survey Facility Detail
+      key_columns:
+      - facility_key
+      name_column: facility_key
+      folder: Survey Facility
+      description: Numeric identifier of the facility - 1, 2 or 3.

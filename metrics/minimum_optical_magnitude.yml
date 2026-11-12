@@ -1,0 +1,9 @@
+unique_name: Minimum Optical Magnitude
+object_type: metric
+label: Minimum Optical Magnitude
+description: Brightest star among the selection - the MINIMUM magnitude, because the scale is inverted.
+  0.85 warehouse-wide.
+dataset: Star Detail
+column: optical_magnitude
+calculation_method: minimum
+unrelated_dimensions_handling: error

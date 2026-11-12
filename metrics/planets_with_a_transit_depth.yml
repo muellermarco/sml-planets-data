@@ -1,0 +1,9 @@
+unique_name: Planets With A Transit Depth
+object_type: metric
+label: Planets With A Transit Depth
+description: How many of the selected planets have a computable transit depth, which needs a planet radius
+  and a stellar radius. 2684 of 3372 warehouse-wide.
+dataset: Planet Detail
+column: has_transit_depth
+calculation_method: sum
+unrelated_dimensions_handling: error

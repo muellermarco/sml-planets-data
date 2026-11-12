@@ -1,0 +1,7 @@
+unique_name: Density Coverage Rate
+object_type: metric_calc
+label: Density Coverage Rate
+description: The proportion of the selected planets that record a density. A FRACTION from 0 to 1; warehouse-wide
+  388/3372, or 0.11507 - the tightest coverage in the model, and the ceiling on every composition question.
+expression: CASE WHEN ISEMPTY([Measures].[Planet Count]) OR [Measures].[Planet Count] = 0 THEN NULL ELSE
+  [Measures].[Planets With A Density] / [Measures].[Planet Count] END

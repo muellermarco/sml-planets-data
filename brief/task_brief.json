@@ -1,0 +1,1658 @@
+{
+  "database": "planets_data",
+  "task_count": 29,
+  "tasks": [
+    {
+      "instance_id": "planets_data_1",
+      "selected_database": "planets_data",
+      "amb_user_query": "What's the average surface pull for all those Super-Earths they found by watching stars dim?",
+      "category": "Query",
+      "output_type": "scalar",
+      "high_level": false,
+      "external_knowledge": [
+        1,
+        2,
+        4,
+        21,
+        24,
+        36
+      ],
+      "knowledge_ambiguity": [
+        {
+          "term": "Planet Surface Gravity",
+          "type": "knowledge_ambiguity",
+          "is_mask": true
+        }
+      ],
+      "user_query_ambiguity": {
+        "critical_ambiguity": [
+          {
+            "term": "Super-Earths",
+            "type": "knowledge_linking_ambiguity",
+            "is_mask": true
+          },
+          {
+            "term": "watching stars dim",
+            "type": "schema_linking_ambiguity",
+            "is_mask": false
+          }
+        ],
+        "non_critical_ambiguity": [
+          {
+            "term": "average",
+            "type": "decimal_ambiguity",
+            "is_mask": false
+          },
+          {
+            "term": "those Super-Earths",
+            "type": "null_ambiguity",
+            "is_mask": false
+          }
+        ]
+      },
+      "follow_up": [
+        {
+          "query": "Now, what is the ratio of the average planet surface gravity for super-earths discovered via the transit method to the average planet surface gravity for inflated gas giants? Provide the result as a single scalar value rounded to 2 decimal places.",
+          "type": "topic_pivot",
+          "category": "Query",
+          "output_type": "scalar",
+          "external_knowledge": [
+            1,
+            2,
+            4,
+            20,
+            21,
+            24,
+            32,
+            36
+          ]
+        }
+      ]
+    },
+    {
+      "instance_id": "planets_data_2",
+      "selected_database": "planets_data",
+      "amb_user_query": "I'm looking for Jupiter-like planets that are both scorching hot and spinning backwards.\nCan you list them out for me, along with their names, how long their year is, their orbital tilt, and their speed?",
+      "category": "Query",
+      "output_type": "table",
+      "high_level": false,
+      "external_knowledge": [
+        11,
+        20,
+        22,
+        23,
+        31
+      ],
+      "knowledge_ambiguity": [
+        {
+          "term": "Orbital Velocity",
+          "type": "knowledge_ambiguity",
+          "is_mask": true
+        }
+      ],
+      "user_query_ambiguity": {
+        "critical_ambiguity": [
+          {
+            "term": "scorching hot",
+            "type": "semantic_ambiguity",
+            "is_mask": false
+          },
+          {
+            "term": "spinning backwards",
+            "type": "knowledge_linking_ambiguity",
+            "is_mask": true
+          },
+          {
+            "term": "Jupiter-like planets",
+            "type": "knowledge_linking_ambiguity",
+            "is_mask": true
+          }
+        ],
+        "non_critical_ambiguity": [
+          {
+            "term": "list them out for me",
+            "type": "sort_ambiguity",
+            "is_mask": false
+          },
+          {
+            "term": "their speed",
+            "type": "null_ambiguity",
+            "is_mask": false
+          }
+        ]
+      },
+      "follow_up": [
+        {
+          "query": "For the host stars of the identified hot jupiters in a retrograde orbit, what is their average stellar density? Give the result as a single value rounded to the nearest integer.",
+          "type": "result_based",
+          "category": "Query",
+          "output_type": "scalar",
+          "external_knowledge": [
+            12,
+            20,
+            22,
+            23,
+            31
+          ]
+        }
+      ]
+    },
+    {
+      "instance_id": "planets_data_4",
+      "selected_database": "planets_data",
+      "amb_user_query": "Let's fact-check Kepler's law on systems with multiple planets.\nFor each of these systems, take a planet and use its orbit to calculate its star's mass.\nShow me the star's name, its official mass, and the mass we just calculated.",
+      "category": "Query",
+      "output_type": "table",
+      "high_level": true,
+      "external_knowledge": [
+        15,
+        28
+      ],
+      "knowledge_ambiguity": [
+        {
+          "term": "Kepler's Third Law Verification",
+          "type": "knowledge_ambiguity",
+          "is_mask": true
+        }
+      ],
+      "user_query_ambiguity": {
+        "critical_ambiguity": [
+          {
+            "term": "multiple planets",
+            "type": "semantic_ambiguity",
+            "is_mask": false
+          },
+          {
+            "term": "take a planet",
+            "type": "intent_ambiguity",
+            "is_mask": false
+          }
+        ],
+        "non_critical_ambiguity": [
+          {
+            "term": "show me",
+            "type": "sort_ambiguity",
+            "is_mask": false
+          },
+          {
+            "term": "use its orbit",
+            "type": "null_ambiguity",
+            "is_mask": false
+          }
+        ]
+      },
+      "follow_up": [
+        {
+          "query": "Among the systems previously analyzed, what is the name of the host star whose outermost planet has the highest calculated planetary equilibrium temperature? Provide the name as a text value. Note that to ensure consistent units for the calculation, convert stellar radius from solar radii to meters with the factor 6.957E8, and semi-major axis from AU to meters with 1.496E11.",
+          "type": "attribute_change",
+          "category": "Query",
+          "output_type": "scalar",
+          "external_knowledge": [
+            5,
+            15,
+            28
+          ]
+        }
+      ]
+    },
+    {
+      "instance_id": "planets_data_5",
+      "selected_database": "planets_data",
+      "amb_user_query": "Which star is the most dense?\nGive me its name.",
+      "category": "Query",
+      "output_type": "scalar",
+      "high_level": false,
+      "external_knowledge": [
+        12
+      ],
+      "knowledge_ambiguity": [
+        {
+          "term": "Stellar Density",
+          "type": "knowledge_ambiguity",
+          "is_mask": true
+        }
+      ],
+      "user_query_ambiguity": {
+        "critical_ambiguity": [
+          {
+            "term": "most dense",
+            "type": "knowledge_linking_ambiguity",
+            "is_mask": true
+          },
+          {
+            "term": "star",
+            "type": "schema_linking_ambiguity",
+            "is_mask": false
+          }
+        ],
+        "non_critical_ambiguity": [
+          {
+            "term": "most",
+            "type": "sort_ambiguity",
+            "is_mask": false
+          },
+          {
+            "term": "star",
+            "type": "null_ambiguity",
+            "is_mask": false
+          }
+        ]
+      },
+      "follow_up": [
+        {
+          "query": "What is the ratio of the maximum to minimum stellar density among all stars in the database? Provide the result as a single scalar value, to the nearest whole number. Note: To calculate density, use the conversion factors 1.98847E30 for solar mass to kg, and 6.957E8 for solar radius to meters.",
+          "type": "attribute_change",
+          "category": "Query",
+          "output_type": "scalar",
+          "external_knowledge": [
+            12
+          ]
+        }
+      ]
+    },
+    {
+      "instance_id": "planets_data_6",
+      "selected_database": "planets_data",
+      "amb_user_query": "Show me a list of all the planets with weird orbits, but only the ones where we have a mass estimate.\nI want to see the planet's name, its star's name, how weird its orbit is, and the mass ratio.",
+      "category": "Query",
+      "output_type": "table",
+      "high_level": true,
+      "external_knowledge": [
+        18,
+        27,
+        34
+      ],
+      "knowledge_ambiguity": [
+        {
+          "term": "Planet-Star Mass Ratio",
+          "type": "knowledge_ambiguity",
+          "is_mask": true
+        }
+      ],
+      "user_query_ambiguity": {
+        "critical_ambiguity": [
+          {
+            "term": "weird orbits",
+            "type": "knowledge_linking_ambiguity",
+            "is_mask": true
+          },
+          {
+            "term": "mass estimate",
+            "type": "semantic_ambiguity",
+            "is_mask": true
+          }
+        ],
+        "non_critical_ambiguity": [
+          {
+            "term": "mass ratio",
+            "type": "decimal_ambiguity",
+            "is_mask": false
+          },
+          {
+            "term": "list",
+            "type": "sort_ambiguity",
+            "is_mask": false
+          },
+          {
+            "term": "planets_data",
+            "type": "null_ambiguity",
+            "is_mask": false
+          }
+        ]
+      },
+      "follow_up": [
+        {
+          "query": "Among the planets with a high eccentricity orbit and minimum mass status, what is the average host star mass in solar masses? Provide the result to 2 decimal places.",
+          "type": "result_based",
+          "category": "Query",
+          "output_type": "scalar",
+          "external_knowledge": [
+            18,
+            27,
+            34
+          ]
+        }
+      ]
+    },
+    {
+      "instance_id": "planets_data_7",
+      "selected_database": "planets_data",
+      "amb_user_query": "For all the big gassy planets found by the K2 telescope, what's their average temperature?\nGive me that in Kelvin.",
+      "category": "Query",
+      "output_type": "scalar",
+      "high_level": false,
+      "external_knowledge": [
+        5,
+        20,
+        50
+      ],
+      "knowledge_ambiguity": [
+        {
+          "term": "Planetary Equilibrium Temperature",
+          "type": "knowledge_ambiguity",
+          "is_mask": true
+        }
+      ],
+      "user_query_ambiguity": {
+        "critical_ambiguity": [
+          {
+            "term": "big gassy planets",
+            "type": "knowledge_linking_ambiguity",
+            "is_mask": true
+          },
+          {
+            "term": "K2 telescope",
+            "type": "schema_linking_ambiguity",
+            "is_mask": false
+          }
+        ],
+        "non_critical_ambiguity": [
+          {
+            "term": "average",
+            "type": "decimal_ambiguity",
+            "is_mask": false
+          },
+          {
+            "term": "planets_data",
+            "type": "null_ambiguity",
+            "is_mask": false
+          }
+        ]
+      },
+      "follow_up": [
+        {
+          "query": "What is the average stellar luminosity, relative to the sun, for the host stars of the gas giant planets discovered by the k2 mission? Give the answer to 3 decimal places.",
+          "type": "attribute_change",
+          "category": "Query",
+          "output_type": "scalar",
+          "external_knowledge": [
+            3,
+            20,
+            50
+          ]
+        }
+      ]
+    },
+    {
+      "instance_id": "planets_data_8",
+      "selected_database": "planets_data",
+      "amb_user_query": "When planets found by the star wobble method pass in front of their star, what's the biggest dimming effect?\nTell me that dip in brightness, and also name the planet and star.",
+      "category": "Query",
+      "output_type": "table",
+      "high_level": false,
+      "external_knowledge": [
+        9,
+        37
+      ],
+      "knowledge_ambiguity": [
+        {
+          "term": "Transit Depth",
+          "type": "knowledge_ambiguity",
+          "is_mask": true
+        }
+      ],
+      "user_query_ambiguity": {
+        "critical_ambiguity": [
+          {
+            "term": "star wobble method",
+            "type": "knowledge_linking_ambiguity",
+            "is_mask": true
+          },
+          {
+            "term": "biggest dimming effect",
+            "type": "intent_ambiguity",
+            "is_mask": false
+          }
+        ],
+        "non_critical_ambiguity": [
+          {
+            "term": "dip in brightness",
+            "type": "decimal_ambiguity",
+            "is_mask": false
+          },
+          {
+            "term": "planets_data",
+            "type": "null_ambiguity",
+            "is_mask": false
+          }
+        ]
+      },
+      "follow_up": [
+        {
+          "query": "For the specific planet and star identified, what is the planet escape velocity in km/s? Round to the nearest integer. Note: you will need the Gravitational constant G = 6.67430E-11, the mass of Jupiter in kg = 1.898E27, and the radius of Jupiter in meters = 7.1492E7.",
+          "type": "result_based",
+          "category": "Query",
+          "output_type": "scalar",
+          "external_knowledge": [
+            1,
+            2,
+            9,
+            10,
+            37
+          ]
+        }
+      ]
+    },
+    {
+      "instance_id": "planets_data_9",
+      "selected_database": "planets_data",
+      "amb_user_query": "Find me the rocky super earth that has the strongest gravity pull of them all.\nOnce you've pinpointed that planet, tell me what its mass is as a fraction of its star's mass.\nI need that final number.",
+      "category": "Query",
+      "output_type": "scalar",
+      "high_level": false,
+      "external_knowledge": [
+        1,
+        2,
+        4,
+        18,
+        21,
+        24
+      ],
+      "knowledge_ambiguity": [
+        {
+          "term": "Planet Surface Gravity",
+          "type": "knowledge_ambiguity",
+          "is_mask": true
+        }
+      ],
+      "user_query_ambiguity": {
+        "critical_ambiguity": [
+          {
+            "term": "rocky super earth",
+            "type": "knowledge_linking_ambiguity",
+            "is_mask": true
+          },
+          {
+            "term": "strongest gravity pull",
+            "type": "semantic_ambiguity",
+            "is_mask": true
+          }
+        ],
+        "non_critical_ambiguity": [
+          {
+            "term": "final number",
+            "type": "decimal_ambiguity",
+            "is_mask": false
+          }
+        ]
+      },
+      "follow_up": [
+        {
+          "query": "Now, let's look at all super-earths with a planet surface gravity greater than 3. For these planets, what is the average planetary equilibrium temperature? Please provide the result in kelvin, rounded to 2 decimal places.",
+          "type": "constraint_change",
+          "category": "Query",
+          "output_type": "scalar",
+          "external_knowledge": [
+            1,
+            2,
+            4,
+            5,
+            21,
+            24
+          ]
+        }
+      ]
+    },
+    {
+      "instance_id": "planets_data_10",
+      "selected_database": "planets_data",
+      "amb_user_query": "On average, how far away are the stars that have those big, puffy gas planets? I only want to include stars where we have a solid distance number, not a bad measurement.\nShow the result in light-years.",
+      "category": "Query",
+      "output_type": "scalar",
+      "high_level": false,
+      "external_knowledge": [
+        0,
+        20,
+        32,
+        35,
+        38
+      ],
+      "knowledge_ambiguity": [
+        {
+          "term": "Distance in Light-Years",
+          "type": "knowledge_ambiguity",
+          "is_mask": true
+        }
+      ],
+      "user_query_ambiguity": {
+        "critical_ambiguity": [
+          {
+            "term": "big, puffy gas planets",
+            "type": "knowledge_linking_ambiguity",
+            "is_mask": true
+          },
+          {
+            "term": "bad measurement",
+            "type": "semantic_ambiguity",
+            "is_mask": true
+          }
+        ],
+        "non_critical_ambiguity": [
+          {
+            "term": "how far away",
+            "type": "decimal_ambiguity",
+            "is_mask": false
+          }
+        ]
+      },
+      "follow_up": [
+        {
+          "query": "For the host stars of inflated gas giant planets meeting the same data quality criteria (no upper limit on distance and no blend flag for photometric magnitude), what is their average stellar mass in solar masses? Provide the answer to 2 decimal places.",
+          "type": "attribute_change",
+          "category": "Query",
+          "output_type": "scalar",
+          "external_knowledge": [
+            20,
+            32,
+            35,
+            38
+          ]
+        }
+      ]
+    },
+    {
+      "instance_id": "planets_data_11",
+      "selected_database": "planets_data",
+      "amb_user_query": "Find me the planetary systems that are really tightly packed, but only if their closest-in planet is also super fast.\nFor these systems, I want to see the star's name and the average orbital period ratio.",
+      "category": "Query",
+      "output_type": "table",
+      "high_level": true,
+      "external_knowledge": [
+        17,
+        22,
+        28,
+        33
+      ],
+      "knowledge_ambiguity": [
+        {
+          "term": "Compact System",
+          "type": "knowledge_ambiguity",
+          "is_mask": true
+        }
+      ],
+      "user_query_ambiguity": {
+        "critical_ambiguity": [
+          {
+            "term": "tightly packed",
+            "type": "knowledge_linking_ambiguity",
+            "is_mask": true
+          },
+          {
+            "term": "super fast",
+            "type": "semantic_ambiguity",
+            "is_mask": true
+          }
+        ],
+        "non_critical_ambiguity": [
+          {
+            "term": "average orbital period ratio",
+            "type": "decimal_ambiguity",
+            "is_mask": false
+          },
+          {
+            "term": "find me",
+            "type": "sort_ambiguity",
+            "is_mask": false
+          }
+        ]
+      },
+      "follow_up": [
+        {
+          "query": "For the compact systems identified that also have a short-period innermost planet, what is the average host star temperature in kelvin? Return the result as an integer.",
+          "type": "attribute_change",
+          "category": "Query",
+          "output_type": "scalar",
+          "external_knowledge": [
+            17,
+            22,
+            28,
+            33
+          ]
+        }
+      ]
+    },
+    {
+      "instance_id": "planets_data_12",
+      "selected_database": "planets_data",
+      "amb_user_query": "How many different stars have planets that were found by looking at timing variations?",
+      "category": "Query",
+      "output_type": "scalar",
+      "high_level": false,
+      "external_knowledge": [
+        50
+      ],
+      "knowledge_ambiguity": [
+        {
+          "term": "Discovery via TTV method",
+          "type": "knowledge_ambiguity",
+          "is_mask": true
+        }
+      ],
+      "user_query_ambiguity": {
+        "critical_ambiguity": [
+          {
+            "term": "timing variations",
+            "type": "lexical_ambiguity",
+            "is_mask": false
+          },
+          {
+            "term": "stars",
+            "type": "schema_linking_ambiguity",
+            "is_mask": false
+          }
+        ],
+        "non_critical_ambiguity": [
+          {
+            "term": "different",
+            "type": "distinct_ambiguity",
+            "is_mask": false
+          }
+        ]
+      },
+      "follow_up": [
+        {
+          "query": "Among the planets discovered via the ttv method, what is the maximum recorded orbital period in days? Provide this as a single numerical value.",
+          "type": "attribute_change",
+          "category": "Query",
+          "output_type": "scalar",
+          "external_knowledge": [
+            50
+          ]
+        }
+      ]
+    },
+    {
+      "instance_id": "planets_data_13",
+      "selected_database": "planets_data",
+      "amb_user_query": "Find the planet with the biggest mass-to-size ratio and tell me its escape velocity.\nJust give me a whole number.",
+      "category": "Query",
+      "output_type": "scalar",
+      "high_level": false,
+      "external_knowledge": [
+        1,
+        2,
+        10,
+        16
+      ],
+      "knowledge_ambiguity": [
+        {
+          "term": "Planet Escape Velocity",
+          "type": "knowledge_ambiguity",
+          "is_mask": true
+        }
+      ],
+      "user_query_ambiguity": {
+        "critical_ambiguity": [
+          {
+            "term": "biggest",
+            "type": "intent_ambiguity",
+            "is_mask": false
+          },
+          {
+            "term": "mass-to-size ratio",
+            "type": "knowledge_linking_ambiguity",
+            "is_mask": true
+          }
+        ],
+        "non_critical_ambiguity": [
+          {
+            "term": "escape velocity",
+            "type": "decimal_ambiguity",
+            "is_mask": false
+          },
+          {
+            "term": "planet",
+            "type": "null_ambiguity",
+            "is_mask": false
+          }
+        ]
+      },
+      "follow_up": [
+        {
+          "query": "What is the host star's name for the planet with the highest confirmed planet escape velocity? Return the name as a single text result.",
+          "type": "attribute_change",
+          "category": "Query",
+          "output_type": "scalar",
+          "external_knowledge": [
+            1,
+            2,
+            10
+          ]
+        }
+      ]
+    },
+    {
+      "instance_id": "planets_data_14",
+      "selected_database": "planets_data",
+      "amb_user_query": "Can you count up how many stars were observed with each type of light filter?\nMake sure to group the filters together properly. Then show me the filter name and how many stars for each.",
+      "category": "Query",
+      "output_type": "table",
+      "high_level": false,
+      "external_knowledge": [
+        44
+      ],
+      "knowledge_ambiguity": [
+        {
+          "term": "Photoband Standardization",
+          "type": "knowledge_ambiguity",
+          "is_mask": true
+        }
+      ],
+      "user_query_ambiguity": {
+        "critical_ambiguity": [
+          {
+            "term": "light filter",
+            "type": "schema_linking_ambiguity",
+            "is_mask": false
+          },
+          {
+            "term": "group the filters together properly",
+            "type": "intent_ambiguity",
+            "is_mask": false
+          }
+        ],
+        "non_critical_ambiguity": [
+          {
+            "term": "show me",
+            "type": "sort_ambiguity",
+            "is_mask": false
+          },
+          {
+            "term": "each type",
+            "type": "distinct_ambiguity",
+            "is_mask": false
+          },
+          {
+            "term": "type of light filter",
+            "type": "null_ambiguity",
+            "is_mask": false
+          }
+        ]
+      },
+      "follow_up": [
+        {
+          "query": "Of the stars observed in the 'v-band', what percentage of them are part of a multi-planetary system? Provide the result to 2 decimal places.",
+          "type": "result_based",
+          "category": "Query",
+          "output_type": "scalar",
+          "external_knowledge": [
+            28,
+            44
+          ]
+        }
+      ]
+    },
+    {
+      "instance_id": "planets_data_15",
+      "selected_database": "planets_data",
+      "amb_user_query": "If you look at stars that only have rocky planets, what is their average brightness?",
+      "category": "Query",
+      "output_type": "scalar",
+      "high_level": true,
+      "external_knowledge": [
+        3,
+        20,
+        21
+      ],
+      "knowledge_ambiguity": [
+        {
+          "term": "Stellar Luminosity",
+          "type": "knowledge_ambiguity",
+          "is_mask": true
+        }
+      ],
+      "user_query_ambiguity": {
+        "critical_ambiguity": [
+          {
+            "term": "only have rocky planets",
+            "type": "syntactic_ambiguity",
+            "is_mask": false
+          },
+          {
+            "term": "rocky planets",
+            "type": "knowledge_linking_ambiguity",
+            "is_mask": true
+          }
+        ],
+        "non_critical_ambiguity": [
+          {
+            "term": "average brightness",
+            "type": "decimal_ambiguity",
+            "is_mask": false
+          },
+          {
+            "term": "stars",
+            "type": "null_ambiguity",
+            "is_mask": false
+          }
+        ]
+      },
+      "follow_up": [
+        {
+          "query": "Now, what is the average stellar mass for stars that host at least one gas giant planet, but have no rocky planets in the system? Calculate the result in solar mass units and provide it to 2 decimal places.",
+          "type": "topic_pivot",
+          "category": "Query",
+          "output_type": "scalar",
+          "external_knowledge": [
+            20,
+            21
+          ]
+        }
+      ]
+    },
+    {
+      "instance_id": "planets_data_16",
+      "selected_database": "planets_data",
+      "amb_user_query": "How many planets did Kepler find where the star's temperature reading is bad?",
+      "category": "Query",
+      "output_type": "scalar",
+      "high_level": false,
+      "external_knowledge": [
+        38,
+        39,
+        46
+      ],
+      "knowledge_ambiguity": [
+        {
+          "term": "Blended Measurement",
+          "type": "knowledge_ambiguity",
+          "is_mask": true
+        }
+      ],
+      "user_query_ambiguity": {
+        "critical_ambiguity": [
+          {
+            "term": "Kepler",
+            "type": "knowledge_linking_ambiguity",
+            "is_mask": true
+          },
+          {
+            "term": "bad",
+            "type": "semantic_ambiguity",
+            "is_mask": true
+          }
+        ],
+        "non_critical_ambiguity": []
+      },
+      "follow_up": [
+        {
+          "query": "Among the planets discovered by the kepler mission in systems with a blended measurement for stellar temperature, how many are classified as rocky planets? Provide the total count.",
+          "type": "constraint_change",
+          "category": "Query",
+          "output_type": "scalar",
+          "external_knowledge": [
+            21,
+            38,
+            39,
+            46
+          ]
+        }
+      ]
+    },
+    {
+      "instance_id": "planets_data_17",
+      "selected_database": "planets_data",
+      "amb_user_query": "Can you give me the coordinates for the star '55 Cnc' on an HR diagram?\nI need its temperature and its luminosity.",
+      "category": "Query",
+      "output_type": "table",
+      "high_level": false,
+      "external_knowledge": [
+        3,
+        13
+      ],
+      "knowledge_ambiguity": [
+        {
+          "term": "Stellar Luminosity",
+          "type": "knowledge_ambiguity",
+          "is_mask": true
+        }
+      ],
+      "user_query_ambiguity": {
+        "critical_ambiguity": [
+          {
+            "term": "coordinates for the star '55 Cnc' on an HR diagram",
+            "type": "knowledge_linking_ambiguity",
+            "is_mask": true
+          },
+          {
+            "term": "'55 Cnc'",
+            "type": "schema_linking_ambiguity",
+            "is_mask": false
+          }
+        ],
+        "non_critical_ambiguity": [
+          {
+            "term": "luminosity",
+            "type": "decimal_ambiguity",
+            "is_mask": false
+          }
+        ]
+      },
+      "follow_up": [
+        {
+          "query": "What is the calculated stellar density for the star '55 cnc'? Give the result in kg/m^3, rounded to the nearest whole number. Use a conversion factor of 1.98847E30 for solar mass to kg and 6.957E8 for solar radius to meters.",
+          "type": "attribute_change",
+          "category": "Query",
+          "output_type": "scalar",
+          "external_knowledge": [
+            3,
+            12,
+            13
+          ]
+        }
+      ]
+    },
+    {
+      "instance_id": "planets_data_18",
+      "selected_database": "planets_data",
+      "amb_user_query": "I want to find the hottest planet that isn't a 'Hot Jupiter'.\nCan you tell me its name, its star, and its temperature?",
+      "category": "Query",
+      "output_type": "table",
+      "high_level": false,
+      "external_knowledge": [
+        5,
+        20,
+        22,
+        23
+      ],
+      "knowledge_ambiguity": [
+        {
+          "term": "Planetary Equilibrium Temperature",
+          "type": "knowledge_ambiguity",
+          "is_mask": true
+        }
+      ],
+      "user_query_ambiguity": {
+        "critical_ambiguity": [
+          {
+            "term": "hottest planet",
+            "type": "intent_ambiguity",
+            "is_mask": false
+          },
+          {
+            "term": "Hot Jupiter",
+            "type": "knowledge_linking_ambiguity",
+            "is_mask": true
+          }
+        ],
+        "non_critical_ambiguity": [
+          {
+            "term": "temperature",
+            "type": "decimal_ambiguity",
+            "is_mask": false
+          },
+          {
+            "term": "planet",
+            "type": "null_ambiguity",
+            "is_mask": false
+          }
+        ]
+      },
+      "follow_up": [
+        {
+          "query": "For the identified planet with the highest planetary equilibrium temperature (that is not a hot jupiter), what is its calculated planet escape velocity in km/s? Round to the nearest integer. Note: you will need the Gravitational constant G = 6.67430E-11, Jupiter mass = 1.898E27 kg, and Jupiter radius = 7.1492E7 meters.",
+          "type": "result_based",
+          "category": "Query",
+          "output_type": "scalar",
+          "external_knowledge": [
+            1,
+            2,
+            5,
+            10,
+            20,
+            22,
+            23
+          ]
+        }
+      ]
+    },
+    {
+      "instance_id": "planets_data_19",
+      "selected_database": "planets_data",
+      "amb_user_query": "For how many planets do we have a size measurement, but we know it's just an estimate?",
+      "category": "Query",
+      "output_type": "scalar",
+      "high_level": false,
+      "external_knowledge": [
+        35,
+        68
+      ],
+      "knowledge_ambiguity": [
+        {
+          "term": "Upper Limit Value",
+          "type": "knowledge_ambiguity",
+          "is_mask": true
+        }
+      ],
+      "user_query_ambiguity": {
+        "critical_ambiguity": [
+          {
+            "term": "size measurement",
+            "type": "schema_linking_ambiguity",
+            "is_mask": false
+          },
+          {
+            "term": "just an estimate",
+            "type": "semantic_ambiguity",
+            "is_mask": true
+          }
+        ],
+        "non_critical_ambiguity": []
+      },
+      "follow_up": [
+        {
+          "query": "Of the planets that have a radius flagged as an upper limit value, what is the average mass in jupiter units? Exclude planets where the mass is also an upper limit. Provide the result to 4 decimal places.",
+          "type": "result_based",
+          "category": "Query",
+          "output_type": "scalar",
+          "external_knowledge": [
+            35,
+            67,
+            68
+          ]
+        }
+      ]
+    },
+    {
+      "instance_id": "planets_data_20",
+      "selected_database": "planets_data",
+      "amb_user_query": "For the star that looks brightest from Earth, what's its gravitational parameter?\nGive me the answer in scientific notation.",
+      "category": "Query",
+      "output_type": "scalar",
+      "high_level": false,
+      "external_knowledge": [
+        19,
+        41
+      ],
+      "knowledge_ambiguity": [
+        {
+          "term": "Gravitational Parameter (μ)",
+          "type": "knowledge_ambiguity",
+          "is_mask": true
+        }
+      ],
+      "user_query_ambiguity": {
+        "critical_ambiguity": [
+          {
+            "term": "brightest",
+            "type": "knowledge_linking_ambiguity",
+            "is_mask": true
+          },
+          {
+            "term": "gravitational parameter",
+            "type": "knowledge_linking_ambiguity",
+            "is_mask": true
+          }
+        ],
+        "non_critical_ambiguity": [
+          {
+            "term": "scientific notation",
+            "type": "decimal_ambiguity",
+            "is_mask": false
+          },
+          {
+            "term": "star",
+            "type": "null_ambiguity",
+            "is_mask": false
+          }
+        ]
+      },
+      "follow_up": [
+        {
+          "query": "What is the stellar density of the brightest star as seen from earth? Provide the result in kg/m^3, rounded to the nearest integer. Note: the conversion for solar mass to kg is 1.98847E30 and for solar radius to meters is 6.957E8.",
+          "type": "attribute_change",
+          "category": "Query",
+          "output_type": "scalar",
+          "external_knowledge": [
+            12,
+            19,
+            41
+          ]
+        }
+      ]
+    },
+    {
+      "instance_id": "planets_data_M_1",
+      "selected_database": "planets_data",
+      "amb_user_query": "Let's clean up how planets were found because the data is messy. Can you make a new view called `v_discovery_method_summary`?\nIt should list every planet's ID, its original method, and a new column with a clean category for it.",
+      "category": "Management",
+      "output_type": null,
+      "high_level": false,
+      "external_knowledge": [
+        36,
+        37,
+        51
+      ],
+      "knowledge_ambiguity": [
+        {
+          "term": "Discovery via Radial Velocity",
+          "type": "knowledge_ambiguity",
+          "is_mask": true
+        }
+      ],
+      "user_query_ambiguity": {
+        "critical_ambiguity": [
+          {
+            "term": "clean category",
+            "type": "knowledge_linking_ambiguity",
+            "is_mask": true
+          },
+          {
+            "term": "clean up",
+            "type": "intent_ambiguity",
+            "is_mask": true
+          }
+        ],
+        "non_critical_ambiguity": []
+      },
+      "follow_up": [
+        {
+          "query": "From the discovery method summary, what is the percentage of planets discovered via 'radial velocity' that are also considered to be a well-characterized planet? Please report the result to two decimal places.",
+          "type": "result_based",
+          "category": "Query",
+          "output_type": "scalar",
+          "external_knowledge": [
+            8,
+            29,
+            30
+          ]
+        }
+      ]
+    },
+    {
+      "instance_id": "planets_data_M_2",
+      "selected_database": "planets_data",
+      "amb_user_query": "I need a new table called `planet_properties_earth_units` to keep track of planet sizes in a way that's easier to compare.\nIt should reference the planet, and have its mass and radius in Earth units.\nThen fill it up.",
+      "category": "Management",
+      "output_type": null,
+      "high_level": false,
+      "external_knowledge": [
+        1,
+        2
+      ],
+      "knowledge_ambiguity": [
+        {
+          "term": "Planet Mass in Earth Units",
+          "type": "knowledge_ambiguity",
+          "is_mask": true
+        }
+      ],
+      "user_query_ambiguity": {
+        "critical_ambiguity": [
+          {
+            "term": "Earth units",
+            "type": "knowledge_linking_ambiguity",
+            "is_mask": true
+          },
+          {
+            "term": "easier to compare",
+            "type": "semantic_ambiguity",
+            "is_mask": true
+          }
+        ],
+        "non_critical_ambiguity": [
+          {
+            "term": "fill it up",
+            "type": "null_ambiguity",
+            "is_mask": false
+          },
+          {
+            "term": "mass and radius",
+            "type": "decimal_ambiguity",
+            "is_mask": false
+          }
+        ]
+      },
+      "follow_up": [
+        {
+          "query": "Using the new table with earth-unit properties, which planet has the highest planet surface gravity? Please provide its reference id.",
+          "type": "attribute_change",
+          "category": "Query",
+          "output_type": "scalar",
+          "external_knowledge": [
+            4
+          ]
+        }
+      ]
+    },
+    {
+      "instance_id": "planets_data_M_3",
+      "selected_database": "planets_data",
+      "amb_user_query": "Let's create a summary view for all the star systems;\ncall it `v_system_overview`. For each star, I want to see its name, its size, its temperature, and counts for how its planets were discovered.",
+      "category": "Management",
+      "output_type": null,
+      "high_level": false,
+      "external_knowledge": [
+        36,
+        37
+      ],
+      "knowledge_ambiguity": [
+        {
+          "term": "Discovery via Transit Method",
+          "type": "knowledge_ambiguity",
+          "is_mask": true
+        }
+      ],
+      "user_query_ambiguity": {
+        "critical_ambiguity": [
+          {
+            "term": "how its planets were discovered",
+            "type": "knowledge_linking_ambiguity",
+            "is_mask": true
+          },
+          {
+            "term": "size",
+            "type": "schema_linking_ambiguity",
+            "is_mask": false
+          }
+        ],
+        "non_critical_ambiguity": [
+          {
+            "term": "For each star",
+            "type": "join_ambiguity",
+            "is_mask": false
+          },
+          {
+            "term": "counts",
+            "type": "null_ambiguity",
+            "is_mask": false
+          }
+        ]
+      },
+      "follow_up": [
+        {
+          "query": "From the system overview, what is the average stellar luminosity, to four decimal places, for stars that have at least one transit-discovered planet but no radial-velocity-discovered planets?",
+          "type": "result_based",
+          "category": "Query",
+          "output_type": "scalar",
+          "external_knowledge": [
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "instance_id": "planets_data_M_4",
+      "selected_database": "planets_data",
+      "amb_user_query": "Make me a table called `high_precision_params` that flags planets with very good measurements.\nIt needs to link to the planet and then have flags for mass, radius, and period.\nThen, fill it up for all relevant planets.",
+      "category": "Management",
+      "output_type": null,
+      "high_level": false,
+      "external_knowledge": [
+        8,
+        29
+      ],
+      "knowledge_ambiguity": [
+        {
+          "term": "High-Precision Measurement",
+          "type": "knowledge_ambiguity",
+          "is_mask": true
+        }
+      ],
+      "user_query_ambiguity": {
+        "critical_ambiguity": [
+          {
+            "term": "very good measurements",
+            "type": "knowledge_linking_ambiguity",
+            "is_mask": true
+          },
+          {
+            "term": "relative uncertainty",
+            "type": "semantic_ambiguity",
+            "is_mask": true
+          }
+        ],
+        "non_critical_ambiguity": [
+          {
+            "term": "all relevant planets",
+            "type": "null_ambiguity",
+            "is_mask": false
+          },
+          {
+            "term": "flags planets",
+            "type": "join_ambiguity",
+            "is_mask": false
+          }
+        ]
+      },
+      "follow_up": [
+        {
+          "query": "Based on the high-precision flags table, how many planets are considered to be a well-characterized planet?",
+          "type": "result_based",
+          "category": "Query",
+          "output_type": "scalar",
+          "external_knowledge": [
+            30
+          ]
+        }
+      ]
+    },
+    {
+      "instance_id": "planets_data_M_5",
+      "selected_database": "planets_data",
+      "amb_user_query": "I want to categorize all the stars by how big they are.\nCan you make a new table called `star_classifications` for this?\nIt needs to link to the star and give it a label based on its mass.",
+      "category": "Management",
+      "output_type": null,
+      "high_level": false,
+      "external_knowledge": [
+        43
+      ],
+      "knowledge_ambiguity": [
+        {
+          "term": "Stellar Mass Value",
+          "type": "knowledge_ambiguity",
+          "is_mask": false
+        }
+      ],
+      "user_query_ambiguity": {
+        "critical_ambiguity": [
+          {
+            "term": "label based on its mass",
+            "type": "intent_ambiguity",
+            "is_mask": false
+          },
+          {
+            "term": "how big they are",
+            "type": "schema_linking_ambiguity",
+            "is_mask": false
+          }
+        ],
+        "non_critical_ambiguity": [
+          {
+            "term": "all the stars",
+            "type": "null_ambiguity",
+            "is_mask": false
+          },
+          {
+            "term": "categorize all the stars",
+            "type": "null_ambiguity",
+            "is_mask": false
+          }
+        ]
+      },
+      "follow_up": [
+        {
+          "query": "Among the different star classifications, which class hosts the planet with the longest orbital period? Return only the classification name.",
+          "type": "topic_pivot",
+          "category": "Query",
+          "output_type": "scalar",
+          "external_knowledge": []
+        }
+      ]
+    },
+    {
+      "instance_id": "planets_data_M_6",
+      "selected_database": "planets_data",
+      "amb_user_query": "Can you make me a pre-compiled list of all the big puffy gas planets?\nLet's call it `v_inflated_giants_report`. The list should show the planet's name, its star, its mass, radius, density, and its temperature.",
+      "category": "Management",
+      "output_type": null,
+      "high_level": false,
+      "external_knowledge": [
+        5,
+        20,
+        32
+      ],
+      "knowledge_ambiguity": [
+        {
+          "term": "Inflated Gas Giant",
+          "type": "knowledge_ambiguity",
+          "is_mask": true
+        }
+      ],
+      "user_query_ambiguity": {
+        "critical_ambiguity": [
+          {
+            "term": "big puffy gas planets",
+            "type": "knowledge_linking_ambiguity",
+            "is_mask": true
+          },
+          {
+            "term": "its temperature",
+            "type": "semantic_ambiguity",
+            "is_mask": true
+          }
+        ],
+        "non_critical_ambiguity": [
+          {
+            "term": "temperature",
+            "type": "decimal_ambiguity",
+            "is_mask": true
+          },
+          {
+            "term": "all the big puffy gas planets",
+            "type": "null_ambiguity",
+            "is_mask": false
+          }
+        ]
+      },
+      "follow_up": [
+        {
+          "query": "From the inflated giants report, how many of those planets would also be classified as a high eccentricity planet?",
+          "type": "constraint_change",
+          "category": "Query",
+          "output_type": "scalar",
+          "external_knowledge": [
+            27
+          ]
+        }
+      ]
+    },
+    {
+      "instance_id": "planets_data_M_7",
+      "selected_database": "planets_data",
+      "amb_user_query": "Let's make a new table called `planet_types` to label every planet with its type.\nInclude classifications like 'Hot Jupiter', 'Super-Earth', 'Rocky Planet', and 'Gas Giant'. If a planet doesn't fit, label it 'Unknown'.\nGo ahead and fill the table after you create it.",
+      "category": "Management",
+      "output_type": null,
+      "high_level": false,
+      "external_knowledge": [
+        1,
+        20,
+        21,
+        22,
+        23,
+        24
+      ],
+      "knowledge_ambiguity": [
+        {
+          "term": "Hot Jupiter",
+          "type": "knowledge_ambiguity",
+          "is_mask": true
+        }
+      ],
+      "user_query_ambiguity": {
+        "critical_ambiguity": [
+          {
+            "term": "Include classifications like",
+            "type": "semantic_ambiguity",
+            "is_mask": true
+          },
+          {
+            "term": "'Hot Jupiter'",
+            "type": "knowledge_linking_ambiguity",
+            "is_mask": true
+          }
+        ],
+        "non_critical_ambiguity": [
+          {
+            "term": "label every planet",
+            "type": "join_ambiguity",
+            "is_mask": false
+          },
+          {
+            "term": "If a planet doesn't fit",
+            "type": "null_ambiguity",
+            "is_mask": false
+          }
+        ]
+      },
+      "follow_up": [
+        {
+          "query": "For all planets that we previously classified as 'super-earth', what is their average goldilocks value, calculated to 3 decimal places?",
+          "type": "result_based",
+          "category": "Query",
+          "output_type": "scalar",
+          "external_knowledge": [
+            3,
+            6,
+            7,
+            14
+          ]
+        }
+      ]
+    },
+    {
+      "instance_id": "planets_data_M_8",
+      "selected_database": "planets_data",
+      "amb_user_query": "I want a quick way to see which planets have dodgy star measurements.\nMake a view called `v_uncertain_measurements`. It should list planets with potentially contaminated star data.\nShow the planet's letter, host star, and which measurements are affected.",
+      "category": "Management",
+      "output_type": null,
+      "high_level": false,
+      "external_knowledge": [
+        38
+      ],
+      "knowledge_ambiguity": [
+        {
+          "term": "Blended Measurement",
+          "type": "knowledge_ambiguity",
+          "is_mask": true
+        }
+      ],
+      "user_query_ambiguity": {
+        "critical_ambiguity": [
+          {
+            "term": "dodgy star measurements",
+            "type": "knowledge_linking_ambiguity",
+            "is_mask": true
+          },
+          {
+            "term": "which measurements are affected",
+            "type": "intent_ambiguity",
+            "is_mask": false
+          }
+        ],
+        "non_critical_ambiguity": []
+      },
+      "follow_up": [
+        {
+          "query": "From the list of planets with uncertain measurements, what percentage of them have a retrograde orbit? Please provide the answer to two decimal places.",
+          "type": "result_based",
+          "category": "Query",
+          "output_type": "scalar",
+          "external_knowledge": [
+            31
+          ]
+        }
+      ]
+    },
+    {
+      "instance_id": "planets_data_M_9",
+      "selected_database": "planets_data",
+      "amb_user_query": "Let's make a table for studying multi-planet systems, call it `system_period_ratios`.\nIt should have the star's ID, and for adjacent planets, their periods and the ratio.\nFill it up for any system that has more than one planet.",
+      "category": "Management",
+      "output_type": null,
+      "high_level": false,
+      "external_knowledge": [
+        17,
+        28,
+        33
+      ],
+      "knowledge_ambiguity": [
+        {
+          "term": "Orbital Period Ratio",
+          "type": "knowledge_ambiguity",
+          "is_mask": true
+        }
+      ],
+      "user_query_ambiguity": {
+        "critical_ambiguity": [
+          {
+            "term": "adjacent planets",
+            "type": "semantic_ambiguity",
+            "is_mask": false
+          },
+          {
+            "term": "the ratio",
+            "type": "knowledge_linking_ambiguity",
+            "is_mask": true
+          }
+        ],
+        "non_critical_ambiguity": [
+          {
+            "term": "find adjacent planets",
+            "type": "rank_ambiguity",
+            "is_mask": false
+          },
+          {
+            "term": "their periods",
+            "type": "null_ambiguity",
+            "is_mask": false
+          }
+        ]
+      },
+      "follow_up": [
+        {
+          "query": "Using the period ratios we calculated, how many stars host a truly compact system?",
+          "type": "constraint_change",
+          "category": "Query",
+          "output_type": "scalar",
+          "external_knowledge": [
+            33
+          ]
+        }
+      ]
+    },
+    {
+      "instance_id": "planets_data_M_10",
+      "selected_database": "planets_data",
+      "amb_user_query": "I need a pre-calculated summary of how we're finding planets.\nPlease create a materialized view called `v_discovery_stats`. It should list each discovery technique, and for each one, show the number of planets found, their average distance, and the last update date.",
+      "category": "Management",
+      "output_type": null,
+      "high_level": false,
+      "external_knowledge": [
+        0
+      ],
+      "knowledge_ambiguity": [
+        {
+          "term": "Distance in Light-Years",
+          "type": "knowledge_ambiguity",
+          "is_mask": true
+        }
+      ],
+      "user_query_ambiguity": {
+        "critical_ambiguity": [
+          {
+            "term": "average distance",
+            "type": "knowledge_linking_ambiguity",
+            "is_mask": true
+          },
+          {
+            "term": "last update date",
+            "type": "schema_linking_ambiguity",
+            "is_mask": false
+          }
+        ],
+        "non_critical_ambiguity": [
+          {
+            "term": "their average distance",
+            "type": "decimal_ambiguity",
+            "is_mask": true
+          },
+          {
+            "term": "number of planets found",
+            "type": "join_ambiguity",
+            "is_mask": false
+          }
+        ]
+      },
+      "follow_up": [
+        {
+          "query": "From our discovery stats view, what is the ratio of the average distance for 'transit' discoveries to 'radvel' discoveries, calculated to two decimal places?",
+          "type": "topic_pivot",
+          "category": "Query",
+          "output_type": "scalar",
+          "external_knowledge": []
+        }
+      ]
+    }
+  ]
+}

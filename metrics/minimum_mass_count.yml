@@ -1,0 +1,10 @@
+unique_name: Minimum Mass Count
+object_type: metric
+label: Minimum Mass Count
+description: How many of the selected planets record a mass at all. 1174 warehouse-wide; the Mass Source
+  attribute says which of them are minimum masses - 554 read 'Msini' and 9 read 'Msin(i)/sin(i)'.
+dataset: Planet Detail
+column: has_planet_mass_jupiter
+calculation_method: sum
+unrelated_dimensions_handling: error
+is_hidden: true

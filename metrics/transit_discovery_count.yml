@@ -1,0 +1,8 @@
+unique_name: Transit Discovery Count
+object_type: metric
+label: Transit Discovery Count
+description: How many of the selected planets were discovered by transit. 2664 of 3372 warehouse-wide.
+dataset: Planet Detail
+column: transit_discovery_indicator
+calculation_method: sum
+unrelated_dimensions_handling: error

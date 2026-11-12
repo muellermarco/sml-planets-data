@@ -1,0 +1,8 @@
+unique_name: Observation Count
+object_type: metric
+label: Observation Count
+description: How many planet-to-survey observation records. All 2683, over 2460 planets and 3 facilities.
+dataset: Planet Observation
+column: observation_row_count
+calculation_method: sum
+unrelated_dimensions_handling: error

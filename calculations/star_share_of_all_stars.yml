@@ -1,0 +1,6 @@
+unique_name: Star Share Of All Stars
+object_type: metric_calc
+label: Star Share Of All Stars
+description: Share of all 2509 host stars falling in the current selection. A FRACTION from 0 to 1.
+expression: CASE WHEN ISEMPTY(AllMember([Measures].[Star Count])) OR AllMember([Measures].[Star Count])
+  = 0 THEN NULL ELSE [Measures].[Star Count] / AllMember([Measures].[Star Count]) END

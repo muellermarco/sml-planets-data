@@ -1,0 +1,8 @@
+unique_name: Well Characterized Count
+object_type: metric
+label: Well Characterized Count
+description: How many of the selected planets have high-precision mass, radius AND period. 48 warehouse-wide.
+dataset: Planet Detail
+column: well_characterized_indicator
+calculation_method: sum
+unrelated_dimensions_handling: error

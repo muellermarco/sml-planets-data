@@ -1,0 +1,9 @@
+unique_name: Maximum Planet Star Mass Ratio
+object_type: metric
+label: Maximum Planet Star Mass Ratio
+description: Largest planet-to-star mass ratio among the selection. 0.69997 warehouse-wide - a companion
+  nearly as heavy as its host.
+dataset: Planet Detail
+column: planet_star_mass_ratio
+calculation_method: maximum
+unrelated_dimensions_handling: error

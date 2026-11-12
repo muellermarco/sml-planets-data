@@ -1,0 +1,8 @@
+unique_name: Maximum Planet Radius Jupiter
+object_type: metric
+label: Maximum Planet Radius Jupiter
+description: Largest planet among the selection, in Jupiter radii. 6.9 warehouse-wide.
+dataset: Planet Detail
+column: planet_radius_jupiter
+calculation_method: maximum
+unrelated_dimensions_handling: error

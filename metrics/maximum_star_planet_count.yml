@@ -1,0 +1,8 @@
+unique_name: Maximum Star Planet Count
+object_type: metric
+label: Maximum Star Planet Count
+description: Largest number of planets in one system. 7 warehouse-wide.
+dataset: Star Detail
+column: star_planet_count
+calculation_method: maximum
+unrelated_dimensions_handling: error

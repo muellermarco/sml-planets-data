@@ -1,0 +1,8 @@
+unique_name: Planet Share Of All Planets
+object_type: metric_calc
+label: Planet Share Of All Planets
+description: Share of all 3372 planets falling in the current selection - what percentage of the catalogue.
+  Returned as a FRACTION from 0 to 1, not a percentage. The denominator strips every filter and grouping,
+  so this works beside any grouping including a category the user defined in conversation.
+expression: CASE WHEN ISEMPTY(AllMember([Measures].[Planet Count])) OR AllMember([Measures].[Planet Count])
+  = 0 THEN NULL ELSE [Measures].[Planet Count] / AllMember([Measures].[Planet Count]) END

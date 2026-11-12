@@ -1,0 +1,9 @@
+unique_name: Distinct Star Count On Planets
+object_type: metric
+label: Distinct Star Count On Planets
+description: How many distinct host stars the selected planets belong to. 2509 across all 3372 planets.
+  Use this rather than Planet Count whenever the question counts stars or systems but filters planets.
+dataset: Planet Detail
+column: star
+calculation_method: count distinct
+unrelated_dimensions_handling: error

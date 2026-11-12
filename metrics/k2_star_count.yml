@@ -1,0 +1,8 @@
+unique_name: K2 Star Count
+object_type: metric
+label: K2 Star Count
+description: How many of the selected stars have a planet observed by K2. 94 of 2509 warehouse-wide.
+dataset: Star Detail
+column: k2_observation_indicator_measure
+calculation_method: sum
+unrelated_dimensions_handling: error

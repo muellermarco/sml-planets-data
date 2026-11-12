@@ -1,0 +1,8 @@
+unique_name: Total Adjacent Pairs
+object_type: metric
+label: Total Adjacent Pairs
+description: Adjacent planet pairs added across the selected stars. 861 warehouse-wide.
+dataset: Star Detail
+column: adjacent_pair_count_measure
+calculation_method: sum
+unrelated_dimensions_handling: error

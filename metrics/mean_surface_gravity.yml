@@ -1,0 +1,9 @@
+unique_name: Mean Surface Gravity
+object_type: metric
+label: Mean Surface Gravity
+description: Mean surface gravity relative to Earth's. 22.225 across the 509 planets with both a mass
+  and a radius.
+dataset: Planet Detail
+column: surface_gravity_measure
+calculation_method: average
+unrelated_dimensions_handling: error

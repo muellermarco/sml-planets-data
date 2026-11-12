@@ -1,0 +1,8 @@
+unique_name: Kepler Observed Planet Count
+object_type: metric
+label: Kepler Observed Planet Count
+description: How many of the selected planets were observed by the Kepler mission. 2329 of 3372 warehouse-wide.
+dataset: Planet Detail
+column: kepler_observation_indicator_measure
+calculation_method: sum
+unrelated_dimensions_handling: error

@@ -1,0 +1,8 @@
+unique_name: Planets With A Radius
+object_type: metric
+label: Planets With A Radius
+description: How many of the selected planets record a radius. 2694 of 3372 warehouse-wide.
+dataset: Planet Detail
+column: has_planet_radius_jupiter
+calculation_method: sum
+unrelated_dimensions_handling: error

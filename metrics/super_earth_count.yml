@@ -1,0 +1,9 @@
+unique_name: Super Earth Count
+object_type: metric
+label: Super Earth Count
+description: How many of the selected planets are super-Earths - rocky with a mass between 1 and 10 Earth
+  masses. 31 warehouse-wide, of which 29 were found by transit.
+dataset: Planet Detail
+column: super_earth_indicator
+calculation_method: sum
+unrelated_dimensions_handling: error

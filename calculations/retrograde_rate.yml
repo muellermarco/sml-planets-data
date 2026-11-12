@@ -1,0 +1,8 @@
+unique_name: Retrograde Rate
+object_type: metric_calc
+label: Retrograde Rate
+description: Among planets carrying an inclination, the share orbiting retrograde. A FRACTION from 0 to
+  1; warehouse-wide 8/502, or 0.015936.
+expression: CASE WHEN ISEMPTY([Measures].[Planets With An Inclination]) OR [Measures].[Planets With An
+  Inclination] = 0 THEN NULL ELSE [Measures].[Retrograde Orbit Count] / [Measures].[Planets With An Inclination]
+  END

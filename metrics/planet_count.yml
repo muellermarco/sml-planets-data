@@ -1,0 +1,10 @@
+unique_name: Planet Count
+object_type: metric
+label: Planet Count
+description: How many planets, number of exoplanets. All 3372 regardless of which measurements they carry,
+  so a question about a physical property must filter first - a mass exists for 1174 and a density for
+  388.
+dataset: Planet Detail
+column: planet_row_count
+calculation_method: sum
+unrelated_dimensions_handling: error

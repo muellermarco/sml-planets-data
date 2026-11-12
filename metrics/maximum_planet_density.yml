@@ -1,0 +1,9 @@
+unique_name: Maximum Planet Density
+object_type: metric
+label: Maximum Planet Density
+description: Highest bulk density among the selection. 77.7 grams per cubic centimetre warehouse-wide
+  - far denser than any rock, which is a measurement artefact rather than a physical planet.
+dataset: Planet Detail
+column: planet_density
+calculation_method: maximum
+unrelated_dimensions_handling: error

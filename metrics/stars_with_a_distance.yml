@@ -1,0 +1,8 @@
+unique_name: Stars With A Distance
+object_type: metric
+label: Stars With A Distance
+description: How many of the selected stars record a distance. 1996 of 2509 warehouse-wide.
+dataset: Star Detail
+column: has_stellar_distance_pc
+calculation_method: sum
+unrelated_dimensions_handling: error

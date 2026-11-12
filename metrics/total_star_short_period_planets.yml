@@ -1,0 +1,8 @@
+unique_name: Total Star Short Period Planets
+object_type: metric
+label: Total Star Short Period Planets
+description: Short-period planets added across the selected stars. 1445 warehouse-wide.
+dataset: Star Detail
+column: star_short_period_count_measure
+calculation_method: sum
+unrelated_dimensions_handling: error

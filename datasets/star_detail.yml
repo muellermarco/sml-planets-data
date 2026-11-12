@@ -1,0 +1,349 @@
+unique_name: Star Detail
+object_type: dataset
+label: Star Detail
+connection_id: bird_planets_data
+sql: "SELECT q.*,\n  CASE WHEN q.stellar_distance_pc IS NOT NULL THEN 1 ELSE 0 END AS has_stellar_distance_pc,\n\
+  \  CASE WHEN q.stellar_mass IS NOT NULL THEN 1 ELSE 0 END AS has_stellar_mass,\n  CASE WHEN q.stellar_radius\
+  \ IS NOT NULL THEN 1 ELSE 0 END AS has_stellar_radius,\n  CASE WHEN q.stellar_temperature IS NOT NULL\
+  \ THEN 1 ELSE 0 END AS has_stellar_temperature,\n  CASE WHEN q.stellar_luminosity IS NOT NULL THEN 1\
+  \ ELSE 0 END AS has_stellar_luminosity,\n  CASE WHEN q.stellar_density_solar IS NOT NULL THEN 1 ELSE\
+  \ 0 END AS has_stellar_density_solar,\n  CASE WHEN q.optical_magnitude IS NOT NULL THEN 1 ELSE 0 END\
+  \ AS has_optical_magnitude,\n  CASE WHEN q.max_adjacent_period_ratio IS NOT NULL THEN 1 ELSE 0 END AS\
+  \ has_max_adjacent_period_ratio,\n  q.stellar_distance_pc AS stellar_distance_pc_measure,\n  q.stellar_distance_ly\
+  \ AS stellar_distance_ly_measure,\n  q.stellar_mass AS stellar_mass_measure,\n  q.stellar_radius AS\
+  \ stellar_radius_measure,\n  q.stellar_temperature AS stellar_temperature_measure,\n  q.optical_magnitude\
+  \ AS optical_magnitude_measure,\n  q.stellar_luminosity AS stellar_luminosity_measure,\n  q.stellar_density_kg_m3\
+  \ AS stellar_density_kg_m3_measure,\n  q.stellar_density_solar AS stellar_density_solar_measure,\n \
+  \ q.gravitational_parameter AS gravitational_parameter_measure,\n  q.habitable_zone_inner_au AS habitable_zone_inner_au_measure,\n\
+  \  q.habitable_zone_outer_au AS habitable_zone_outer_au_measure,\n  q.star_planet_count AS star_planet_count_measure,\n\
+  \  q.companion_count AS companion_count_measure,\n  q.shortest_orbital_period AS shortest_orbital_period_measure,\n\
+  \  q.max_adjacent_period_ratio AS max_adjacent_period_ratio_measure,\n  q.mean_adjacent_period_ratio\
+  \ AS mean_adjacent_period_ratio_measure,\n  q.geometric_mean_adjacent_period_ratio AS geometric_mean_adjacent_period_ratio_measure,\n\
+  \  q.adjacent_pair_count AS adjacent_pair_count_measure,\n  q.star_gas_giant_count AS star_gas_giant_count_measure,\n\
+  \  q.star_rocky_planet_count AS star_rocky_planet_count_measure,\n  q.star_planets_with_density AS star_planets_with_density_measure,\n\
+  \  q.star_short_period_count AS star_short_period_count_measure,\n  q.star_transit_discovery_count AS\
+  \ star_transit_discovery_count_measure,\n  q.star_radial_velocity_count AS star_radial_velocity_count_measure,\n\
+  \  q.kepler_observation_indicator AS kepler_observation_indicator_measure,\n  q.k2_observation_indicator\
+  \ AS k2_observation_indicator_measure,\n  q.ttv_observation_indicator AS ttv_observation_indicator_measure\n\
+  FROM (\nWITH ratios AS (\n    SELECT\n        pp.hostlink                                     AS star,\n\
+  \        oo.period                                       AS period,\n        lead(oo.period) OVER (\n\
+  \            PARTITION BY pp.hostlink\n            ORDER BY oo.period)                         AS next_period\n\
+  \    FROM public.planets pp\n    JOIN public.orbital_characteristics oo ON oo.bodylink = pp.planetref\n\
+  ),\npairs AS (\n    SELECT\n        star,\n        count(*) FILTER (WHERE next_period IS NOT NULL) AS\
+  \ adjacent_pair_count,\n        max(next_period / NULLIF(period, 0))            AS max_ratio,\n    \
+  \    min(next_period / NULLIF(period, 0))            AS min_ratio,\n        avg(next_period / NULLIF(period,\
+  \ 0))            AS avg_ratio,\n        exp(avg(ln(next_period / NULLIF(period, 0))))   AS geo_ratio\n\
+  \    FROM ratios\n    GROUP BY star\n),\nper_star AS (\n    SELECT\n        pp.hostlink            \
+  \                         AS star,\n        count(*)                                        AS planet_count,\n\
+  \        min(oo.period)                                  AS shortest_period,\n        max(oo.period)\
+  \                                  AS longest_period,\n        min(oo.semimajor)                   \
+  \            AS innermost_semi_major,\n        max(oo.semimajor)                               AS outermost_semi_major,\n\
+  \        max(php.massjup)                                AS heaviest_planet_mass,\n        max(php.radjup)\
+  \                                 AS largest_planet_radius,\n        max(php.densvalue)            \
+  \                  AS densest_planet,\n        sum(CASE WHEN php.massjup > 0.1 THEN 1 ELSE 0 END) AS\
+  \ gas_giant_count,\n        sum(CASE WHEN php.densvalue > 3 THEN 1 ELSE 0 END) AS rocky_count,\n   \
+  \     count(php.densvalue)                            AS planets_with_density,\n        count(CASE WHEN\
+  \ php.densvalue IS NOT NULL OR php.massjup IS NOT NULL\n                   THEN 1 END)             \
+  \             AS planets_with_composition,\n        sum(CASE WHEN oo.period < 10 THEN 1 ELSE 0 END)\
+  \ AS short_period_count,\n        sum(CASE WHEN CASE WHEN lower(trim(pp.discmethod)) IN ('radvel', 'rv',\
+  \ 'rv method', 'radial velocity', 'doppler') THEN 'Radial Velocity' WHEN lower(trim(pp.discmethod))\
+  \ IN ('transit', 'tr', 'transit method', 'photometry', 'photometric') THEN 'Transit' WHEN lower(trim(pp.discmethod))\
+  \ IN ('direct imaging', 'di', 'imaging', 'img', 'direct') THEN 'Imaging' WHEN lower(trim(pp.discmethod))\
+  \ IN ('ttv', 'transit timing variations', 'transit timing', 'ttv method', 'timing var') THEN 'TTV' WHEN\
+  \ lower(trim(pp.discmethod)) IN ('microlensing', 'ml', 'lensing', 'gravitational') OR trim(pp.discmethod)\
+  \ = concat(chr(956), 'Lens') THEN 'Microlensing' ELSE 'Other' END = 'Transit' THEN 1 ELSE 0 END)   \
+  \     AS transit_discovery_count,\n        sum(CASE WHEN CASE WHEN lower(trim(pp.discmethod)) IN ('radvel',\
+  \ 'rv', 'rv method', 'radial velocity', 'doppler') THEN 'Radial Velocity' WHEN lower(trim(pp.discmethod))\
+  \ IN ('transit', 'tr', 'transit method', 'photometry', 'photometric') THEN 'Transit' WHEN lower(trim(pp.discmethod))\
+  \ IN ('direct imaging', 'di', 'imaging', 'img', 'direct') THEN 'Imaging' WHEN lower(trim(pp.discmethod))\
+  \ IN ('ttv', 'transit timing variations', 'transit timing', 'ttv method', 'timing var') THEN 'TTV' WHEN\
+  \ lower(trim(pp.discmethod)) IN ('microlensing', 'ml', 'lensing', 'gravitational') OR trim(pp.discmethod)\
+  \ = concat(chr(956), 'Lens') THEN 'Microlensing' ELSE 'Other' END = 'Radial Velocity' THEN 1 ELSE 0\
+  \ END)         AS radial_velocity_count\n    FROM public.planets pp\n    LEFT JOIN public.orbital_characteristics\
+  \ oo ON oo.bodylink = pp.planetref\n    LEFT JOIN public.physical_properties php ON php.objectlink =\
+  \ pp.planetref\n    GROUP BY pp.hostlink\n),\nstar_obs AS (\n    SELECT\n        pp.hostlink       \
+  \                              AS star,\n        max(CASE WHEN i.facilityname = 'kep' THEN 1 ELSE 0\
+  \ END) AS kepler_flag,\n        max(CASE WHEN i.facilityname = 'k2' THEN 1 ELSE 0 END)  AS k2_flag,\n\
+  \        max(CASE WHEN i.facilityname = 'ttv' THEN 1 ELSE 0 END) AS ttv_flag\n    FROM public.planet_instrument_observations\
+  \ io\n    JOIN public.instruments_surveys i ON i.instrumentref = io.facilitylink\n    JOIN public.planets\
+  \ pp ON pp.planetref = io.subjectlink\n    GROUP BY pp.hostlink\n)\nSELECT\n    s.stellarref       \
+  \                                 AS star,\n    s.hostplname                                       \
+  \ AS star_name,\n    (s.stellardist)::text::numeric                               AS stellar_distance_pc,\n\
+  \    (s.stellardist * 3.26156)                       AS stellar_distance_ly,\n    s.compcount::double\
+  \ precision                       AS companion_count,\n    (s.stellarprops->'physical'->>'Mass_Value')::numeric\
+  \                                    AS stellar_mass,\n    (s.stellarprops->'physical'->>'Radius_Value')::numeric\
+  \                                  AS stellar_radius,\n    (s.stellarprops->'physical'->>'Temp_Value')::numeric\
+  \                                    AS stellar_temperature,\n    (s.stellarprops->'photometry'->>'Opt_Mag')::numeric\
+  \                                         AS optical_magnitude,\n    s.stellarprops->'photometry'->>'Photo_Band'\
+  \                                             AS photometric_band_stored,\n    CASE WHEN lower(trim(s.stellarprops->'photometry'->>'Photo_Band'))\
+  \ IN ('v (johnson)', 'johnson', 'v', 'johnson v', 'v-band') THEN 'Johnson V' WHEN lower(trim(s.stellarprops->'photometry'->>'Photo_Band'))\
+  \ IN ('kepler-band', 'kepler', 'kep-b', 'kep') THEN 'Kepler' WHEN lower(trim(s.stellarprops->'photometry'->>'Photo_Band'))\
+  \ = 'k-band' THEN 'K-band' WHEN s.stellarprops->'photometry'->>'Photo_Band' IS NOT NULL THEN 'Other'\
+  \ END                                     AS photometric_band,\n    CASE WHEN lower(trim(s.stellarprops->'photometry'->>'Photo_Band'))\
+  \ IN ('v (johnson)', 'johnson', 'v', 'johnson v') THEN 'Johnson V' WHEN lower(trim(s.stellarprops->'photometry'->>'Photo_Band'))\
+  \ = 'v-band' THEN 'V-band' WHEN lower(trim(s.stellarprops->'photometry'->>'Photo_Band')) IN ('kepler-band',\
+  \ 'kepler', 'kep-b', 'kep') THEN 'Kepler' WHEN lower(trim(s.stellarprops->'photometry'->>'Photo_Band'))\
+  \ = 'k-band' THEN 'K-band' WHEN s.stellarprops->'photometry'->>'Photo_Band' IS NOT NULL THEN 'Other'\
+  \ END                                       AS photometric_band_strict,\n    CASE WHEN lower(trim(s.stellarprops->'photometry'->>'Photo_Band'))\
+  \ IN ('v (johnson)', 'johnson', 'v', 'johnson v', 'v-band') THEN 'V-Band' WHEN lower(trim(s.stellarprops->'photometry'->>'Photo_Band'))\
+  \ IN ('kepler-band', 'kepler', 'kep-b', 'kep') THEN 'Kepler-Band' END                              \
+  \         AS photometric_band_group,\n    (POWER((s.stellarprops->'physical'->>'Radius_Value')::real,\
+  \ 2) * POWER((s.stellarprops->'physical'->>'Temp_Value')::real / 5778, 4))                         \
+  \               AS stellar_luminosity,\n    SQRT((POWER((s.stellarprops->'physical'->>'Radius_Value')::real,\
+  \ 2) * POWER((s.stellarprops->'physical'->>'Temp_Value')::real / 5778, 4)) / 1.1)                  \
+  \                        AS habitable_zone_inner_au,\n    SQRT((POWER((s.stellarprops->'physical'->>'Radius_Value')::real,\
+  \ 2) * POWER((s.stellarprops->'physical'->>'Temp_Value')::real / 5778, 4)) / 0.53)                 \
+  \                         AS habitable_zone_outer_au,\n    (((s.stellarprops->'physical'->>'Mass_Value')::real\
+  \ * 1.98847E30) / NULLIF(4.0/3.0 * PI() * POWER((s.stellarprops->'physical'->>'Radius_Value')::real\
+  \ * 6.957E8, 3), 0))                             AS stellar_density_kg_m3,\n    ((s.stellarprops->'physical'->>'Mass_Value')::real\
+  \ / NULLIF(4.0/3.0 * PI() * POWER((s.stellarprops->'physical'->>'Radius_Value')::real, 3), 0))     \
+  \                        AS stellar_density_solar,\n    (6.67430E-11 * (s.stellarprops->'physical'->>'Mass_Value')::real\
+  \ * 1.98847E30)                                    AS gravitational_parameter,\n    (s.coordsys->>'RA_Decimal')::double\
+  \ precision                         AS right_ascension_degrees,\n    (s.coordsys->>'Dec_Decimal')::double\
+  \ precision                        AS declination_degrees,\n    s.coordsys->>'RA_Text'             \
+  \                       AS right_ascension_text,\n    s.coordsys->>'Dec_Text'                      \
+  \             AS declination_text,\n    (s.stellarprops->'physical'->>'Temp_Blend')::double precision\
+  \                         AS temperature_blend_flag,\n    (s.stellarprops->'physical'->>'Mass_Blend')::double\
+  \ precision                         AS mass_blend_flag,\n    (s.stellarprops->'physical'->>'Rad_Blend')::double\
+  \ precision                          AS radius_blend_flag,\n    (s.stellarprops->'photometry'->>'Mag_Blend')::double\
+  \ precision                          AS magnitude_blend_flag,\n    CASE WHEN (s.stellarprops->'photometry'->>'Mag_Blend')::double\
+  \ precision = 1 THEN 'Yes' WHEN (s.stellarprops->'photometry'->>'Mag_Blend')::double precision IS NOT\
+  \ NULL THEN 'No' END                 AS star_magnitude_blended,\n    CASE WHEN COALESCE((s.stellarprops->'physical'->>'Temp_Blend')::double\
+  \ precision, 0) = 1\n              OR COALESCE((s.stellarprops->'physical'->>'Mass_Blend')::double precision,\
+  \ 0) = 1\n              OR COALESCE((s.stellarprops->'physical'->>'Rad_Blend')::double precision, 0)\
+  \ = 1\n              OR COALESCE((s.stellarprops->'photometry'->>'Mag_Blend')::double precision, 0)\
+  \ = 1\n         THEN 'Yes' ELSE 'No' END                       AS any_blended_measurement,\n    ps.planet_count::double\
+  \ precision                   AS star_planet_count,\n    (ps.shortest_period)::text::numeric       \
+  \                   AS shortest_orbital_period,\n    (ps.longest_period)::text::numeric            \
+  \               AS longest_orbital_period,\n    (ps.innermost_semi_major)::text::numeric           \
+  \          AS innermost_semi_major_axis,\n    (ps.outermost_semi_major)::text::numeric             \
+  \        AS outermost_semi_major_axis,\n    (ps.heaviest_planet_mass)::text::numeric               \
+  \      AS heaviest_planet_mass_jupiter,\n    (ps.largest_planet_radius)::text::numeric             \
+  \       AS largest_planet_radius_jupiter,\n    (ps.densest_planet)::text::numeric                  \
+  \         AS densest_planet_density,\n    ps.gas_giant_count::double precision                AS star_gas_giant_count,\n\
+  \    ps.rocky_count::double precision                    AS star_rocky_planet_count,\n    ps.planets_with_density::double\
+  \ precision           AS star_planets_with_density,\n    ps.planets_with_composition::double precision\
+  \       AS star_planets_with_composition,\n    ps.short_period_count::double precision             AS\
+  \ star_short_period_count,\n    ps.transit_discovery_count::double precision        AS star_transit_discovery_count,\n\
+  \    ps.radial_velocity_count::double precision          AS star_radial_velocity_count,\n    pr.adjacent_pair_count::double\
+  \ precision            AS adjacent_pair_count,\n    pr.max_ratio                                   \
+  \     AS max_adjacent_period_ratio,\n    pr.min_ratio                                        AS min_adjacent_period_ratio,\n\
+  \    pr.avg_ratio                                        AS mean_adjacent_period_ratio,\n    pr.geo_ratio\
+  \                                        AS geometric_mean_adjacent_period_ratio,\n    COALESCE(so.kepler_flag,\
+  \ 0)                         AS kepler_observation_indicator,\n    COALESCE(so.k2_flag, 0)         \
+  \                    AS k2_observation_indicator,\n    COALESCE(so.ttv_flag, 0)                    \
+  \        AS ttv_observation_indicator,\n    CASE WHEN s.compcount > 1 THEN 'Yes' ELSE 'No' END  AS multi_planetary_system,\n\
+  \    CASE WHEN s.compcount > 1 THEN 1 ELSE 0 END         AS multi_planetary_indicator,\n    CASE WHEN\
+  \ ps.planet_count > 1 THEN 'Yes' ELSE 'No' END\n                                                   \
+  \     AS multiple_planet_rows,\n    CASE WHEN ps.planets_with_composition = 0 THEN NULL\n         WHEN\
+  \ ps.rocky_count > 0 AND ps.gas_giant_count = 0 THEN 'Rocky Only'\n         WHEN ps.gas_giant_count\
+  \ > 0 AND ps.rocky_count = 0 THEN 'Gas Giants Only'\n         WHEN ps.rocky_count > 0 AND ps.gas_giant_count\
+  \ > 0 THEN 'Mixed'\n         ELSE 'Neither' END                             AS system_composition,\n\
+  \    CASE WHEN ps.planets_with_composition = 0 THEN NULL\n         WHEN ps.rocky_count > 0 THEN 'Yes'\
+  \ ELSE 'No' END AS has_rocky_planet,\n    CASE WHEN ps.planets_with_composition = 0 THEN NULL\n    \
+  \     WHEN ps.gas_giant_count > 0 THEN 'Yes' ELSE 'No' END AS has_gas_giant,\n    CASE WHEN ps.rocky_count\
+  \ > 0 AND ps.gas_giant_count = 0 THEN 1 ELSE 0 END\n                                               \
+  \         AS rocky_only_indicator,\n    CASE WHEN ps.gas_giant_count > 0 AND ps.rocky_count = 0 THEN\
+  \ 1 ELSE 0 END\n                                                        AS gas_giants_only_indicator,\n\
+  \    CASE WHEN ps.rocky_count = ps.planets_with_density\n              AND ps.planets_with_density >\
+  \ 0 THEN 'Yes'\n         WHEN ps.planets_with_density > 0 THEN 'No' END  AS all_density_measured_rocky,\n\
+  \    1                                                   AS star_row_count\nFROM public.stars s\nLEFT\
+  \ JOIN per_star ps ON ps.star = s.stellarref\nLEFT JOIN pairs pr ON pr.star = s.stellarref\nLEFT JOIN\
+  \ star_obs so ON so.star = s.stellarref\n) q"
+columns:
+- name: star
+  data_type: long
+- name: star_name
+  data_type: string
+- name: stellar_distance_pc
+  data_type: decimal
+- name: stellar_distance_ly
+  data_type: double
+- name: companion_count
+  data_type: double
+- name: stellar_mass
+  data_type: decimal
+- name: stellar_radius
+  data_type: decimal
+- name: stellar_temperature
+  data_type: decimal
+- name: optical_magnitude
+  data_type: decimal
+- name: photometric_band_stored
+  data_type: string
+- name: photometric_band
+  data_type: string
+- name: photometric_band_strict
+  data_type: string
+- name: photometric_band_group
+  data_type: string
+- name: stellar_luminosity
+  data_type: double
+- name: habitable_zone_inner_au
+  data_type: double
+- name: habitable_zone_outer_au
+  data_type: double
+- name: stellar_density_kg_m3
+  data_type: double
+- name: stellar_density_solar
+  data_type: double
+- name: gravitational_parameter
+  data_type: double
+- name: right_ascension_degrees
+  data_type: double
+- name: declination_degrees
+  data_type: double
+- name: right_ascension_text
+  data_type: string
+- name: declination_text
+  data_type: string
+- name: temperature_blend_flag
+  data_type: double
+- name: mass_blend_flag
+  data_type: double
+- name: radius_blend_flag
+  data_type: double
+- name: magnitude_blend_flag
+  data_type: double
+- name: star_magnitude_blended
+  data_type: string
+- name: any_blended_measurement
+  data_type: string
+- name: star_planet_count
+  data_type: double
+- name: shortest_orbital_period
+  data_type: decimal
+- name: longest_orbital_period
+  data_type: decimal
+- name: innermost_semi_major_axis
+  data_type: decimal
+- name: outermost_semi_major_axis
+  data_type: decimal
+- name: heaviest_planet_mass_jupiter
+  data_type: decimal
+- name: largest_planet_radius_jupiter
+  data_type: decimal
+- name: densest_planet_density
+  data_type: decimal
+- name: star_gas_giant_count
+  data_type: double
+- name: star_rocky_planet_count
+  data_type: double
+- name: star_planets_with_density
+  data_type: double
+- name: star_planets_with_composition
+  data_type: double
+- name: star_short_period_count
+  data_type: double
+- name: star_transit_discovery_count
+  data_type: double
+- name: star_radial_velocity_count
+  data_type: double
+- name: adjacent_pair_count
+  data_type: double
+- name: max_adjacent_period_ratio
+  data_type: double
+- name: min_adjacent_period_ratio
+  data_type: double
+- name: mean_adjacent_period_ratio
+  data_type: double
+- name: geometric_mean_adjacent_period_ratio
+  data_type: double
+- name: kepler_observation_indicator
+  data_type: int
+- name: k2_observation_indicator
+  data_type: int
+- name: ttv_observation_indicator
+  data_type: int
+- name: multi_planetary_system
+  data_type: string
+- name: multi_planetary_indicator
+  data_type: int
+- name: multiple_planet_rows
+  data_type: string
+- name: system_composition
+  data_type: string
+- name: has_rocky_planet
+  data_type: string
+- name: has_gas_giant
+  data_type: string
+- name: rocky_only_indicator
+  data_type: int
+- name: gas_giants_only_indicator
+  data_type: int
+- name: all_density_measured_rocky
+  data_type: string
+- name: star_row_count
+  data_type: int
+- name: has_stellar_distance_pc
+  data_type: int
+- name: has_stellar_mass
+  data_type: int
+- name: has_stellar_radius
+  data_type: int
+- name: has_stellar_temperature
+  data_type: int
+- name: has_stellar_luminosity
+  data_type: int
+- name: has_stellar_density_solar
+  data_type: int
+- name: has_optical_magnitude
+  data_type: int
+- name: has_max_adjacent_period_ratio
+  data_type: int
+- name: stellar_distance_pc_measure
+  data_type: decimal
+- name: stellar_distance_ly_measure
+  data_type: double
+- name: stellar_mass_measure
+  data_type: decimal
+- name: stellar_radius_measure
+  data_type: decimal
+- name: stellar_temperature_measure
+  data_type: decimal
+- name: optical_magnitude_measure
+  data_type: decimal
+- name: stellar_luminosity_measure
+  data_type: double
+- name: stellar_density_kg_m3_measure
+  data_type: double
+- name: stellar_density_solar_measure
+  data_type: double
+- name: gravitational_parameter_measure
+  data_type: double
+- name: habitable_zone_inner_au_measure
+  data_type: double
+- name: habitable_zone_outer_au_measure
+  data_type: double
+- name: star_planet_count_measure
+  data_type: double
+- name: companion_count_measure
+  data_type: double
+- name: shortest_orbital_period_measure
+  data_type: decimal
+- name: max_adjacent_period_ratio_measure
+  data_type: double
+- name: mean_adjacent_period_ratio_measure
+  data_type: double
+- name: geometric_mean_adjacent_period_ratio_measure
+  data_type: double
+- name: adjacent_pair_count_measure
+  data_type: double
+- name: star_gas_giant_count_measure
+  data_type: double
+- name: star_rocky_planet_count_measure
+  data_type: double
+- name: star_planets_with_density_measure
+  data_type: double
+- name: star_short_period_count_measure
+  data_type: double
+- name: star_transit_discovery_count_measure
+  data_type: double
+- name: star_radial_velocity_count_measure
+  data_type: double
+- name: kepler_observation_indicator_measure
+  data_type: int
+- name: k2_observation_indicator_measure
+  data_type: int
+- name: ttv_observation_indicator_measure
+  data_type: int

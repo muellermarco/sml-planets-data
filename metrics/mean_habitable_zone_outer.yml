@@ -1,0 +1,8 @@
+unique_name: Mean Habitable Zone Outer
+object_type: metric
+label: Mean Habitable Zone Outer
+description: Mean outer edge of the habitable zone, in AU. 1.8664 across 2207 stars.
+dataset: Star Detail
+column: habitable_zone_outer_au_measure
+calculation_method: average
+unrelated_dimensions_handling: error

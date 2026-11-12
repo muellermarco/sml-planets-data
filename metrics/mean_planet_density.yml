@@ -1,0 +1,8 @@
+unique_name: Mean Planet Density
+object_type: metric
+label: Mean Planet Density
+description: Mean bulk density in grams per cubic centimetre. 2.5591 across only 388 planets.
+dataset: Planet Detail
+column: planet_density_measure
+calculation_method: average
+unrelated_dimensions_handling: error

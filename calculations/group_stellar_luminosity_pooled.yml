@@ -1,0 +1,12 @@
+unique_name: Group Stellar Luminosity (Pooled)
+object_type: metric_calc
+label: Group Stellar Luminosity (Pooled)
+description: 'Stellar luminosity recomputed for the whole selected group from the mean radius and mean
+  temperature, rather than averaged per star: the mean radius squared times the mean temperature over
+  5778 to the fourth power. Warehouse-wide 1.6097 squared times (5545.5/5778) to the fourth, or 2.2477,
+  against a per-star mean of 5.6405 - so averaging the stars first more than doubles the answer, because
+  luminosity is a steep function of both inputs.'
+expression: CASE WHEN ISEMPTY([Measures].[Mean Stellar Radius]) OR ISEMPTY([Measures].[Mean Stellar Temperature])
+  THEN NULL ELSE [Measures].[Mean Stellar Radius] * [Measures].[Mean Stellar Radius] * ([Measures].[Mean
+  Stellar Temperature] / 5778) * ([Measures].[Mean Stellar Temperature] / 5778) * ([Measures].[Mean Stellar
+  Temperature] / 5778) * ([Measures].[Mean Stellar Temperature] / 5778) END

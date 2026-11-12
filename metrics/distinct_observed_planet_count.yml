@@ -1,0 +1,9 @@
+unique_name: Distinct Observed Planet Count
+object_type: metric
+label: Distinct Observed Planet Count
+description: How many distinct planets the selected observations cover. 2460 across all 2683 observations,
+  so 912 planets were never observed by any of the three surveys.
+dataset: Planet Observation
+column: planet
+calculation_method: count distinct
+unrelated_dimensions_handling: error

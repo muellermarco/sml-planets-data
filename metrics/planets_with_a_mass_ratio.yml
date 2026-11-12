@@ -1,0 +1,8 @@
+unique_name: Planets With A Mass Ratio
+object_type: metric
+label: Planets With A Mass Ratio
+description: How many of the selected planets have a computable planet-star mass ratio. 1127 of 3372 warehouse-wide.
+dataset: Planet Detail
+column: has_planet_star_mass_ratio
+calculation_method: sum
+unrelated_dimensions_handling: error

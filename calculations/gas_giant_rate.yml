@@ -1,0 +1,8 @@
+unique_name: Gas Giant Rate
+object_type: metric_calc
+label: Gas Giant Rate
+description: Among planets carrying a mass, the share that are gas giants. A FRACTION from 0 to 1; warehouse-wide
+  929/1174, or 0.7913. The denominator is the mass coverage rather than all 3372 planets, because a planet
+  with no mass is unknown rather than small.
+expression: CASE WHEN ISEMPTY([Measures].[Planets With A Mass]) OR [Measures].[Planets With A Mass] =
+  0 THEN NULL ELSE [Measures].[Gas Giant Count] / [Measures].[Planets With A Mass] END

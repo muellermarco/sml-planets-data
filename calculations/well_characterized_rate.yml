@@ -1,0 +1,7 @@
+unique_name: Well Characterized Rate
+object_type: metric_calc
+label: Well Characterized Rate
+description: The proportion of the selected planets with high-precision mass, radius and period. A FRACTION
+  from 0 to 1; warehouse-wide 48/3372, or 0.014235.
+expression: CASE WHEN ISEMPTY([Measures].[Planet Count]) OR [Measures].[Planet Count] = 0 THEN NULL ELSE
+  [Measures].[Well Characterized Count] / [Measures].[Planet Count] END

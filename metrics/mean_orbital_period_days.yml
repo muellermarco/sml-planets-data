@@ -1,0 +1,10 @@
+unique_name: Mean Orbital Period Days
+object_type: metric
+label: Mean Orbital Period Days
+description: Mean orbital period in days. 2725.8 across the 3305 planets that record one. The distribution
+  spans eight orders of magnitude, so this mean is dominated by a few very wide orbits and the median
+  would be far lower.
+dataset: Planet Detail
+column: orbital_period_days_measure
+calculation_method: average
+unrelated_dimensions_handling: error

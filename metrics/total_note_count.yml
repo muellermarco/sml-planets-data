@@ -1,0 +1,8 @@
+unique_name: Total Note Count
+object_type: metric
+label: Total Note Count
+description: Notes added across the selected planets. 2376 warehouse-wide over 3372 planets.
+dataset: Planet Detail
+column: note_count_measure
+calculation_method: sum
+unrelated_dimensions_handling: error

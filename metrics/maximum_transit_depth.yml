@@ -1,0 +1,8 @@
+unique_name: Maximum Transit Depth
+object_type: metric
+label: Maximum Transit Depth
+description: Deepest transit among the selection, as a fraction. 1.1347 warehouse-wide.
+dataset: Planet Detail
+column: transit_depth
+calculation_method: maximum
+unrelated_dimensions_handling: error

@@ -1,0 +1,21 @@
+unique_name: Planet Observation
+object_type: dataset
+label: Planet Observation
+connection_id: bird_planets_data
+sql: "SELECT\n    io.obsref                                           AS observation,\n    io.subjectlink\
+  \                                      AS planet,\n    p.hostlink                                  \
+  \        AS star,\n    i.facilityname                                      AS facility,\n    1     \
+  \                                              AS observation_row_count\nFROM public.planet_instrument_observations\
+  \ io\nJOIN public.instruments_surveys i ON i.instrumentref = io.facilitylink\nJOIN public.planets p\
+  \ ON p.planetref = io.subjectlink"
+columns:
+- name: observation
+  data_type: long
+- name: planet
+  data_type: long
+- name: star
+  data_type: long
+- name: facility
+  data_type: string
+- name: observation_row_count
+  data_type: int

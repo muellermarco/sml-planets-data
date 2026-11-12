@@ -1,0 +1,8 @@
+unique_name: Maximum Stellar Luminosity
+object_type: metric
+label: Maximum Stellar Luminosity
+description: Most luminous star among the selection. 630.99 solar luminosities warehouse-wide.
+dataset: Star Detail
+column: stellar_luminosity
+calculation_method: maximum
+unrelated_dimensions_handling: error

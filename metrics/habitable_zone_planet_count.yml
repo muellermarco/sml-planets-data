@@ -1,0 +1,8 @@
+unique_name: Habitable Zone Planet Count
+object_type: metric
+label: Habitable Zone Planet Count
+description: How many of the selected planets orbit inside their star's habitable zone. 28 warehouse-wide.
+dataset: Planet Detail
+column: habitable_zone_indicator
+calculation_method: sum
+unrelated_dimensions_handling: error

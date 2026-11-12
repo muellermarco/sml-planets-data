@@ -1,0 +1,6 @@
+unique_name: bird_planets_data
+object_type: connection
+label: bird_planets_data
+as_connection: bird_planets_data
+database: planets_data
+schema: public

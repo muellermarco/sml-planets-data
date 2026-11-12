@@ -1,0 +1,8 @@
+unique_name: Total System Planets
+object_type: metric
+label: Total System Planets
+description: Planets added across the selected stars. 3372 warehouse-wide, which is the whole catalogue.
+dataset: Star Detail
+column: star_planet_count_measure
+calculation_method: sum
+unrelated_dimensions_handling: error

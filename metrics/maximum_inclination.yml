@@ -1,0 +1,9 @@
+unique_name: Maximum Inclination
+object_type: metric
+label: Maximum Inclination
+description: Highest inclination among the selected planets. 90.76 degrees warehouse-wide, which is only
+  0.76 above the retrograde threshold.
+dataset: Planet Detail
+column: inclination_degrees
+calculation_method: maximum
+unrelated_dimensions_handling: error

@@ -1,0 +1,8 @@
+unique_name: Maximum Escape Velocity
+object_type: metric
+label: Maximum Escape Velocity
+description: Highest escape velocity among the selection, in kilometres per second.
+dataset: Planet Detail
+column: escape_velocity_kms
+calculation_method: maximum
+unrelated_dimensions_handling: error

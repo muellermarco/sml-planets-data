@@ -1,0 +1,9 @@
+unique_name: Maximum Eccentricity
+object_type: metric
+label: Maximum Eccentricity
+description: Highest eccentricity among the selected planets. 0.956 warehouse-wide - a nearly parabolic
+  orbit.
+dataset: Planet Detail
+column: eccentricity
+calculation_method: maximum
+unrelated_dimensions_handling: error

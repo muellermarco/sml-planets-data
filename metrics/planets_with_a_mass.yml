@@ -1,0 +1,9 @@
+unique_name: Planets With A Mass
+object_type: metric
+label: Planets With A Mass
+description: How many of the selected planets record a mass. 1174 of 3372 warehouse-wide, and 554 of those
+  are minimum masses rather than true ones.
+dataset: Planet Detail
+column: has_planet_mass_jupiter
+calculation_method: sum
+unrelated_dimensions_handling: error

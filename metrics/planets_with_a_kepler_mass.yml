@@ -1,0 +1,9 @@
+unique_name: Planets With A Kepler Mass
+object_type: metric
+label: Planets With A Kepler Mass
+description: How many of the selected planets yield a Kepler's-law stellar mass. 1831 of 3372 warehouse-wide;
+  1534 of those also have a reported stellar mass to compare against.
+dataset: Planet Detail
+column: has_kepler_derived_stellar_mass
+calculation_method: sum
+unrelated_dimensions_handling: error

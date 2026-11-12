@@ -1,0 +1,9 @@
+unique_name: Stars With An Adjacent Pair
+object_type: metric
+label: Stars With An Adjacent Pair
+description: How many of the selected stars have at least one adjacent planet pair with both periods recorded.
+  568 of 2509 warehouse-wide, out of 569 that declare more than one companion.
+dataset: Star Detail
+column: has_max_adjacent_period_ratio
+calculation_method: sum
+unrelated_dimensions_handling: error

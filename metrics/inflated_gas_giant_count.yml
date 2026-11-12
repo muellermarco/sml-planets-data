@@ -1,0 +1,8 @@
+unique_name: Inflated Gas Giant Count
+object_type: metric
+label: Inflated Gas Giant Count
+description: How many of the selected planets are inflated gas giants - a giant mass with a low density.
+dataset: Planet Detail
+column: inflated_gas_giant_indicator
+calculation_method: sum
+unrelated_dimensions_handling: error

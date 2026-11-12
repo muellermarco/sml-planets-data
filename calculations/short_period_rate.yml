@@ -1,0 +1,7 @@
+unique_name: Short Period Rate
+object_type: metric_calc
+label: Short Period Rate
+description: Among planets carrying a period, the share orbiting in under 10 days. A FRACTION from 0 to
+  1; warehouse-wide 1445/3305, or 0.43722.
+expression: CASE WHEN ISEMPTY([Measures].[Planets With A Period]) OR [Measures].[Planets With A Period]
+  = 0 THEN NULL ELSE [Measures].[Short Period Planet Count] / [Measures].[Planets With A Period] END

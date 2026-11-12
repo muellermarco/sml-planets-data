@@ -1,0 +1,9 @@
+unique_name: Maximum Stellar Density
+object_type: metric
+label: Maximum Stellar Density
+description: Densest star among the selection, in kilograms per cubic metre. 30,839,868
+  warehouse-wide.
+dataset: Star Detail
+column: stellar_density_kg_m3
+calculation_method: maximum
+unrelated_dimensions_handling: error

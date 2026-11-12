@@ -1,0 +1,9 @@
+unique_name: Stars With A Magnitude
+object_type: metric
+label: Stars With A Magnitude
+description: How many of the selected stars record an apparent magnitude. 2400 of 2509 warehouse-wide;
+  the same 2400 record a photometric band.
+dataset: Star Detail
+column: has_optical_magnitude
+calculation_method: sum
+unrelated_dimensions_handling: error

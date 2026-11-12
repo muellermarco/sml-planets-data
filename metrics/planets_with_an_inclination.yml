@@ -1,0 +1,9 @@
+unique_name: Planets With An Inclination
+object_type: metric
+label: Planets With An Inclination
+description: How many of the selected planets record an inclination. 502 of 3372 warehouse-wide - so a
+  retrograde-orbit question can only be answered for one planet in seven.
+dataset: Planet Detail
+column: has_inclination_degrees
+calculation_method: sum
+unrelated_dimensions_handling: error

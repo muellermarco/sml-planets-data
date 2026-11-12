@@ -1,0 +1,9 @@
+unique_name: Maximum Orbital Period Days
+object_type: metric
+label: Maximum Orbital Period Days
+description: Longest orbital period among the selected planets. 7,300,000 days warehouse-wide, or about
+  20,000 years.
+dataset: Planet Detail
+column: orbital_period_days
+calculation_method: maximum
+unrelated_dimensions_handling: error

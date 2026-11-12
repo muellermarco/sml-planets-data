@@ -1,0 +1,9 @@
+unique_name: Stars With A Luminosity
+object_type: metric
+label: Stars With A Luminosity
+description: How many of the selected stars have a computable luminosity, which needs both a radius and
+  a temperature. 2207 of 2509 warehouse-wide. The same 2207 have habitable-zone boundaries.
+dataset: Star Detail
+column: has_stellar_luminosity
+calculation_method: sum
+unrelated_dimensions_handling: error

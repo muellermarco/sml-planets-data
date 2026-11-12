@@ -1,0 +1,8 @@
+unique_name: Mean Escape Velocity
+object_type: metric
+label: Mean Escape Velocity
+description: Mean escape velocity in kilometres per second. 66.962 across 509 planets.
+dataset: Planet Detail
+column: escape_velocity_kms_measure
+calculation_method: average
+unrelated_dimensions_handling: error

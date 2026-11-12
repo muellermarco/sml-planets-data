@@ -1,0 +1,9 @@
+unique_name: Multi Planetary Star Count
+object_type: metric
+label: Multi Planetary Star Count
+description: How many of the selected stars declare more than one companion. 569 of 2509 warehouse-wide.
+  The reading that counts actual planet rows gives 570.
+dataset: Star Detail
+column: multi_planetary_indicator
+calculation_method: sum
+unrelated_dimensions_handling: error

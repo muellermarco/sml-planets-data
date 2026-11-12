@@ -1,0 +1,8 @@
+unique_name: Maximum Equilibrium Temperature
+object_type: metric
+label: Maximum Equilibrium Temperature
+description: Highest equilibrium temperature among the selection, in Kelvin.
+dataset: Planet Detail
+column: equilibrium_temperature
+calculation_method: maximum
+unrelated_dimensions_handling: error

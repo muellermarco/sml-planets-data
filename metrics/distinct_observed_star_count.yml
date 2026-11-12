@@ -1,0 +1,8 @@
+unique_name: Distinct Observed Star Count
+object_type: metric
+label: Distinct Observed Star Count
+description: How many distinct host stars the selected observations reach. 1740 across all 2683 observations.
+dataset: Planet Observation
+column: star
+calculation_method: count distinct
+unrelated_dimensions_handling: error

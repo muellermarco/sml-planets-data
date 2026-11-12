@@ -1,0 +1,8 @@
+unique_name: Maximum Mass Radius Ratio
+object_type: metric
+label: Maximum Mass Radius Ratio
+description: Largest mass-radius ratio among the selection.
+dataset: Planet Detail
+column: mass_radius_ratio
+calculation_method: maximum
+unrelated_dimensions_handling: error

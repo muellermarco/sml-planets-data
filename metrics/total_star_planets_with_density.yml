@@ -1,0 +1,8 @@
+unique_name: Total Star Planets With Density
+object_type: metric
+label: Total Star Planets With Density
+description: Planets with a recorded density, added across the selected stars. 388 warehouse-wide.
+dataset: Star Detail
+column: star_planets_with_density_measure
+calculation_method: sum
+unrelated_dimensions_handling: error

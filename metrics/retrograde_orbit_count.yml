@@ -1,0 +1,9 @@
+unique_name: Retrograde Orbit Count
+object_type: metric
+label: Retrograde Orbit Count
+description: How many of the selected planets orbit retrograde - an inclination above 90 degrees. 8 of
+  the 502 with an inclination warehouse-wide.
+dataset: Planet Detail
+column: retrograde_indicator
+calculation_method: sum
+unrelated_dimensions_handling: error

@@ -1,0 +1,9 @@
+unique_name: Magnitude Blend Count
+object_type: metric
+label: Magnitude Blend Count
+description: How many of the selected planets orbit a star whose magnitude is a blended measurement -
+  the only blended measurements in the warehouse.
+dataset: Planet Detail
+column: magnitude_blend_indicator
+calculation_method: sum
+unrelated_dimensions_handling: error

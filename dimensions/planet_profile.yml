@@ -1,0 +1,1027 @@
+unique_name: Planet Profile
+object_type: dimension
+label: Planet Profile
+type: standard
+description: 'Every knowledge-base formula that lands on a planet, as a queryable attribute, each evaluated
+  in consistent SI units from the standard physical constants written out in full. Velocities carry kilometres
+  per second under the bare name with a metres-per-second twin; the transit depth is a fraction with a
+  percent twin. Orbital Profile: The planet''s orbit, from the orbital record that covers 3371 of the
+  3372 planets - though its individual columns are much sparser than that. Physical Profile: The planet''s
+  mass, size and density, from the physical record that covers 3359 planets - but a mass exists for only
+  1174 and a density for 388, and those two numbers bound most of the classifications in this model. Host
+  Star Snapshot: The host star''s properties carried onto the planet row, so a planet-level question does
+  not need a join. These are the same values the Star Record dimension publishes; use these when filtering
+  or projecting alongside planet measures and the Star Record dimension when the question groups stars.
+  Measurement Quality Profile: Relative uncertainties, limit flags and blend flags. Read the populations
+  before using any of these: on this warehouse almost every blend flag and almost every upper-limit flag
+  is zero, so the concepts they express select nobody, and the model says so rather than leaving the emptiness
+  to be discovered. Planet Classification Profile: Knowledge-base planet classifications, each with the
+  population it selects and the number of planets it cannot judge. Read those numbers first: a density
+  exists for only 388 planets and a mass for 1174, so several of these classifications are undecidable
+  for most of the catalogue. Every flag follows SQL''s own three-valued logic: ''Yes'' when the definition
+  holds, ''No'' when it is definitely false - for a compound definition, as soon as one condition is recorded
+  false - and null only when nothing recorded settles it. So filtering on ''No'' selects exactly the planets
+  a NOT of the definition keeps. Survey Observation Profile: Which of the three surveys observed the planet,
+  as per-planet flags so a question can filter without joining the observation bridge. 2460 of the 3372
+  planets were observed by at least one survey and none by more than two.'
+is_degenerate: true
+level_attributes:
+- unique_name: Planet Profile Key
+  label: Planet Profile Key
+  dataset: Planet Detail
+  key_columns:
+  - planet
+  name_column: planet
+  is_hidden: true
+hierarchies:
+- unique_name: Planet Profile Hierarchy
+  label: Planet Profile
+  filter_empty: 'yes'
+  folder: Derived Planet Quantities
+  levels:
+  - unique_name: Planet Profile Key
+    is_hidden: true
+    secondary_attributes:
+    - unique_name: Surface Gravity
+      label: Surface Gravity
+      dataset: Planet Detail
+      key_columns:
+      - surface_gravity
+      name_column: surface_gravity
+      folder: Derived Planet Quantities
+      description: Planet Surface Gravity relative to Earth's - mass in Earth units over radius in Earth
+        units squared. 0.0052 to 1254.7 on the 509 planets that have BOTH a mass and a radius, averaging
+        22.23. Earth is 1 by construction.
+    - unique_name: Mass Radius Ratio
+      label: Mass Radius Ratio
+      dataset: Planet Detail
+      key_columns:
+      - mass_radius_ratio
+      name_column: mass_radius_ratio
+      folder: Derived Planet Quantities
+      description: Mass in Earth units divided by radius in Earth units - the mass-radius relationship.
+        0.0323 to 2742 on the same 509 planets, averaging 81.3.
+    - unique_name: Escape Velocity
+      label: Escape Velocity
+      dataset: Planet Detail
+      key_columns:
+      - escape_velocity_kms
+      name_column: escape_velocity_kms
+      folder: Derived Planet Quantities
+      description: 'Planet Escape Velocity - the speed needed to escape the planet, in KILOMETRES PER
+        SECOND: the square root of twice G times the mass over the radius, with the Jupiter-unit mass
+        and radius converted to kilograms and metres, divided by 1000. From 2.009 km/s on the 509 planets
+        with both a mass and a radius, averaging 66.96. The twin Escape Velocity (Metres Per Second) is
+        the same figure times 1000. Physical constants are the standard published values, written out
+        and composed inside the formula rather than pre-multiplied: G = 6.67430E-11, solar mass 1.98847E30
+        kg, solar radius 6.957E8 m, astronomical unit 1.496E11 m, Jupiter mass 1.898E27 kg, Jupiter radius
+        7.1492E7 m, 109.2 Earth radii per solar radius.'
+    - unique_name: Escape Velocity (Metres Per Second)
+      label: Escape Velocity (Metres Per Second)
+      dataset: Planet Detail
+      key_columns:
+      - escape_velocity_ms
+      name_column: escape_velocity_ms
+      folder: Derived Planet Quantities
+      description: The same escape velocity in metres per second, as the SI formula yields it before dividing
+        by 1000. 2009 to 585,451 m/s on 509 planets, averaging 66,962.
+    - unique_name: Orbital Velocity
+      label: Orbital Velocity
+      dataset: Planet Detail
+      key_columns:
+      - orbital_velocity_kms
+      name_column: orbital_velocity_kms
+      folder: Derived Planet Quantities
+      description: 'Mean orbital speed assuming a circular orbit, in KILOMETRES PER SECOND - orbital velocity,
+        speed. The square root of G times the stellar mass over the semi-major axis, with the solar-unit
+        mass and the AU converted to kilograms and metres, divided by 1000. 0.235 to 531.29 km/s on the
+        1593 planets with both a stellar mass and a semi-major axis, averaging 82.09. The twin Orbital
+        Velocity (Metres Per Second) is the same figure times 1000. A listing that asks for the planets''
+        speed lists only the planets that have one - filter this column IS NOT NULL - because a planet
+        with no recorded semi-major axis has no velocity and does not belong in a speed report; filtering
+        on the classification flags alone leaves such a planet in as a blank row. Physical constants are
+        the standard published values, written out and composed inside the formula rather than pre-multiplied:
+        G = 6.67430E-11, solar mass 1.98847E30 kg, solar radius 6.957E8 m, astronomical unit 1.496E11
+        m, Jupiter mass 1.898E27 kg, Jupiter radius 7.1492E7 m, 109.2 Earth radii per solar radius.'
+    - unique_name: Orbital Velocity (Metres Per Second)
+      label: Orbital Velocity (Metres Per Second)
+      dataset: Planet Detail
+      key_columns:
+      - orbital_velocity_ms
+      name_column: orbital_velocity_ms
+      folder: Derived Planet Quantities
+      description: The same orbital velocity in metres per second, as the SI formula yields it. 235 to
+        531,293 m/s on 1593 planets, averaging 82,094.
+    - unique_name: Equilibrium Temperature
+      label: Equilibrium Temperature
+      dataset: Planet Detail
+      key_columns:
+      - equilibrium_temperature
+      name_column: equilibrium_temperature
+      folder: Derived Planet Quantities
+      description: 'The Planetary Equilibrium Temperature in KELVIN - the stellar temperature times the
+        square root of the stellar radius over twice the semi-major axis, with the radius in solar radii
+        and the axis in AU both converted to metres so the ratio under the root is dimensionless. From
+        2.94 K on the 1533 planets with all three inputs, averaging 886.7 K. A reading that leaves solar
+        radii over AU unconverted is about 14.7 times larger and is not published, because a formula over
+        two lengths is a formula over one unit. Physical constants are the standard published values,
+        written out and composed inside the formula rather than pre-multiplied: G = 6.67430E-11, solar
+        mass 1.98847E30 kg, solar radius 6.957E8 m, astronomical unit 1.496E11 m, Jupiter mass 1.898E27
+        kg, Jupiter radius 7.1492E7 m, 109.2 Earth radii per solar radius.'
+    - unique_name: Transit Depth
+      label: Transit Depth
+      dataset: Planet Detail
+      key_columns:
+      - transit_depth
+      name_column: transit_depth
+      folder: Derived Planet Quantities
+      description: 'Fractional drop in the star''s brightness during a transit - the planet radius over
+        the stellar radius, squared, both radii in EARTH radii (the planet radius times 11.209, the stellar
+        radius times 109.2). A FRACTION from 0 to 1: 1.3e-05 to 1.135 on the 2684 planets with both radii,
+        averaging 0.00294. The twin Transit Depth (Percent) is the same figure times 100; whether a question
+        wants the fraction or the percent is the caller''s to decide, so ask when it is not said. Physical
+        constants are the standard published values, written out and composed inside the formula rather
+        than pre-multiplied: G = 6.67430E-11, solar mass 1.98847E30 kg, solar radius 6.957E8 m, astronomical
+        unit 1.496E11 m, Jupiter mass 1.898E27 kg, Jupiter radius 7.1492E7 m, 109.2 Earth radii per solar
+        radius.'
+    - unique_name: Transit Depth (Percent)
+      label: Transit Depth (Percent)
+      dataset: Planet Detail
+      key_columns:
+      - transit_depth_percent
+      name_column: transit_depth_percent
+      folder: Derived Planet Quantities
+      description: The same transit depth as a PERCENTAGE - the fraction times 100. 0.0013 to 113.47 on
+        2684 planets, averaging 0.294.
+    - unique_name: Planet Star Mass Ratio
+      label: Planet Star Mass Ratio
+      dataset: Planet Detail
+      key_columns:
+      - planet_star_mass_ratio
+      name_column: planet_star_mass_ratio
+      folder: Derived Planet Quantities
+      description: Planet mass divided by stellar mass, both in kilograms - the mass ratio. 1.9e-07 to
+        0.700 on the 1127 planets with both, averaging 0.00586. The planet mass is Jupiter masses times
+        1.898E27 and the stellar mass solar masses times 1.98847E30, because the knowledge base requires
+        both masses in the same units; the ratio is a pure number. Kepler-131 c, the super-Earth with
+        the strongest surface gravity, reads 2.433e-05.
+    - unique_name: Kepler Derived Stellar Mass
+      label: Kepler Derived Stellar Mass
+      dataset: Planet Detail
+      key_columns:
+      - kepler_derived_stellar_mass
+      name_column: kepler_derived_stellar_mass
+      folder: Derived Planet Quantities
+      description: 'Stellar mass in solar masses derived from the planet''s orbit - the semi-major axis
+        in AU cubed over the period in YEARS squared. 0.0233 to 3.915 on 1831 planets, averaging 1.019.
+        Null on the other 1541 planets, whose period or semi-major axis is unrecorded. A comparison of
+        the recorded mass with this derived one runs over the planets that carry a derived value, so filter
+        this column IS NOT NULL: a planet picked by its semi-major axis - the outermost of a system, say
+        - can still lack a period, and without the filter it prints a blank derived mass as a row of its
+        own. The recorded Host Stellar Mass is independent of this: 1517 of the 1541 with no derived mass
+        carry a recorded host mass, and 297 of the 1831 with a derived mass have no recorded one, so a
+        condition on the recorded mass is a different screen from a condition on this one. The period
+        must be converted from days to years for this to work; using days gives a number about 133,000
+        times too small.'
+    - unique_name: Kepler Mass Difference
+      label: Kepler Mass Difference
+      dataset: Planet Detail
+      key_columns:
+      - kepler_mass_difference
+      name_column: kepler_mass_difference
+      folder: Derived Planet Quantities
+      description: The Kepler-derived stellar mass minus the mass the star record reports, signed. -0.889
+        to 1.019 on the 1534 planets where both exist, averaging 0.0139 - so the law checks out on average,
+        with individual disagreements up to about one solar mass. Kepler Mass Absolute Difference drops
+        the sign for ranking by how far apart the two are.
+    - unique_name: Kepler Mass Absolute Difference
+      label: Kepler Mass Absolute Difference
+      dataset: Planet Detail
+      key_columns:
+      - kepler_mass_absolute_difference
+      name_column: kepler_mass_absolute_difference
+      folder: Derived Planet Quantities
+      description: How far the Kepler-derived stellar mass is from the recorded one, regardless of direction
+        - the absolute discrepancy, the size of the disagreement. 0 to 1.019 solar masses on 1534 planets,
+        averaging 0.0501. The natural sort key when recorded and derived masses are compared side by side;
+        null where the star has no recorded mass, and such rows still carry a derived mass.
+    - unique_name: Goldilocks Value
+      label: Goldilocks Value
+      dataset: Planet Detail
+      key_columns:
+      - goldilocks_value
+      name_column: goldilocks_value
+      folder: Derived Planet Quantities
+      description: How centred the planet is in its star's habitable zone - the semi-major axis minus
+        the inner boundary, over the width of the zone. -2.27 to 21361 on 1533 planets, averaging 15.58.
+        A value of 0.5 is perfectly centred, between 0 and 1 is inside the zone, negative is too close
+        to the star and above 1 too far. The huge maximum reflects planets thousands of times further
+        out than their zone.
+    - unique_name: Planet Distance Light Years (All Recorded)
+      label: Planet Distance Light Years (All Recorded)
+      dataset: Planet Detail
+      key_columns:
+      - stellar_distance_ly
+      name_column: stellar_distance_ly
+      folder: Derived Planet Quantities
+      description: Distance to the planet's host star in light-years, converting parsecs by multiplying
+        by 3.26156. 10.47 to 27723 ly on the 2296 planets whose star records a distance, averaging 2035.
+        Carries every recorded distance whatever its quality flags say; Planet Distance Light Years is the same figure nulled wherever a quality flag is raised. This figure is
+        computed at the Planet Detail grain; 'Stellar Distance Light Years' is the same quantity at the
+        Star Detail grain, where it averages 2153.8. The readings disagree because the grains differ,
+        so say which basis you mean, and ask if the question does not.
+    - unique_name: Planet Distance Light Years
+      label: Planet Distance Light Years
+      dataset: Planet Detail
+      key_columns:
+      - stellar_distance_ly_clean
+      name_column: stellar_distance_ly_clean
+      folder: Derived Planet Quantities
+      description: Distance to the planet's host star in light-years, kept only when neither of the warehouse's
+        two ever-set quality flags is raised on the measurement - the distance is not an upper limit (Distance
+        Upper Limit = 'No') and the magnitude is not blended (Magnitude Blended = 'No') - and null otherwise,
+        including when either flag is missing. Present on 2283 planets, averaging 2041.2 ly; Planet Distance Light Years (All Recorded) carries every recorded distance, flag-clean or not, 2296 planets averaging 2035.
+    - unique_name: Planet Distance Parsecs
+      label: Planet Distance Parsecs
+      dataset: Planet Detail
+      key_columns:
+      - stellar_distance_pc
+      name_column: stellar_distance_pc
+      folder: Derived Planet Quantities
+      description: Distance to the planet's host star in parsecs. 3.21 to 8500 pc on 2296 planets, averaging
+        623.9. This figure is computed at the Planet Detail grain; 'Stellar Distance Parsecs' is the same
+        quantity at the Star Detail grain, where it averages 660.4. The readings disagree because the
+        grains differ, so say which basis you mean, and ask if the question does not.
+    - unique_name: Orbital Period
+      label: Orbital Period
+      dataset: Planet Detail
+      key_columns:
+      - orbital_period_days
+      name_column: orbital_period_days
+      folder: Orbital Properties
+      description: Time to complete one orbit, in DAYS as the warehouse records it - orbital period, year
+        length, length of a year. 0.0907 to 7,300,000 days on the 3305 planets that record one, averaging
+        2726. The range spans eight orders of magnitude, so an unweighted mean is dominated by a handful
+        of very wide orbits. Below 10 days is the short-period condition, met by 1445 planets. A twin,
+        Orbital Period (Years), divides by 365.25; the recorded days are what a plain reading of the warehouse
+        reports, and the twin is the input Kepler's third law needs.
+    - unique_name: Orbital Period (Years)
+      label: Orbital Period (Years)
+      dataset: Planet Detail
+      key_columns:
+      - orbital_period_years
+      name_column: orbital_period_years
+      folder: Orbital Properties
+      description: The recorded period divided by 365.25, in years. 0.000248 to 19986 years, averaging
+        7.463. It is the denominator in the Kepler's-law mass check, which needs years rather than days;
+        for the period itself use Orbital Period, which carries the recorded days.
+    - unique_name: Semi Major Axis AU
+      label: Semi Major Axis AU
+      dataset: Planet Detail
+      key_columns:
+      - semi_major_axis_au
+      name_column: semi_major_axis_au
+      folder: Orbital Properties
+      description: Mean orbital distance in astronomical units - semi-major axis, orbital distance. 0.0044
+        to 2500 AU on only 1897 planets, averaging 7.70. Its sparseness is the binding constraint on the
+        equilibrium temperature, the orbital velocity, the habitable-zone test and the Kepler's-law check.
+    - unique_name: Eccentricity
+      label: Eccentricity
+      dataset: Planet Detail
+      key_columns:
+      - eccentricity
+      name_column: eccentricity
+      folder: Orbital Properties
+      description: How far the orbit departs from a circle - eccentricity, how weird the orbit is. 0 to
+        0.956 on 974 planets, averaging 0.171. Zero is a perfect circle; above 0.25 is the high-eccentricity
+        condition, met by 249 planets.
+    - unique_name: Inclination Degrees
+      label: Inclination Degrees
+      dataset: Planet Detail
+      key_columns:
+      - inclination_degrees
+      name_column: inclination_degrees
+      folder: Orbital Properties
+      description: Orbital inclination in degrees - inclination, orbital tilt. 17.6 to 90.76 degrees on
+        only 502 planets, averaging 85.9. The maximum is 90.76, barely above the 90-degree retrograde
+        threshold, so only 8 planets in the whole catalogue orbit retrograde on the strict reading - and
+        21 more sit at exactly 90.0 degrees, edge-on, which is why Retrograde Orbit (90 Degrees Or More)
+        ships beside Retrograde Orbit.
+    - unique_name: Next Planet Period Days
+      label: Next Planet Period Days
+      dataset: Planet Detail
+      key_columns:
+      - next_planet_period_days
+      name_column: next_planet_period_days
+      folder: Orbital Properties
+      description: Orbital period of the next planet outward in the same system, in days. Present for
+        861 planets - those with at least one longer-period sibling. Null for the outermost planet of
+        every system and for every single-planet system.
+    - unique_name: Next Planet Period Ratio
+      label: Next Planet Period Ratio
+      dataset: Planet Detail
+      key_columns:
+      - next_planet_period_ratio
+      name_column: next_planet_period_ratio
+      folder: Orbital Properties
+      description: The next planet's period divided by this one's - the Orbital Period Ratio for this
+        adjacent pair. 1.006 to 4482 on 861 planets, averaging 20.36. Adjacent pairs are taken in order
+        of period within each host star.
+    - unique_name: Planet Mass Jupiter
+      label: Planet Mass Jupiter
+      dataset: Planet Detail
+      key_columns:
+      - planet_mass_jupiter
+      name_column: planet_mass_jupiter
+      folder: Physical Properties
+      description: Mass in Jupiter masses - mass, planet mass. 0.00006 to 28.5 on only 1174 of the 3372
+        planets, averaging 2.628. Above 0.1 is the gas-giant condition, met by 929 planets. Earth is about
+        0.003 Jupiter masses.
+    - unique_name: Planet Mass Earth
+      label: Planet Mass Earth
+      dataset: Planet Detail
+      key_columns:
+      - planet_mass_earth
+      name_column: planet_mass_earth
+      folder: Physical Properties
+      description: The Planet Mass in Earth Units - the Jupiter figure multiplied by 317.83. 0.0191 to
+        9058 on 1174 planets, averaging 835.4. Between 1 and 10 is half the super-Earth condition.
+    - unique_name: Planet Radius Jupiter
+      label: Planet Radius Jupiter
+      dataset: Planet Detail
+      key_columns:
+      - planet_radius_jupiter
+      name_column: planet_radius_jupiter
+      folder: Physical Properties
+      description: Radius in Jupiter radii - radius, size. 0.027 to 6.9 on 2694 planets, averaging 0.342.
+        Earth is about 0.09 Jupiter radii.
+    - unique_name: Planet Radius Earth
+      label: Planet Radius Earth
+      dataset: Planet Detail
+      key_columns:
+      - planet_radius_earth
+      name_column: planet_radius_earth
+      folder: Physical Properties
+      description: The Planet Radius in Earth Units - the Jupiter figure multiplied by 11.209. 0.303 to
+        77.3 on 2694 planets, averaging 3.833.
+    - unique_name: Planet Density
+      label: Planet Density
+      dataset: Planet Detail
+      key_columns:
+      - planet_density
+      name_column: planet_density
+      folder: Physical Properties
+      description: Bulk density in grams per cubic centimetre - density. 0.03 to 77.7 on only 388 of the
+        3372 planets, averaging 2.559. Above 3 is the rocky condition, met by 74 planets; below 0.5 with
+        a giant mass is the inflated condition, met by 103. Earth is about 5.5. Because a density exists
+        for so few planets, EVERY rocky, super-Earth, inflated-giant and potentially-habitable answer
+        is bounded by 388 rows.
+    - unique_name: Host Stellar Mass
+      label: Host Stellar Mass
+      dataset: Planet Detail
+      key_columns:
+      - host_stellar_mass
+      name_column: host_stellar_mass
+      folder: Host Star Snapshot
+      description: Host star's mass in solar masses. 0.02 to 3.9 on 3051 of the 3372 planets, averaging
+        0.982.
+    - unique_name: Host Stellar Radius
+      label: Host Stellar Radius
+      dataset: Planet Detail
+      key_columns:
+      - host_stellar_radius
+      name_column: host_stellar_radius
+      folder: Host Star Snapshot
+      description: Host star's radius in solar radii. 0.04 to 51.1 on 3015 planets, averaging 1.482.
+    - unique_name: Host Stellar Temperature
+      label: Host Stellar Temperature
+      dataset: Planet Detail
+      key_columns:
+      - host_stellar_temperature
+      name_column: host_stellar_temperature
+      folder: Host Star Snapshot
+      description: Host star's effective temperature in Kelvin. 575 to 57000 on 3205 planets, averaging
+        5545.
+    - unique_name: Host Stellar Luminosity
+      label: Host Stellar Luminosity
+      dataset: Planet Detail
+      key_columns:
+      - host_stellar_luminosity
+      name_column: host_stellar_luminosity
+      folder: Host Star Snapshot
+      description: Host star's luminosity relative to the Sun - the radius squared times the temperature
+        over 5778 to the fourth power. 7.9e-07 to 631 on 2978 planets, averaging 4.760.
+    - unique_name: Habitable Zone Inner AU
+      label: Habitable Zone Inner AU
+      dataset: Planet Detail
+      key_columns:
+      - habitable_zone_inner_au
+      name_column: habitable_zone_inner_au
+      folder: Host Star Snapshot
+      description: Habitable Zone Inner Boundary in AU - the square root of the luminosity over 1.1. 0.00085
+        to 23.95 on 2978 planets, averaging 1.212. This figure is computed at the Planet Detail grain;
+        'Star Habitable Zone Inner' is the same quantity at the Star Detail grain, where it averages 1.296.
+        The readings disagree because the grains differ, so say which basis you mean, and ask if the question
+        does not.
+    - unique_name: Habitable Zone Outer AU
+      label: Habitable Zone Outer AU
+      dataset: Planet Detail
+      key_columns:
+      - habitable_zone_outer_au
+      name_column: habitable_zone_outer_au
+      folder: Host Star Snapshot
+      description: Outer edge of the habitable zone in AU - the square root of the luminosity over 0.53.
+        0.00122 to 34.50 on 2978 planets, averaging 1.747. This figure is computed at the Planet Detail
+        grain; 'Star Habitable Zone Outer' is the same quantity at the Star Detail grain, where it averages
+        1.866. The readings disagree because the grains differ, so say which basis you mean, and ask if
+        the question does not.
+    - unique_name: Planet Companion Count
+      label: Planet Companion Count
+      dataset: Planet Detail
+      key_columns:
+      - companion_count
+      name_column: companion_count
+      folder: Host Star Snapshot
+      description: Number of planetary companions the host star declares. 1 to 7 on all 3372 planets,
+        averaging 1.765. More than 1 puts the planet in a multi-planetary system, which is true for 1431
+        of the 3372 planets. This figure is computed at the Planet Detail grain; 'Star Companion Count'
+        is the same quantity at the Star Detail grain, where it averages 1.344. The readings disagree
+        because the grains differ, so say which basis you mean, and ask if the question does not.
+    - unique_name: Period Relative Uncertainty
+      label: Period Relative Uncertainty
+      dataset: Planet Detail
+      key_columns:
+      - period_relative_uncertainty
+      name_column: period_relative_uncertainty
+      folder: Measurement Quality
+      description: Relative uncertainty in the orbital period, as a percentage - half the spread between
+        the positive and negative errors, over the value, times 100. 0 to 475.5 percent on 3180 planets,
+        averaging 0.755. Below 5 percent is the high-precision condition, met by 3125 planets.
+    - unique_name: Mass Relative Uncertainty
+      label: Mass Relative Uncertainty
+      dataset: Planet Detail
+      key_columns:
+      - mass_relative_uncertainty
+      name_column: mass_relative_uncertainty
+      folder: Measurement Quality
+      description: Relative uncertainty in the planet mass, as a percentage. 0.198 to 7990 percent on
+        987 planets, averaging 30.3. Only 198 planets are under 5 percent, which makes mass the binding
+        constraint on the well-characterized test.
+    - unique_name: Radius Relative Uncertainty
+      label: Radius Relative Uncertainty
+      dataset: Planet Detail
+      key_columns:
+      - radius_relative_uncertainty
+      name_column: radius_relative_uncertainty
+      folder: Measurement Quality
+      description: Relative uncertainty in the planet radius, as a percentage. 0 to 3899 percent on 2656
+        planets, averaging 17.9. 395 planets are under 5 percent.
+    - unique_name: Semi Major Relative Uncertainty
+      label: Semi Major Relative Uncertainty
+      dataset: Planet Detail
+      key_columns:
+      - semi_major_relative_uncertainty
+      name_column: semi_major_relative_uncertainty
+      folder: Measurement Quality
+      description: Relative uncertainty in the semi-major axis, as a percentage. 0 to 100 percent on 1019
+        planets, averaging 4.93.
+    - unique_name: Eccentricity Relative Uncertainty
+      label: Eccentricity Relative Uncertainty
+      dataset: Planet Detail
+      key_columns:
+      - eccentricity_relative_uncertainty
+      name_column: eccentricity_relative_uncertainty
+      folder: Measurement Quality
+      description: Relative uncertainty in the eccentricity, as a percentage. 0.059 to 12550 percent on
+        690 planets, averaging 74.2 - by far the least precisely known parameter, because the values themselves
+        are small.
+    - unique_name: Inclination Relative Uncertainty
+      label: Inclination Relative Uncertainty
+      dataset: Planet Detail
+      key_columns:
+      - inclination_relative_uncertainty
+      name_column: inclination_relative_uncertainty
+      folder: Measurement Quality
+      description: Relative uncertainty in the inclination, as a percentage. 0.0022 to 125 percent on
+        472 planets, averaging 1.50.
+    - unique_name: Density Relative Uncertainty
+      label: Density Relative Uncertainty
+      dataset: Planet Detail
+      key_columns:
+      - density_relative_uncertainty
+      name_column: density_relative_uncertainty
+      folder: Measurement Quality
+      description: Relative uncertainty in the density, as a percentage. 1.59 to 2084 percent on 378 planets,
+        averaging 44.3.
+    - unique_name: Mass Source
+      label: Mass Source
+      dataset: Planet Detail
+      key_columns:
+      - mass_source
+      name_column: mass_source
+      folder: Measurement Quality
+      description: How the mass was determined - mass provenance. 'Mass' on 611 planets, 'Msini' on 554
+        and 'Msin(i)/sin(i)' on 9, with null on 2198. 'Msini' means the value is a MINIMUM mass because
+        the inclination is unknown, which is what a radial-velocity measurement gives.
+    - unique_name: Minimum Mass Status
+      label: Minimum Mass Status
+      dataset: Planet Detail
+      key_columns:
+      - minimum_mass_status
+      name_column: minimum_mass_status
+      folder: Measurement Quality
+      description: Whether the mass is a minimum rather than a true mass - the minimum-mass status. 'Yes'
+        on 554 planets, 'No' on 620 and null on the 2198 with no mass at all. So a mass estimate exists
+        for 1174 planets and nearly half of those are lower bounds.
+    - unique_name: Period Limit Flag
+      label: Period Limit Flag
+      dataset: Planet Detail
+      key_columns:
+      - period_limit_flag
+      name_column: period_limit_flag
+      folder: Measurement Quality
+      description: 'Limit flag on the orbital period as stored - 0 for a measured value, 1 for an upper
+        limit, -1 for a lower limit. Present on 3304 planets: 0 on 3300, 1 on one, -1 on three. Period
+        Upper Limit is the same flag read as Yes/No.'
+    - unique_name: Period Upper Limit
+      label: Period Upper Limit
+      dataset: Planet Detail
+      key_columns:
+      - period_upper_limit
+      name_column: period_upper_limit
+      folder: Measurement Quality
+      description: Whether the orbital period is an Upper Limit Value rather than a measurement. 'Yes'
+        on a few planets, 'No' on the rest that carry a flag, null on 68. 'Yes' when the flag is 1, 'No'
+        when the flag is recorded and not 1 (0 or -1), null when no flag is recorded - so filtering on
+        'No' keeps exactly the planets whose flag is present and differs from 1, and excludes the unknown
+        ones.
+    - unique_name: Mass Limit Flag
+      label: Mass Limit Flag
+      dataset: Planet Detail
+      key_columns:
+      - mass_limit_flag
+      name_column: mass_limit_flag
+      folder: Measurement Quality
+      description: 'Limit flag on the planet mass as stored. Present on 1174 planets: 0 on 1105, 1 on
+        64, -1 on five. Mass Upper Limit is the same flag read as Yes/No.'
+    - unique_name: Mass Upper Limit
+      label: Mass Upper Limit
+      dataset: Planet Detail
+      key_columns:
+      - mass_upper_limit
+      name_column: mass_upper_limit
+      folder: Measurement Quality
+      description: Whether the planet mass is an Upper Limit Value rather than a measurement. 'Yes' on
+        some planets, 'No' on most of the rest, null on the 2198 with no mass. 'Yes' when the flag is
+        1, 'No' when the flag is recorded and not 1 (0 or -1), null when no flag is recorded - so filtering
+        on 'No' keeps exactly the planets whose flag is present and differs from 1, and excludes the unknown
+        ones.
+    - unique_name: Radius Limit Flag
+      label: Radius Limit Flag
+      dataset: Planet Detail
+      key_columns:
+      - radius_limit_flag
+      name_column: radius_limit_flag
+      folder: Measurement Quality
+      description: Limit flag on the planet radius as stored. Present on 2694 planets.
+    - unique_name: Radius Upper Limit
+      label: Radius Upper Limit
+      dataset: Planet Detail
+      key_columns:
+      - radius_upper_limit
+      name_column: radius_upper_limit
+      folder: Measurement Quality
+      description: Whether the radius is an Upper Limit Value rather than a measurement. 'Yes' on a few
+        planets, 'No' on the rest that carry a flag and null on the 678 with no radius. The concept is
+        published so it is not silently missing, but it selects one row. 'Yes' when the flag is 1, 'No'
+        when the flag is recorded and not 1 (0 or -1), null when no flag is recorded - so filtering on
+        'No' keeps exactly the planets whose flag is present and differs from 1, and excludes the unknown
+        ones.
+    - unique_name: Eccentricity Limit Flag
+      label: Eccentricity Limit Flag
+      dataset: Planet Detail
+      key_columns:
+      - eccentricity_limit_flag
+      name_column: eccentricity_limit_flag
+      folder: Measurement Quality
+      description: 'Limit flag on the eccentricity as stored. Present on 971 planets: 0 on 891, 1 on 71,
+        -1 on nine.'
+    - unique_name: Eccentricity Upper Limit
+      label: Eccentricity Upper Limit
+      dataset: Planet Detail
+      key_columns:
+      - eccentricity_upper_limit
+      name_column: eccentricity_upper_limit
+      folder: Measurement Quality
+      description: Whether the eccentricity is an Upper Limit Value. 'Yes' on some planets, 'No' on most
+        of the rest, null on 2401. 'Yes' when the flag is 1, 'No' when the flag is recorded and not 1
+        (0 or -1), null when no flag is recorded - so filtering on 'No' keeps exactly the planets whose
+        flag is present and differs from 1, and excludes the unknown ones.
+    - unique_name: Inclination Limit Flag
+      label: Inclination Limit Flag
+      dataset: Planet Detail
+      key_columns:
+      - inclination_limit_flag
+      name_column: inclination_limit_flag
+      folder: Measurement Quality
+      description: 'Limit flag on the inclination as stored. Present on 504 planets: 0 on 500 and -1 on
+        four, never 1.'
+    - unique_name: Inclination Upper Limit
+      label: Inclination Upper Limit
+      dataset: Planet Detail
+      key_columns:
+      - inclination_upper_limit
+      name_column: inclination_upper_limit
+      folder: Measurement Quality
+      description: Whether the inclination is an Upper Limit Value.  'Yes' when the flag is 1, 'No' when
+        the flag is recorded and not 1 (0 or -1), null when no flag is recorded - so filtering on 'No'
+        keeps exactly the planets whose flag is present and differs from 1, and excludes the unknown ones.
+    - unique_name: Density Limit Flag
+      label: Density Limit Flag
+      dataset: Planet Detail
+      key_columns:
+      - density_limit_flag
+      name_column: density_limit_flag
+      folder: Measurement Quality
+      description: 'Limit flag on the density as stored. Present on 387 planets: 0 on 377, 1 on nine,
+        -1 on one.'
+    - unique_name: Density Upper Limit
+      label: Density Upper Limit
+      dataset: Planet Detail
+      key_columns:
+      - density_upper_limit
+      name_column: density_upper_limit
+      folder: Measurement Quality
+      description: Whether the density is an Upper Limit Value. 'Yes' on a few planets, 'No' on most of
+        the rest that carry a flag, null on 2985. 'Yes' when the flag is 1, 'No' when the flag is recorded
+        and not 1 (0 or -1), null when no flag is recorded - so filtering on 'No' keeps exactly the planets
+        whose flag is present and differs from 1, and excludes the unknown ones.
+    - unique_name: Semi Major Limit Flag
+      label: Semi Major Limit Flag
+      dataset: Planet Detail
+      key_columns:
+      - semi_major_limit_flag
+      name_column: semi_major_limit_flag
+      folder: Measurement Quality
+      description: Limit flag on the semi-major axis. Present on 1892 planets.
+    - unique_name: Distance Limit Flag
+      label: Distance Limit Flag
+      dataset: Planet Detail
+      key_columns:
+      - distance_limit_flag
+      name_column: distance_limit_flag
+      folder: Measurement Quality
+      description: 'Limit flag on the stellar distance as stored. Present on 2293 planets: 0 on 2285 and
+        -1 (a lower limit) on eight, never 1. Null on 1079 planets whose limit status is unrecorded, which
+        is a different thing from a measured distance. A filter written as = 0 drops the eight lower-limit
+        rows, which are measured distances, while Distance Upper Limit = ''No'' keeps every recorded flag
+        that is not an upper limit (2293 planets) - the two select different rows.'
+    - unique_name: Distance Upper Limit
+      label: Distance Upper Limit
+      dataset: Planet Detail
+      key_columns:
+      - distance_upper_limit
+      name_column: distance_upper_limit
+      folder: Measurement Quality
+      description: Whether the host star's distance is an Upper Limit Value.  This is the only quality
+        flag on the distance itself; a screen over stellar measurement quality that uses this flag alone
+        and one that uses both it and Magnitude Blended select different rows. 'Yes' when the flag is
+        1, 'No' when the flag is recorded and not 1 (0 or -1), null when no flag is recorded - so filtering
+        on 'No' keeps exactly the planets whose flag is present and differs from 1, and excludes the unknown
+        ones.
+    - unique_name: Stellar Temperature Limit Flag
+      label: Stellar Temperature Limit Flag
+      dataset: Planet Detail
+      key_columns:
+      - temperature_limit_flag
+      name_column: temperature_limit_flag
+      folder: Measurement Quality
+      description: Limit flag on the stellar temperature as stored. Present on 3204 planets and 1 on exactly
+        one.
+    - unique_name: Stellar Temperature Upper Limit
+      label: Stellar Temperature Upper Limit
+      dataset: Planet Detail
+      key_columns:
+      - stellar_temperature_upper_limit
+      name_column: stellar_temperature_upper_limit
+      folder: Measurement Quality
+      description: Whether the host star's temperature is an Upper Limit Value. 'Yes' on a few planets,
+        'No' on the rest that carry a flag, null on 168. 'Yes' when the flag is 1, 'No' when the flag
+        is recorded and not 1 (0 or -1), null when no flag is recorded - so filtering on 'No' keeps exactly
+        the planets whose flag is present and differs from 1, and excludes the unknown ones.
+    - unique_name: Magnitude Limit Flag
+      label: Magnitude Limit Flag
+      dataset: Planet Detail
+      key_columns:
+      - magnitude_limit_flag
+      name_column: magnitude_limit_flag
+      folder: Measurement Quality
+      description: Limit flag on the stellar magnitude. Present on 3251 planets.
+    - unique_name: Stellar Radius Limit Flag
+      label: Stellar Radius Limit Flag
+      dataset: Planet Detail
+      key_columns:
+      - stellar_radius_limit_flag
+      name_column: stellar_radius_limit_flag
+      folder: Measurement Quality
+      description: Limit flag on the stellar radius. Present on 3014 planets.
+    - unique_name: Stellar Mass Limit Flag
+      label: Stellar Mass Limit Flag
+      dataset: Planet Detail
+      key_columns:
+      - stellar_mass_limit_flag
+      name_column: stellar_mass_limit_flag
+      folder: Measurement Quality
+      description: 'Limit flag on the stellar mass as stored. Present on 3047 planets: 0 on 3041 and -1
+        on six, never 1.'
+    - unique_name: Stellar Mass Upper Limit
+      label: Stellar Mass Upper Limit
+      dataset: Planet Detail
+      key_columns:
+      - stellar_mass_upper_limit
+      name_column: stellar_mass_upper_limit
+      folder: Measurement Quality
+      description: Whether the host star's mass is an Upper Limit Value.  'Yes' when the flag is 1, 'No'
+        when the flag is recorded and not 1 (0 or -1), null when no flag is recorded - so filtering on
+        'No' keeps exactly the planets whose flag is present and differs from 1, and excludes the unknown
+        ones.
+    - unique_name: Temperature Blend Flag
+      label: Temperature Blend Flag
+      dataset: Planet Detail
+      key_columns:
+      - temperature_blend_flag
+      name_column: temperature_blend_flag
+      folder: Measurement Quality
+      description: Blend flag on the stellar temperature - 1 means the measurement is contaminated by
+        light from unresolved companions. Present on 3219 planets.
+    - unique_name: Temperature Blended
+      label: Temperature Blended
+      dataset: Planet Detail
+      key_columns:
+      - temperature_blended
+      name_column: temperature_blended
+      folder: Measurement Quality
+      description: Whether the host star's temperature is a Blended Measurement.  'Yes' when the flag
+        is 1, 'No' when the flag is recorded and not 1 (0 or -1), null when no flag is recorded - so filtering
+        on 'No' keeps exactly the planets whose flag is present and differs from 1, and excludes the unknown
+        ones.
+    - unique_name: Stellar Mass Blend Flag
+      label: Stellar Mass Blend Flag
+      dataset: Planet Detail
+      key_columns:
+      - stellar_mass_blend_flag
+      name_column: stellar_mass_blend_flag
+      folder: Measurement Quality
+      description: Blend flag on the stellar mass. Present on 2977 planets.
+    - unique_name: Stellar Radius Blend Flag
+      label: Stellar Radius Blend Flag
+      dataset: Planet Detail
+      key_columns:
+      - stellar_radius_blend_flag
+      name_column: stellar_radius_blend_flag
+      folder: Measurement Quality
+      description: Blend flag on the stellar radius. Present on 3185 planets.
+    - unique_name: Magnitude Blend Flag
+      label: Magnitude Blend Flag
+      dataset: Planet Detail
+      key_columns:
+      - magnitude_blend_flag
+      name_column: magnitude_blend_flag
+      folder: Measurement Quality
+      description: Blend flag on the stellar magnitude as stored. Present on 3251 planets and equal to
+        1 on a handful of them - the ONLY blended measurements anywhere in this warehouse. Magnitude Blended
+        is the same flag read as Yes/No.
+    - unique_name: Magnitude Blended
+      label: Magnitude Blended
+      dataset: Planet Detail
+      key_columns:
+      - magnitude_blended
+      name_column: magnitude_blended
+      folder: Measurement Quality
+      description: Whether the host star's magnitude is a Blended Measurement - contaminated by companion
+        light. 'Yes' on a handful of planets, 'No' on the rest that carry a flag, null on 121. The only
+        blend flag in the warehouse that is ever set, so it is the one a data-quality screen on stellar
+        photometry turns on. 'Yes' when the flag is 1, 'No' when the flag is recorded and not 1 (0 or
+        -1), null when no flag is recorded - so filtering on 'No' keeps exactly the planets whose flag
+        is present and differs from 1, and excludes the unknown ones.
+    - unique_name: Any Stellar Blend
+      label: Any Stellar Blend
+      dataset: Planet Detail
+      key_columns:
+      - any_stellar_blend
+      name_column: any_stellar_blend
+      folder: Measurement Quality
+      description: Whether any of the four stellar blend flags is set - contaminated star data. 'Yes'
+        on 9 planets and 'No' on 3363. All nine are flagged on the magnitude; the temperature, mass and
+        radius flags are zero throughout.
+    - unique_name: Gas Giant Planet
+      label: Gas Giant Planet
+      dataset: Planet Detail
+      key_columns:
+      - gas_giant_planet
+      name_column: gas_giant_planet
+      folder: Planet Classifications
+      description: Whether the mass exceeds 0.1 Jupiter masses - gas giant, big gassy planet. 'Yes' on
+        929 planets, 'No' on 245, and null on the 2198 with no mass. So three quarters of the catalogue
+        cannot be judged at all.
+    - unique_name: Rocky Planet
+      label: Rocky Planet
+      dataset: Planet Detail
+      key_columns:
+      - rocky_planet
+      name_column: rocky_planet
+      folder: Planet Classifications
+      description: Whether the bulk density exceeds 3 grams per cubic centimetre - rocky planet. 'Yes'
+        on 74 planets, 'No' on 314, and null on the 2984 with no density.
+    - unique_name: Short Period Planet
+      label: Short Period Planet
+      dataset: Planet Detail
+      key_columns:
+      - short_period_planet
+      name_column: short_period_planet
+      folder: Planet Classifications
+      description: Whether the orbital period is under 10 days - short-period, fast orbit. 'Yes' on 1445
+        planets, 'No' on 1860, null on 67.
+    - unique_name: Hot Jupiter
+      label: Hot Jupiter
+      dataset: Planet Detail
+      key_columns:
+      - hot_jupiter
+      name_column: hot_jupiter
+      folder: Planet Classifications
+      description: Whether the planet is both a gas giant and short-period - hot Jupiter. 'Yes' where
+        both hold, 'No' for every planet whose recorded mass rules out a gas giant OR whose recorded period
+        rules out a short-period orbit, even when the other input is missing, and null where neither recorded
+        value settles it. Retrograde Orbit reads a strictly retrograde orbit (inclination above 90 degrees)
+        and Retrograde Orbit (90 Degrees Or More) admits an inclination of exactly 90 degrees; the two
+        readings select different planets.
+    - unique_name: Super Earth
+      label: Super Earth
+      dataset: Planet Detail
+      key_columns:
+      - super_earth
+      name_column: super_earth
+      folder: Planet Classifications
+      description: Whether the planet is rocky AND has a mass between 1 and 10 Earth masses - super-Earth.
+        'Yes' on 31 planets, 'No' on 1075 (a recorded density that is not rocky, or a recorded mass outside
+        that range), null on 2266. 29 of the 31 were discovered by transit, and their mean surface gravity
+        is 2.538 Earth gravities; the strongest is Kepler-131 c at 11.69.
+    - unique_name: Planet In Habitable Zone
+      label: Planet In Habitable Zone
+      dataset: Planet Detail
+      key_columns:
+      - planet_in_habitable_zone
+      name_column: planet_in_habitable_zone
+      folder: Planet Classifications
+      description: Whether the semi-major axis lies between the habitable-zone boundaries. 'Yes' on 28
+        planets, 'No' on 1505, null on 1839.
+    - unique_name: Potentially Habitable
+      label: Potentially Habitable
+      dataset: Planet Detail
+      key_columns:
+      - potentially_habitable
+      name_column: potentially_habitable
+      folder: Planet Classifications
+      description: 'Whether the planet is rocky AND in the habitable zone - potentially habitable exoplanet.
+        ZERO planets qualify: 1538 are ''No'' (a recorded density at or below 3, or an orbit recorded
+        outside the zone) and 1834 cannot be judged. The two conditions never co-occur in this warehouse,
+        because only 388 planets have a density at all and none of those 388 that is rocky also sits inside
+        its zone. So a question about potentially habitable planets has an empty answer, and the honest
+        reply names the two component populations - 74 rocky planets and 28 planets in a habitable zone
+        - rather than returning nothing.'
+    - unique_name: High Eccentricity Planet
+      label: High Eccentricity Planet
+      dataset: Planet Detail
+      key_columns:
+      - high_eccentricity_planet
+      name_column: high_eccentricity_planet
+      folder: Planet Classifications
+      description: Whether the eccentricity exceeds 0.25 - high eccentricity, weird orbit. 'Yes' on 249
+        planets, 'No' on 725, null on 2398.
+    - unique_name: Retrograde Orbit
+      label: Retrograde Orbit
+      dataset: Planet Detail
+      key_columns:
+      - retrograde_orbit
+      name_column: retrograde_orbit
+      folder: Planet Classifications
+      description: Whether the inclination exceeds 90 degrees - retrograde, orbiting backwards, the knowledge
+        base's strict 'greater than 90' reading. 'Yes' on only 8 planets, 'No' on 494, null on 2870. The
+        highest inclination in the warehouse is 90.76 degrees, so the eight that qualify clear the threshold
+        by less than a degree - and 21 planets sit at EXACTLY 90.0 degrees, on the boundary. Retrograde
+        Orbit (90 Degrees Or More) admits them, selecting 29; which reading a question means is the caller's
+        to settle, so ask when the boundary matters.
+    - unique_name: Retrograde Orbit (90 Degrees Or More)
+      label: Retrograde Orbit (90 Degrees Or More)
+      dataset: Planet Detail
+      key_columns:
+      - retrograde_orbit_inclusive
+      name_column: retrograde_orbit_inclusive
+      folder: Planet Classifications
+      description: The inclusive reading of the retrograde threshold - an inclination of 90 degrees or
+        more. 'Yes' on 29 planets (the 8 strictly above 90 plus 21 at exactly 90.0), 'No' on 473, null
+        on 2870. KB 31 defines a retrograde orbit as an inclination strictly greater than 90 degrees, which is the plain Retrograde Orbit; this inclusive twin is for a question that itself says 'at least 90' or '90 or more'. The threshold is the KB's own - do not ask which of the two readings is meant.
+    - unique_name: Inflated Gas Giant
+      label: Inflated Gas Giant
+      dataset: Planet Detail
+      key_columns:
+      - inflated_gas_giant
+      name_column: inflated_gas_giant
+      folder: Planet Classifications
+      description: Whether the planet is a gas giant with a low bulk density - inflated gas giant, big
+        puffy planet. 'Yes' where a giant mass and a low recorded density are both present, 'No' where
+        a recorded mass at or below 0.1 rules out a gas giant or a recorded density rules out inflation,
+        null where neither recorded value settles it. Distance Upper Limit and Magnitude Blended are two
+        separate measurement-quality flags on the star record and they select different rows, so a screen
+        over stellar measurement quality has to say which of them it means; ask rather than choose.
+    - unique_name: In Multi Planetary System
+      label: In Multi Planetary System
+      dataset: Planet Detail
+      key_columns:
+      - in_multi_planetary_system
+      name_column: in_multi_planetary_system
+      folder: Planet Classifications
+      description: Whether the host star declares more than one planetary companion. 'Yes' on 1431 planets
+        and 'No' on 1941.
+    - unique_name: Period High Precision
+      label: Period High Precision
+      dataset: Planet Detail
+      key_columns:
+      - period_high_precision
+      name_column: period_high_precision
+      folder: Planet Classifications
+      description: Whether the period's relative uncertainty is under 5 percent - a high-precision period.
+        'Yes' on 3125 planets, 'No' on 55, null on 192.
+    - unique_name: Mass High Precision
+      label: Mass High Precision
+      dataset: Planet Detail
+      key_columns:
+      - mass_high_precision
+      name_column: mass_high_precision
+      folder: Planet Classifications
+      description: Whether the mass's relative uncertainty is under 5 percent. 'Yes' on 198 planets, 'No'
+        on 789, null on 2385 - the scarcest of the three precision tests.
+    - unique_name: Radius High Precision
+      label: Radius High Precision
+      dataset: Planet Detail
+      key_columns:
+      - radius_high_precision
+      name_column: radius_high_precision
+      folder: Planet Classifications
+      description: Whether the radius's relative uncertainty is under 5 percent. 'Yes' on 396 planets,
+        'No' on 2260, null on 716.
+    - unique_name: Well Characterized Planet
+      label: Well Characterized Planet
+      dataset: Planet Detail
+      key_columns:
+      - well_characterized_planet
+      name_column: well_characterized_planet
+      folder: Planet Classifications
+      description: 'Whether mass, radius AND period are all high-precision. ''Yes'' on 48 planets, ''No''
+        on 2881 (any one of the three recorded at 5 percent or worse), null on 443. The mass test is what
+        narrows it: 3125 planets have a precise period and 396 a precise radius, but only 198 a precise
+        mass.'
+    - unique_name: Kepler Observation
+      label: Kepler Observation
+      dataset: Planet Detail
+      key_columns:
+      - kepler_observation_indicator
+      name_column: kepler_observation_indicator
+      folder: Survey Observations
+      description: Whether the planet has an observation record linked to the 'kep' facility - a Kepler
+        mission discovery. 1 on 2329 planets and 0 on 1043.
+    - unique_name: K2 Observation
+      label: K2 Observation
+      dataset: Planet Detail
+      key_columns:
+      - k2_observation_indicator
+      name_column: k2_observation_indicator
+      folder: Survey Observations
+      description: Whether the planet has an observation record linked to the 'k2' facility - a K2 mission
+        discovery. 1 on 129 planets.
+    - unique_name: TTV Observation
+      label: TTV Observation
+      dataset: Planet Detail
+      key_columns:
+      - ttv_observation_indicator
+      name_column: ttv_observation_indicator
+      folder: Survey Observations
+      description: Whether the planet has an observation record linked to the 'ttv' facility - a transit-timing-variation
+        detection. 1 on 225 planets. This is the knowledge base's Transit Timing Variation (TTV) Method - planets found or discovered via timing variations or the TTV method. Discovery Method's 'TTV' category is a different reading, the standardised stored label, on 15 planets.
+    - unique_name: Planet Observation Count
+      label: Planet Observation Count
+      dataset: Planet Detail
+      key_columns:
+      - observation_count
+      name_column: observation_count
+      folder: Survey Observations
+      description: How many of the three surveys observed the planet. 0, 1 or 2 on all 3372 planets, averaging
+        0.796 - no planet was observed by all three.
+    - unique_name: Observed By A Survey
+      label: Observed By A Survey
+      dataset: Planet Detail
+      key_columns:
+      - observed_by_a_survey
+      name_column: observed_by_a_survey
+      folder: Survey Observations
+      description: Whether any of the three surveys observed the planet. 'Yes' on 2460 and 'No' on 912.

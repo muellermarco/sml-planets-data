@@ -1,0 +1,8 @@
+unique_name: Short Period Planet Count
+object_type: metric
+label: Short Period Planet Count
+description: How many of the selected planets orbit in under 10 days. 1445 of the 3305 with a period warehouse-wide.
+dataset: Planet Detail
+column: short_period_indicator
+calculation_method: sum
+unrelated_dimensions_handling: error

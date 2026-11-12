@@ -1,0 +1,10 @@
+unique_name: Potentially Habitable Count
+object_type: metric
+label: Potentially Habitable Count
+description: How many of the selected planets are both rocky AND in the habitable zone. ZERO warehouse-wide
+  - the two conditions never co-occur, even though 74 planets are rocky and 28 sit in a habitable zone.
+  Published so the emptiness is visible rather than mistaken for a filter error.
+dataset: Planet Detail
+column: potentially_habitable_indicator
+calculation_method: sum
+unrelated_dimensions_handling: error

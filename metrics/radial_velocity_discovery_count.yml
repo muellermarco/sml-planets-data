@@ -1,0 +1,8 @@
+unique_name: Radial Velocity Discovery Count
+object_type: metric
+label: Radial Velocity Discovery Count
+description: How many of the selected planets were discovered by radial velocity. 591 of 3372 warehouse-wide.
+dataset: Planet Detail
+column: radial_velocity_indicator
+calculation_method: sum
+unrelated_dimensions_handling: error

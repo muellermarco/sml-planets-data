@@ -1,0 +1,8 @@
+unique_name: Maximum Orbital Velocity
+object_type: metric
+label: Maximum Orbital Velocity
+description: Highest orbital velocity among the selection, in kilometres per second. 531.29 warehouse-wide.
+dataset: Planet Detail
+column: orbital_velocity_kms
+calculation_method: maximum
+unrelated_dimensions_handling: error

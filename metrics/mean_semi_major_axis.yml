@@ -1,0 +1,8 @@
+unique_name: Mean Semi Major Axis
+object_type: metric
+label: Mean Semi Major Axis
+description: Mean semi-major axis in AU. 7.7042 across 1897 planets.
+dataset: Planet Detail
+column: semi_major_axis_au_measure
+calculation_method: average
+unrelated_dimensions_handling: error

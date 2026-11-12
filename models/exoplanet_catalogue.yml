@@ -1,0 +1,473 @@
+unique_name: Exoplanet Catalogue
+object_type: model
+label: Exoplanet Catalogue
+description: 'A confirmed-exoplanet catalogue: 3372 planets, 2509 host stars and three observing surveys.
+  Orientation: this is a clean star schema. The planet is the fact grain, the orbital record, the physical
+  record and the data-quality record are each exactly 1:1 with a planet and all three fold onto it, and
+  every planet names a host star that resolves. The planet-to-survey table is a genuine bridge - 2683
+  rows over 2460 planets and 3 facilities - and survey membership is also published as three per-planet
+  flags so a question can filter without joining it. Every knowledge-base formula ships both as a queryable
+  per-row attribute and as an aggregate measure. FIVE THINGS DECIDE MOST ANSWERS HERE. First, COVERAGE.
+  The orbital measurements are far better populated than the physical ones, and every derived quantity
+  inherits the scarcest input it needs. A period exists for 3305 planets, a radius for 2694, a semi-major
+  axis for 1897, a mass for 1174, an eccentricity for 974, an inclination for 502 and a DENSITY FOR ONLY
+  388. So the transit depth covers 2684 planets, the Kepler''s-law mass check 1831, the orbital velocity
+  1593, the equilibrium temperature and the Goldilocks value 1533, the mass ratio 1127, and the surface
+  gravity, escape velocity and mass-radius ratio 509 each. Every rocky, super-Earth, inflated-giant and
+  potentially-habitable answer is bounded by that 388. Each object publishes its own support set and the
+  Support Sets And Coverage folder collects them. Second, UNITS AND CONSTANTS. Every derived quantity
+  is evaluated in consistent SI units from the standard physical constants written out in full - G = 6.67430E-11,
+  the solar mass 1.98847E30 kg, the solar radius 6.957E8 m, the astronomical unit 1.496E11 m, Jupiter''s
+  mass 1.898E27 kg and radius 7.1492E7 m, 109.2 Earth radii per solar radius - and at the warehouse''s
+  own column types, so a figure here is the figure a plain SQL reader of the same tables computes. Velocities
+  carry kilometres per second under their bare names with metres-per-second twins; the stellar density
+  is kilograms per cubic metre with a solar-units twin; the transit depth is a fraction with a percent
+  twin; the equilibrium temperature is Kelvin with both lengths in metres. The orbital period is DAYS
+  as recorded, with a years twin for Kepler''s third law. Third, SEVERAL CONCEPTS ARE EMPTY RATHER THAN
+  RARE, and a question about them has no answer rather than a small one. NO planet is both rocky and in
+  its star''s habitable zone, so the potentially-habitable count is zero even though 74 planets are rocky
+  and 28 sit in a zone. NO hot Jupiter also orbits retrograde, so a question asking for both returns nothing.
+  The blend flags are published beside their values. The limit flags are published beside their values.
+  Fourth, TWO TEXT COLUMNS ARE DIRTY. The discovery method is stored in 38 spellings of six standard categories,
+  so grouping by the raw text splits Transit across five buckets - ''Photometric'' 578, ''TR'' 536, ''Transit
+  Method'' 523, ''Photometry'' 516 and ''Transit'' 511, which are one category of 2664. Membership is
+  matched EXACTLY against the label lists the knowledge base gives, because a substring reading would
+  also pull ''Timing Variations'' and ''Eclipse Timing'' into TTV. The photometric band is stored in 10
+  spellings of three bands, five of them for Kepler alone; the canonical form folds ''V-band'' into Johnson
+  V and a stricter reading that keeps it separate ships beside it, moving 155 stars. Fifth, THE MAGNITUDE
+  SCALE IS INVERTED. A smaller number is a brighter star, so ''the brightest star'' is the MINIMUM of
+  the magnitude column, and a maximum returns the faintest. Star names are stored in catalogue form, so
+  ''alf Tau'' rather than ''Aldebaran''. Two more things worth knowing. The three survey codes are stored
+  lower case as ''kep'', ''k2'' and ''ttv'', so a filter written as ''Kepler'' matches nothing. And a
+  star''s declared companion count and the number of planet rows it actually carries agree on all but
+  ONE of the 2509 stars, so the two readings of ''multi-planetary system'' give 569 and 570. Finally,
+  what the warehouse does not hold. There is no spectral type, no metallicity and no age, so a stellar
+  classification can only be built from mass, radius and temperature. The compactness of a system - KB
+  33''s Compact System - depends on a threshold on the adjacent period ratio that the user supplies, so
+  this model publishes the ratios - the maximum, minimum, arithmetic mean and geometric mean per system
+  - and no compactness flag. A star''s planetary make-up is System Composition - rocky only, gas giants
+  only, mixed or neither - judged over the planets whose density or mass is recorded. And the orbital
+  period is stored in DAYS while Kepler''s third law needs years, so the derived stellar mass divides
+  by 365.25 squared; using days directly gives a number about 133,000 times too small.
+  In a FROM clause this model is named "<schema>"."Exoplanet Catalogue" with the schema exactly as
+  list_models prints it, or in full "atscale_catalogs"."<schema>"."Exoplanet Catalogue"; a bare table
+  name is refused before dispatch. Engine notes, the same for every model here. COUNT(*) is refused -
+  a semantic model has no row count of its own - so a count names a published count metric or
+  COUNT(DISTINCT <key column>). A SELECT with no measure, a flat listing as much as a subquery,
+  returns DISTINCT attribute tuples: a listing of entities that leaves out their ID column merges rows
+  with equal values (1000 shows listed by title and a flag came back as 109 rows), so a per-entity
+  listing projects the entity''s ID. SUM or AVG over a dimension ATTRIBUTE is refused before the query
+  is dispatched, with a message naming the workaround, while COUNT over an attribute aggregates
+  correctly and agrees with COUNT(DISTINCT <key column>), so an aggregate of a per-row score names the
+  published metric rather than wrapping the attribute - and where the aggregate has no metric, select
+  the attribute at row grain in a FROM-subquery that also selects the row''s ID column, and aggregate
+  outside it - a select with no measure returns DISTINCT attribute tuples, so without the ID duplicate
+  values collapse and an outer AVG averages the distinct values only. ORDER BY <col> DESC places NULLs
+  FIRST and ASC places them LAST, which is what Postgres does, and an explicit NULLS FIRST or NULLS
+  LAST is honoured, so a top-N over a nullable column writes DESC NULLS LAST or filters that column IS
+  NOT NULL. ORDER BY a column the outer SELECT does not project is an internal render fault, so put
+  the ORDER BY and its LIMIT inside the subquery that projects the sort column, and sorting by an
+  ATTRIBUTE the query neither projects nor groups by is refused outright with a message saying to add
+  it to the select list, while a published MEASURE can be sorted on without being projected -
+  projecting only a CAST or ROUND of a column does not count, so give the rounded expression an alias
+  and ORDER BY the alias; ORDER BY an aggregate the SELECT does not project, such as ORDER BY
+  COUNT(DISTINCT <key>) DESC LIMIT 1 for the most frequent group, is refused the same way, so compute
+  the aggregate under an alias in a FROM-subquery that holds the ORDER BY and LIMIT and project only
+  the group outside. A window column is filtered by selecting it in a FROM-subquery and filtering its
+  alias in the outer WHERE; filtering it in HAVING after a GROUP BY is refused as an incorrectly
+  constructed constraint. ROUND to a fixed number of decimals goes through a numeric cast that must
+  carry precision and scale - a bare CAST(x AS numeric) is refused with ''Numeric values are only
+  accepted with specified precision and scale'', so write CAST(x AS numeric(18,4)), and note that the
+  result comes back as a string rather than a number. A top-level UNION ALL over the model works and a
+  listing UNION ALL a one-row summary is a working shape, but a UNION inside a subquery, CTE or WHERE
+  is refused, a NULL literal in a branch may be written as CAST(NULL AS VARCHAR) though a bare NULL is
+  also accepted, and the branch order is preserved, so a listing followed by a one-row summary comes
+  back in that order. Not accepted in submitted SQL in any spelling: PERCENTILE_CONT, MEDIAN,
+  PERCENT_RANK, CORR, REGR_SLOPE, JSON aggregation, GREATEST/LEAST, IN (subquery), EXISTS and CTEs -
+  whatever this model precomputes for those is named above. STRING_AGG over a FROM-subquery that
+  projects the rows is accepted, but an ORDER BY inside the STRING_AGG call is refused before the query is dispatched, and element order then follows the warehouse. NULLIF is refused before the query is dispatched, so a divide-by-zero guard is written CASE WHEN <b> = 0 THEN NULL ELSE <a> / <b> END. A published median metric is called by its name with the suffix _instance_0.5; the plain
+  name is not found. Two FROM-subqueries joined with a comma are refused; one subquery with
+  conditional aggregates in the outer SELECT, such as MAX(CASE WHEN ... THEN x END), gives two figures
+  in one row. A WHERE on one dataset''s column while projecting another dataset''s column, where the two
+  datasets are not joined, is silently dropped: the filter becomes true and every row returns with no
+  error. Missing-input policy: a figure whose input has no recorded row is null, never zero, unless
+  its own label or description says it treats the absent input as zero; where both readings are
+  published each one names the other. A published count or total metric over a selection that matches no rows returns NULL, not 0, while COUNT(DISTINCT <key column>) over the same selection returns 0; a count of records meeting a condition that no record meets is 0, so write COALESCE(<count metric>, 0) or COUNT(DISTINCT <key column>). Stored text is matched as stored; no attribute in this model
+  holds one value under spellings that differ only in case or spacing.'
+metrics:
+- unique_name: Planet Count
+  folder: Record And Entity Counts
+- unique_name: Star Count
+  folder: Record And Entity Counts
+- unique_name: Distinct Star Count On Planets
+  folder: Record And Entity Counts
+- unique_name: Observation Count
+  folder: Record And Entity Counts
+- unique_name: Distinct Observed Planet Count
+  folder: Record And Entity Counts
+- unique_name: Distinct Observed Star Count
+  folder: Record And Entity Counts
+- unique_name: Survey Facility Count
+  folder: Record And Entity Counts
+- unique_name: Planets With A Period
+  folder: Support Sets And Coverage
+- unique_name: Planets With A Semi Major Axis
+  folder: Support Sets And Coverage
+- unique_name: Planets With A Mass
+  folder: Support Sets And Coverage
+- unique_name: Planets With A Radius
+  folder: Support Sets And Coverage
+- unique_name: Planets With A Density
+  folder: Support Sets And Coverage
+- unique_name: Planets With An Eccentricity
+  folder: Support Sets And Coverage
+- unique_name: Planets With An Inclination
+  folder: Support Sets And Coverage
+- unique_name: Planets With A Surface Gravity
+  folder: Support Sets And Coverage
+- unique_name: Planets With An Equilibrium Temperature
+  folder: Support Sets And Coverage
+- unique_name: Planets With A Transit Depth
+  folder: Support Sets And Coverage
+- unique_name: Planets With An Orbital Velocity
+  folder: Support Sets And Coverage
+- unique_name: Planets With A Mass Ratio
+  folder: Support Sets And Coverage
+- unique_name: Planets With A Kepler Mass
+  folder: Support Sets And Coverage
+- unique_name: Planets With A Host Distance
+  folder: Support Sets And Coverage
+- unique_name: Planets With A Next Period Ratio
+  folder: Support Sets And Coverage
+- unique_name: Stars With A Distance
+  folder: Support Sets And Coverage
+- unique_name: Stars With A Mass
+  folder: Support Sets And Coverage
+- unique_name: Stars With A Radius
+  folder: Support Sets And Coverage
+- unique_name: Stars With A Temperature
+  folder: Support Sets And Coverage
+- unique_name: Stars With A Luminosity
+  folder: Support Sets And Coverage
+- unique_name: Stars With A Density
+  folder: Support Sets And Coverage
+- unique_name: Stars With A Magnitude
+  folder: Support Sets And Coverage
+- unique_name: Stars With An Adjacent Pair
+  folder: Support Sets And Coverage
+- unique_name: Mean Orbital Period Days
+  folder: Orbital Measures
+- unique_name: Minimum Orbital Period Days
+  folder: Orbital Measures
+- unique_name: Maximum Orbital Period Days
+  folder: Orbital Measures
+- unique_name: Mean Semi Major Axis
+  folder: Orbital Measures
+- unique_name: Mean Eccentricity
+  folder: Orbital Measures
+- unique_name: Maximum Eccentricity
+  folder: Orbital Measures
+- unique_name: Mean Inclination
+  folder: Orbital Measures
+- unique_name: Maximum Inclination
+  folder: Orbital Measures
+- unique_name: Mean Next Period Ratio
+  folder: Orbital Measures
+- unique_name: Mean Planet Mass Jupiter
+  folder: Physical Measures
+- unique_name: Mean Planet Mass Earth
+  folder: Physical Measures
+- unique_name: Maximum Planet Mass Jupiter
+  folder: Physical Measures
+- unique_name: Mean Planet Radius Jupiter
+  folder: Physical Measures
+- unique_name: Mean Planet Radius Earth
+  folder: Physical Measures
+- unique_name: Maximum Planet Radius Jupiter
+  folder: Physical Measures
+- unique_name: Mean Planet Density
+  folder: Physical Measures
+- unique_name: Maximum Planet Density
+  folder: Physical Measures
+- unique_name: Total Note Count
+  folder: Physical Measures
+- unique_name: Mean Surface Gravity
+  folder: Derived Quantity Measures
+- unique_name: Maximum Surface Gravity
+  folder: Derived Quantity Measures
+- unique_name: Mean Mass Radius Ratio
+  folder: Derived Quantity Measures
+- unique_name: Maximum Mass Radius Ratio
+  folder: Derived Quantity Measures
+- unique_name: Mean Escape Velocity
+  folder: Derived Quantity Measures
+- unique_name: Maximum Escape Velocity
+  folder: Derived Quantity Measures
+- unique_name: Mean Orbital Velocity
+  folder: Derived Quantity Measures
+- unique_name: Maximum Orbital Velocity
+  folder: Derived Quantity Measures
+- unique_name: Mean Equilibrium Temperature
+  folder: Derived Quantity Measures
+- unique_name: Maximum Equilibrium Temperature
+  folder: Derived Quantity Measures
+- unique_name: Mean Transit Depth
+  folder: Derived Quantity Measures
+- unique_name: Maximum Transit Depth
+  folder: Derived Quantity Measures
+- unique_name: Mean Planet Star Mass Ratio
+  folder: Derived Quantity Measures
+- unique_name: Maximum Planet Star Mass Ratio
+  folder: Derived Quantity Measures
+- unique_name: Mean Kepler Derived Stellar Mass
+  folder: Derived Quantity Measures
+- unique_name: Mean Kepler Mass Difference
+  folder: Derived Quantity Measures
+- unique_name: Mean Kepler Mass Absolute Difference
+  folder: Derived Quantity Measures
+- unique_name: Mean Goldilocks Value
+  folder: Derived Quantity Measures
+- unique_name: Mean Planet Distance Light Years (All Recorded)
+  folder: Derived Quantity Measures
+- unique_name: Mean Planet Distance Light Years
+  folder: Derived Quantity Measures
+- unique_name: Mean Stellar Distance Parsecs
+  folder: Stellar Measures
+- unique_name: Mean Stellar Distance Light Years
+  folder: Stellar Measures
+- unique_name: Mean Stellar Mass
+  folder: Stellar Measures
+- unique_name: Mean Stellar Radius
+  folder: Stellar Measures
+- unique_name: Mean Stellar Temperature
+  folder: Stellar Measures
+- unique_name: Maximum Stellar Temperature
+  folder: Stellar Measures
+- unique_name: Mean Optical Magnitude
+  folder: Stellar Measures
+- unique_name: Minimum Optical Magnitude
+  folder: Stellar Measures
+- unique_name: Mean Stellar Luminosity
+  folder: Stellar Measures
+- unique_name: Maximum Stellar Luminosity
+  folder: Stellar Measures
+- unique_name: Mean Stellar Density
+  folder: Stellar Measures
+- unique_name: Maximum Stellar Density
+  folder: Stellar Measures
+- unique_name: Minimum Stellar Density
+  folder: Stellar Measures
+- unique_name: Mean Stellar Density (Solar Units)
+  folder: Stellar Measures
+- unique_name: Mean Gravitational Parameter
+  folder: Stellar Measures
+- unique_name: Mean Habitable Zone Inner
+  folder: Stellar Measures
+- unique_name: Mean Habitable Zone Outer
+  folder: Stellar Measures
+- unique_name: Mean Star Planet Count
+  folder: Star System Measures
+- unique_name: Maximum Star Planet Count
+  folder: Star System Measures
+- unique_name: Total System Planets
+  folder: Star System Measures
+- unique_name: Mean Companion Count
+  folder: Star System Measures
+- unique_name: Mean Shortest Orbital Period
+  folder: Star System Measures
+- unique_name: Mean Max Adjacent Period Ratio
+  folder: Star System Measures
+- unique_name: Mean Adjacent Period Ratio Per System
+  folder: Star System Measures
+- unique_name: Mean Geometric Adjacent Period Ratio Per System
+  folder: Star System Measures
+- unique_name: Rocky Only Star Count
+  folder: Star System Measures
+- unique_name: Gas Giants Only Star Count
+  folder: Star System Measures
+- unique_name: Total Adjacent Pairs
+  folder: Star System Measures
+- unique_name: Total Star Gas Giants
+  folder: Star System Measures
+- unique_name: Total Star Rocky Planets
+  folder: Star System Measures
+- unique_name: Total Star Planets With Density
+  folder: Star System Measures
+- unique_name: Total Star Short Period Planets
+  folder: Star System Measures
+- unique_name: Total Star Transit Discoveries
+  folder: Star System Measures
+- unique_name: Total Star Radial Velocity Discoveries
+  folder: Star System Measures
+- unique_name: Multi Planetary Star Count
+  folder: Star System Measures
+- unique_name: Kepler Star Count
+  folder: Star System Measures
+- unique_name: K2 Star Count
+  folder: Star System Measures
+- unique_name: TTV Star Count
+  folder: Star System Measures
+- unique_name: Gas Giant Count
+  folder: Classification Counts
+- unique_name: Rocky Planet Count
+  folder: Classification Counts
+- unique_name: Short Period Planet Count
+  folder: Classification Counts
+- unique_name: Hot Jupiter Count
+  folder: Classification Counts
+- unique_name: Super Earth Count
+  folder: Classification Counts
+- unique_name: Habitable Zone Planet Count
+  folder: Classification Counts
+- unique_name: Potentially Habitable Count
+  folder: Classification Counts
+- unique_name: High Eccentricity Count
+  folder: Classification Counts
+- unique_name: Retrograde Orbit Count
+  folder: Classification Counts
+- unique_name: Inflated Gas Giant Count
+  folder: Classification Counts
+- unique_name: Well Characterized Count
+  folder: Classification Counts
+- unique_name: Transit Discovery Count
+  folder: Classification Counts
+- unique_name: Radial Velocity Discovery Count
+  folder: Classification Counts
+- unique_name: Kepler Observed Planet Count
+  folder: Classification Counts
+- unique_name: K2 Observed Planet Count
+  folder: Classification Counts
+- unique_name: TTV Observed Planet Count
+  folder: Classification Counts
+- unique_name: Mean Period Relative Uncertainty
+  folder: Measurement Quality Measures
+- unique_name: Mean Mass Relative Uncertainty
+  folder: Measurement Quality Measures
+- unique_name: Mean Radius Relative Uncertainty
+  folder: Measurement Quality Measures
+- unique_name: Mean Density Relative Uncertainty
+  folder: Measurement Quality Measures
+- unique_name: Mean Eccentricity Relative Uncertainty
+  folder: Measurement Quality Measures
+- unique_name: Radius Upper Limit Count
+  folder: Measurement Quality Measures
+- unique_name: Temperature Blend Count
+  folder: Measurement Quality Measures
+- unique_name: Distance Upper Limit Count
+  folder: Measurement Quality Measures
+- unique_name: Mass Upper Limit Count
+  folder: Measurement Quality Measures
+- unique_name: Magnitude Blend Count
+  folder: Measurement Quality Measures
+- unique_name: Minimum Mass Count
+  folder: Measurement Quality Measures
+- unique_name: Planet Share Of All Planets
+  folder: Calculations - Shares And Rates
+- unique_name: Star Share Of All Stars
+  folder: Calculations - Shares And Rates
+- unique_name: Gas Giant Rate
+  folder: Calculations - Shares And Rates
+- unique_name: Rocky Planet Rate
+  folder: Calculations - Shares And Rates
+- unique_name: Short Period Rate
+  folder: Calculations - Shares And Rates
+- unique_name: High Eccentricity Rate
+  folder: Calculations - Shares And Rates
+- unique_name: Retrograde Rate
+  folder: Calculations - Shares And Rates
+- unique_name: Inflated Gas Giant Rate
+  folder: Calculations - Shares And Rates
+- unique_name: Super Earth Rate
+  folder: Calculations - Shares And Rates
+- unique_name: Habitable Zone Rate
+  folder: Calculations - Shares And Rates
+- unique_name: Well Characterized Rate
+  folder: Calculations - Shares And Rates
+- unique_name: Transit Discovery Rate
+  folder: Calculations - Shares And Rates
+- unique_name: Radial Velocity Discovery Rate
+  folder: Calculations - Shares And Rates
+- unique_name: Kepler Observation Rate
+  folder: Calculations - Shares And Rates
+- unique_name: Mass Coverage Rate
+  folder: Calculations - Shares And Rates
+- unique_name: Density Coverage Rate
+  folder: Calculations - Shares And Rates
+- unique_name: Multi Planetary Star Rate
+  folder: Calculations - Shares And Rates
+- unique_name: Observed Planet Rate
+  folder: Calculations - Shares And Rates
+- unique_name: Group Planets Per Star
+  folder: Calculations - Group Formulas
+- unique_name: Group Mass Ratio (Pooled)
+  folder: Calculations - Group Formulas
+- unique_name: Group Surface Gravity (Pooled)
+  folder: Calculations - Group Formulas
+- unique_name: Group Mass Radius Ratio (Pooled)
+  folder: Calculations - Group Formulas
+- unique_name: Group Stellar Luminosity (Pooled)
+  folder: Calculations - Group Formulas
+- unique_name: Group Rocky Fraction Per System
+  folder: Calculations - Group Formulas
+- unique_name: Group Observations Per Planet
+  folder: Calculations - Group Formulas
+dimensions:
+- Planet Profile
+- Star Profile
+relationships:
+- unique_name: planet_detail_to_planet
+  from:
+    dataset: Planet Detail
+    join_columns:
+    - planet
+  to:
+    dimension: Planet Record
+    level: Planet
+- unique_name: observation_to_planet
+  from:
+    dataset: Planet Observation
+    join_columns:
+    - planet
+  to:
+    dimension: Planet Record
+    level: Planet
+- unique_name: planet_to_star
+  from:
+    dataset: Planet Detail
+    join_columns:
+    - star
+  to:
+    dimension: Star Record
+    level: Star
+- unique_name: star_detail_to_star
+  from:
+    dataset: Star Detail
+    join_columns:
+    - star
+  to:
+    dimension: Star Record
+    level: Star
+- unique_name: observation_to_star
+  from:
+    dataset: Planet Observation
+    join_columns:
+    - star
+  to:
+    dimension: Star Record
+    level: Star
+- unique_name: observation_to_facility
+  from:
+    dataset: Planet Observation
+    join_columns:
+    - facility
+  to:
+    dimension: Survey Facility
+    level: Facility Name
+- unique_name: facility_detail_to_facility
+  from:
+    dataset: Survey Facility Detail
+    join_columns:
+    - facility
+  to:
+    dimension: Survey Facility
+    level: Facility Name

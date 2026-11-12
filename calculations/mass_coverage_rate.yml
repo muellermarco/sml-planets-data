@@ -1,0 +1,8 @@
+unique_name: Mass Coverage Rate
+object_type: metric_calc
+label: Mass Coverage Rate
+description: The proportion of the selected planets that record a mass. A FRACTION from 0 to 1; warehouse-wide
+  1174/3372, or 0.34816. Report it beside any mass-based average, because that average describes a third
+  of the catalogue.
+expression: CASE WHEN ISEMPTY([Measures].[Planet Count]) OR [Measures].[Planet Count] = 0 THEN NULL ELSE
+  [Measures].[Planets With A Mass] / [Measures].[Planet Count] END

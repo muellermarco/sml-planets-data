@@ -1,0 +1,8 @@
+unique_name: Group Observations Per Planet
+object_type: metric_calc
+label: Group Observations Per Planet
+description: Observation records divided by distinct planets observed. Warehouse-wide 2683/2460, or 1.0906
+  - so most observed planets appear once and a few appear twice. No planet appears three times.
+expression: CASE WHEN ISEMPTY([Measures].[Distinct Observed Planet Count]) OR [Measures].[Distinct Observed
+  Planet Count] = 0 THEN NULL ELSE [Measures].[Observation Count] / [Measures].[Distinct Observed Planet
+  Count] END

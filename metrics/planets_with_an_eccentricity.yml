@@ -1,0 +1,8 @@
+unique_name: Planets With An Eccentricity
+object_type: metric
+label: Planets With An Eccentricity
+description: How many of the selected planets record an eccentricity. 974 of 3372 warehouse-wide.
+dataset: Planet Detail
+column: has_eccentricity
+calculation_method: sum
+unrelated_dimensions_handling: error

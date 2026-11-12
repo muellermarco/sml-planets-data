@@ -1,0 +1,9 @@
+unique_name: Mean Geometric Adjacent Period Ratio Per System
+object_type: metric
+label: Mean Geometric Adjacent Period Ratio Per System
+description: Mean of each system's GEOMETRIC-mean adjacent period ratio. 28.598 across 568 stars; 1.9896
+  across the 210 systems whose ratios are all under 3 with an innermost planet under 10 days.
+dataset: Star Detail
+column: geometric_mean_adjacent_period_ratio_measure
+calculation_method: average
+unrelated_dimensions_handling: error

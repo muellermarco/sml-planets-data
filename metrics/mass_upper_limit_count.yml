@@ -1,0 +1,9 @@
+unique_name: Mass Upper Limit Count
+object_type: metric
+label: Mass Upper Limit Count
+description: How many of the selected planets have a mass that is an upper limit rather than a measurement.
+  64 of the 1174 with a mass warehouse-wide.
+dataset: Planet Detail
+column: mass_upper_limit_indicator
+calculation_method: sum
+unrelated_dimensions_handling: error

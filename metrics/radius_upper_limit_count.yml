@@ -1,0 +1,9 @@
+unique_name: Radius Upper Limit Count
+object_type: metric
+label: Radius Upper Limit Count
+description: How many of the selected planets have a radius that is an upper limit rather than a measurement.
+  Exactly 1 warehouse-wide, out of the 2694 with a radius.
+dataset: Planet Detail
+column: radius_upper_limit_indicator
+calculation_method: sum
+unrelated_dimensions_handling: error

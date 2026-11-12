@@ -1,0 +1,472 @@
+unique_name: Star Profile
+object_type: dimension
+label: Star Profile
+type: standard
+description: 'Where the star sits on the sky. Both coordinates are stored twice, as decimal degrees and
+  as a sexagesimal string, and both forms are published on all 2509 stars. Star System Profile: What the
+  star''s planets look like in aggregate, and the adjacent-period ratios a compactness question needs.
+  569 stars declare more than one companion and 568 of them have at least one adjacent pair with both
+  periods recorded. Stellar Formula Profile: Knowledge-base stellar formulas, as queryable per-star attributes.
+  Each needs a temperature, a radius or a mass, so each covers a different subset of the 2509 stars.'
+is_degenerate: true
+level_attributes:
+- unique_name: Star Profile Key
+  label: Star Profile Key
+  dataset: Star Detail
+  key_columns:
+  - star
+  name_column: star
+  is_hidden: true
+hierarchies:
+- unique_name: Star Profile Hierarchy
+  label: Star Profile
+  filter_empty: 'yes'
+  folder: Sky Coordinates
+  levels:
+  - unique_name: Star Profile Key
+    is_hidden: true
+    secondary_attributes:
+    - unique_name: Right Ascension Degrees
+      label: Right Ascension Degrees
+      dataset: Star Detail
+      key_columns:
+      - right_ascension_degrees
+      name_column: right_ascension_degrees
+      folder: Sky Coordinates
+      description: Right ascension in decimal degrees. 0.362 to 359.97 on all 2509 stars, averaging 255.2.
+    - unique_name: Declination Degrees
+      label: Declination Degrees
+      dataset: Star Detail
+      key_columns:
+      - declination_degrees
+      name_column: declination_degrees
+      folder: Sky Coordinates
+      description: Declination in decimal degrees. -84.23 to 85.74 on all 2509 stars, averaging 27.90.
+    - unique_name: Right Ascension Text
+      label: Right Ascension Text
+      dataset: Star Detail
+      key_columns:
+      - right_ascension_text
+      name_column: right_ascension_text
+      folder: Sky Coordinates
+      description: Right ascension in hours, minutes and seconds, e.g. 12h20m43.03s. 2506 distinct strings
+        on all 2509 stars.
+    - unique_name: Declination Text
+      label: Declination Text
+      dataset: Star Detail
+      key_columns:
+      - declination_text
+      name_column: declination_text
+      folder: Sky Coordinates
+      description: Declination in degrees, arcminutes and arcseconds with a sign prefix, e.g. +17d47m34.3s.
+        2508 distinct strings on all 2509 stars.
+    - unique_name: Star Temperature Blend Flag
+      label: Star Temperature Blend Flag
+      dataset: Star Detail
+      key_columns:
+      - temperature_blend_flag
+      name_column: temperature_blend_flag
+      folder: Sky Coordinates
+      description: Blend flag on the star's temperature. Present on 2369 stars.
+    - unique_name: Star Mass Blend Flag
+      label: Star Mass Blend Flag
+      dataset: Star Detail
+      key_columns:
+      - mass_blend_flag
+      name_column: mass_blend_flag
+      folder: Sky Coordinates
+      description: Blend flag on the star's mass. Present on 2282 stars.
+    - unique_name: Star Radius Blend Flag
+      label: Star Radius Blend Flag
+      dataset: Star Detail
+      key_columns:
+      - radius_blend_flag
+      name_column: radius_blend_flag
+      folder: Sky Coordinates
+      description: Blend flag on the star's radius. Present on 2346 stars.
+    - unique_name: Star Magnitude Blend Flag
+      label: Star Magnitude Blend Flag
+      dataset: Star Detail
+      key_columns:
+      - magnitude_blend_flag
+      name_column: magnitude_blend_flag
+      folder: Sky Coordinates
+      description: Blend flag on the star's magnitude as stored. Present on 2400 stars and equal to 1
+        on a handful of them - the only blended measurements at star grain.
+    - unique_name: Star Magnitude Blended
+      label: Star Magnitude Blended
+      dataset: Star Detail
+      key_columns:
+      - star_magnitude_blended
+      name_column: star_magnitude_blended
+      folder: Sky Coordinates
+      description: Whether the star's magnitude is a Blended Measurement, read as Yes/No. 'Yes' on a handful
+        of stars, 'No' on the rest that carry a flag, null on the 109 with no flag. 'Yes' when the flag
+        is 1, 'No' when the flag is recorded and not 1 (0 or -1), null when no flag is recorded - so filtering
+        on 'No' keeps exactly the planets whose flag is present and differs from 1, and excludes the unknown
+        ones.
+    - unique_name: Any Blended Measurement
+      label: Any Blended Measurement
+      dataset: Star Detail
+      key_columns:
+      - any_blended_measurement
+      name_column: any_blended_measurement
+      folder: Sky Coordinates
+      description: Whether any of the star's four blend flags is set - contaminated star data. 'Yes' on
+        7 stars and 'No' on 2502. All seven are flagged on the magnitude alone.
+    - unique_name: Star Planet Count
+      label: Star Planet Count
+      dataset: Star Detail
+      key_columns:
+      - star_planet_count
+      name_column: star_planet_count
+      folder: Star System Summary
+      description: How many planet rows the star actually carries. 1 to 7 on all 2509 stars, averaging
+        1.344. It agrees with the star's own declared companion count on all but ONE star, so the two
+        readings of multi-planetary differ by a single row - 570 stars have more than one planet row and
+        569 declare more than one companion.
+    - unique_name: Shortest Orbital Period
+      label: Shortest Orbital Period
+      dataset: Star Detail
+      key_columns:
+      - shortest_orbital_period
+      name_column: shortest_orbital_period
+      folder: Star System Summary
+      description: Period of the innermost planet by period, in days - the fastest planet in the system.
+        0.0907 to 7,300,000 on 2444 stars, averaging 3477.
+    - unique_name: Longest Orbital Period
+      label: Longest Orbital Period
+      dataset: Star Detail
+      key_columns:
+      - longest_orbital_period
+      name_column: longest_orbital_period
+      folder: Star System Summary
+      description: Period of the outermost planet by period, in days. 0.0907 to 7,300,000 on 2444 stars,
+        averaging 3619.
+    - unique_name: Innermost Semi Major Axis
+      label: Innermost Semi Major Axis
+      dataset: Star Detail
+      key_columns:
+      - innermost_semi_major_axis
+      name_column: innermost_semi_major_axis
+      folder: Star System Summary
+      description: Smallest semi-major axis in the system, in AU. 0.0044 to 2500 on 1244 stars, averaging
+        11.32.
+    - unique_name: Outermost Semi Major Axis
+      label: Outermost Semi Major Axis
+      dataset: Star Detail
+      key_columns:
+      - outermost_semi_major_axis
+      name_column: outermost_semi_major_axis
+      folder: Star System Summary
+      description: Largest semi-major axis in the system, in AU. 0.0044 to 2500 on 1244 stars, averaging
+        11.57. The planet that holds it does not always record a period, so a Kepler's-law check on the
+        outermost planet filters Kepler Derived Stellar Mass IS NOT NULL.
+    - unique_name: Heaviest Planet Mass
+      label: Heaviest Planet Mass
+      dataset: Star Detail
+      key_columns:
+      - heaviest_planet_mass_jupiter
+      name_column: heaviest_planet_mass_jupiter
+      folder: Star System Summary
+      description: Mass of the system's heaviest planet, in Jupiter masses. 0.00063 to 28.5 on 920 stars,
+        averaging 3.097.
+    - unique_name: Largest Planet Radius
+      label: Largest Planet Radius
+      dataset: Star Detail
+      key_columns:
+      - largest_planet_radius_jupiter
+      name_column: largest_planet_radius_jupiter
+      folder: Star System Summary
+      description: Radius of the system's largest planet, in Jupiter radii. 0.046 to 6.9 on 1991 stars,
+        averaging 0.399.
+    - unique_name: Densest Planet Density
+      label: Densest Planet Density
+      dataset: Star Detail
+      key_columns:
+      - densest_planet_density
+      name_column: densest_planet_density
+      folder: Star System Summary
+      description: Density of the system's densest planet. 0.046 to 77.7 on only 333 stars, averaging
+        2.654.
+    - unique_name: Star Gas Giant Count
+      label: Star Gas Giant Count
+      dataset: Star Detail
+      key_columns:
+      - star_gas_giant_count
+      name_column: star_gas_giant_count
+      folder: Star System Summary
+      description: How many of the star's planets are gas giants. 0 to 4 on all 2509 stars, averaging
+        0.370.
+    - unique_name: Star Rocky Planet Count
+      label: Star Rocky Planet Count
+      dataset: Star Detail
+      key_columns:
+      - star_rocky_planet_count
+      name_column: star_rocky_planet_count
+      folder: Star System Summary
+      description: How many of the star's planets are rocky. 0 to 4 on all 2509 stars, averaging 0.0295.
+    - unique_name: Star Planets With Density
+      label: Star Planets With Density
+      dataset: Star Detail
+      key_columns:
+      - star_planets_with_density
+      name_column: star_planets_with_density
+      folder: Star System Summary
+      description: How many of the star's planets have a density at all. 0 to 6 on all 2509 stars, averaging
+        0.155 - the honest denominator for any rocky-fraction question.
+    - unique_name: Star Planets With Composition
+      label: Star Planets With Composition
+      dataset: Star Detail
+      key_columns:
+      - star_planets_with_composition
+      name_column: star_planets_with_composition
+      folder: Star System Summary
+      description: How many of the star's planets carry a density OR a mass - the planets whose composition
+        class (rocky by density, gas giant by mass) can be judged at all. 1176 planets over 921 stars;
+        0 on the other 1588 stars, whose System Composition is therefore null.
+    - unique_name: Star Short Period Count
+      label: Star Short Period Count
+      dataset: Star Detail
+      key_columns:
+      - star_short_period_count
+      name_column: star_short_period_count
+      folder: Star System Summary
+      description: How many of the star's planets orbit in under 10 days. 0 to 5 on all 2509 stars, averaging
+        0.576.
+    - unique_name: Star Transit Discovery Count
+      label: Star Transit Discovery Count
+      dataset: Star Detail
+      key_columns:
+      - star_transit_discovery_count
+      name_column: star_transit_discovery_count
+      folder: Star System Summary
+      description: How many of the star's planets were found by transit. 0 to 7 on all 2509 stars, averaging
+        1.062.
+    - unique_name: Star Radial Velocity Count
+      label: Star Radial Velocity Count
+      dataset: Star Detail
+      key_columns:
+      - star_radial_velocity_count
+      name_column: star_radial_velocity_count
+      folder: Star System Summary
+      description: How many of the star's planets were found by radial velocity. 0 to 6 on all 2509 stars,
+        averaging 0.236.
+    - unique_name: Adjacent Pair Count
+      label: Adjacent Pair Count
+      dataset: Star Detail
+      key_columns:
+      - adjacent_pair_count
+      name_column: adjacent_pair_count
+      folder: Star System Summary
+      description: How many adjacent planet pairs the system has with both periods recorded. 0 to 6 on
+        2508 stars, averaging 0.343. 568 stars have at least one pair and 193 have more than one.
+    - unique_name: Max Adjacent Period Ratio
+      label: Max Adjacent Period Ratio
+      dataset: Star Detail
+      key_columns:
+      - max_adjacent_period_ratio
+      name_column: max_adjacent_period_ratio
+      folder: Star System Summary
+      description: Largest ratio between the periods of two adjacent planets in the system. 1.173 to 4482
+        on 568 stars, averaging 29.78. KB 33 defines a Compact System from this figure - a multi-planet
+        system whose adjacent period ratios all stay under one cutoff - and the cutoff comes from the
+        user.
+    - unique_name: Min Adjacent Period Ratio
+      label: Min Adjacent Period Ratio
+      dataset: Star Detail
+      key_columns:
+      - min_adjacent_period_ratio
+      name_column: min_adjacent_period_ratio
+      folder: Star System Summary
+      description: Smallest ratio between the periods of two adjacent planets. 1.006 to 4482 on 568 stars,
+        averaging 28.26.
+    - unique_name: Mean Adjacent Period Ratio
+      label: Mean Adjacent Period Ratio
+      dataset: Star Detail
+      key_columns:
+      - mean_adjacent_period_ratio
+      name_column: mean_adjacent_period_ratio
+      folder: Star System Summary
+      description: ARITHMETIC mean of the system's adjacent Orbital Period Ratios. 1.173 to 4482 on 568
+        stars, averaging 28.94. Geometric Mean Adjacent Period Ratio is the other average of the same
+        ratios; the two agree on every two-planet system and differ on 177 of the 193 systems with more
+        than one pair, so which average a question means is the caller's to settle - ask when it says
+        'average ratio'.
+    - unique_name: Geometric Mean Adjacent Period Ratio
+      label: Geometric Mean Adjacent Period Ratio
+      dataset: Star Detail
+      key_columns:
+      - geometric_mean_adjacent_period_ratio
+      name_column: geometric_mean_adjacent_period_ratio
+      folder: Star System Summary
+      description: GEOMETRIC mean of the system's adjacent Orbital Period Ratios - the exponential of
+        the mean logarithm, the conventional average of a set of ratios. 1.173 to 4482 on 568 stars, averaging
+        28.60; on the 210 systems whose ratios are all under 3 and whose innermost planet orbits in under
+        10 days it averages 1.990. Identical to Mean Adjacent Period Ratio on two-planet systems and smaller
+        on every system with more than one pair.
+    - unique_name: Multi Planetary System
+      label: Multi Planetary System
+      dataset: Star Detail
+      key_columns:
+      - multi_planetary_system
+      name_column: multi_planetary_system
+      folder: Star System Summary
+      description: Whether the star declares more than one planetary companion - multi-planetary. 'Yes'
+        on 569 stars and 'No' on 1940.
+    - unique_name: Multiple Planet Rows
+      label: Multiple Planet Rows
+      dataset: Star Detail
+      key_columns:
+      - multiple_planet_rows
+      name_column: multiple_planet_rows
+      folder: Star System Summary
+      description: Whether the star actually carries more than one planet row. 'Yes' on 570 stars and
+        'No' on 1939 - one more than the declared-companion reading, because a single star's two figures
+        disagree.
+    - unique_name: System Composition
+      label: System Composition
+      dataset: Star Detail
+      key_columns:
+      - system_composition
+      name_column: system_composition
+      folder: Star System Summary
+      description: 'What kinds of planet the star hosts, judged from the two knowledge-base composition
+        classes over every planet with a density or a mass: ''Rocky Only'' (one or more Rocky Planets
+        and no Gas Giant Planet) on 27 stars, ''Gas Giants Only'' (one or more gas giants and no rocky
+        planet) on 782, ''Mixed'' (both) on 35, ''Neither'' (planets judgeable but none in either class)
+        on 77, and null on the 1588 stars none of whose planets records a density or a mass. Has Rocky
+        Planet and Has Gas Giant are the two halves as separate Yes/No attributes. A star can be judged
+        rocky-only here while All Density Measured Planets Rocky says the same thing of a wider set (49
+        stars), because that reading ignores planets whose mass, but not density, is recorded - the two
+        differ on 22 stars whose gas giants have no density.'
+    - unique_name: Has Rocky Planet
+      label: Has Rocky Planet
+      dataset: Star Detail
+      key_columns:
+      - has_rocky_planet
+      name_column: has_rocky_planet
+      folder: Star System Summary
+      description: Whether at least one of the star's planets is a Rocky Planet - a recorded density above
+        3. 'Yes' on 62 stars, 'No' on 859 whose judgeable planets are all non-rocky, null on the 1588
+        with no judgeable planet.
+    - unique_name: Has Gas Giant
+      label: Has Gas Giant
+      dataset: Star Detail
+      key_columns:
+      - has_gas_giant
+      name_column: has_gas_giant
+      folder: Star System Summary
+      description: Whether at least one of the star's planets is a Gas Giant Planet - a recorded mass
+        above 0.1 Jupiter masses. 'Yes' on 817 stars, 'No' on 104, null on 1588.
+    - unique_name: All Density Measured Planets Rocky
+      label: All Density Measured Planets Rocky
+      dataset: Star Detail
+      key_columns:
+      - all_density_measured_rocky
+      name_column: all_density_measured_rocky
+      folder: Star System Summary
+      description: Whether every planet of the star that HAS a density is rocky - the narrower reading
+        that looks only at density-measured planets and ignores a gas giant known by its mass alone. 'Yes'
+        on 49 stars, 'No' on 284, and null on the 2176 with no density anywhere in the system. System
+        Composition = 'Rocky Only' is the reading that also rules out gas giants by mass, and selects
+        27 of these 49.
+    - unique_name: Star Kepler Observation
+      label: Star Kepler Observation
+      dataset: Star Detail
+      key_columns:
+      - kepler_observation_indicator
+      name_column: kepler_observation_indicator
+      folder: Star System Summary
+      description: Whether any planet of the star was observed by the Kepler mission. 1 on 1644 stars.
+    - unique_name: Star K2 Observation
+      label: Star K2 Observation
+      dataset: Star Detail
+      key_columns:
+      - k2_observation_indicator
+      name_column: k2_observation_indicator
+      folder: Star System Summary
+      description: Whether any planet of the star was observed by K2. 1 on 94 stars.
+    - unique_name: Star TTV Observation
+      label: Star TTV Observation
+      dataset: Star Detail
+      key_columns:
+      - ttv_observation_indicator
+      name_column: ttv_observation_indicator
+      folder: Star System Summary
+      description: Whether any planet of the star was detected through transit timing variations.
+    - unique_name: Stellar Luminosity (Intrinsic Brightness, Solar Units)
+      label: Stellar Luminosity (Intrinsic Brightness, Solar Units)
+      dataset: Star Detail
+      key_columns:
+      - stellar_luminosity
+      name_column: stellar_luminosity
+      folder: Stellar Formula Measures
+      description: 'Intrinsic brightness of the star relative to the Sun - luminosity in solar units:
+        the radius in solar radii squared, times the temperature over 5778 K to the fourth power. 7.9e-07
+        to 631 on the 2207 stars with both a radius and a temperature, averaging 5.640. It is the input
+        to both habitable-zone boundaries, and paired with the effective temperature it is the Hertzsprung-Russell
+        (HR) Diagram Position the knowledge base defines - a coordinate pair of temperature and luminosity.'
+    - unique_name: Star Habitable Zone Inner
+      label: Star Habitable Zone Inner
+      dataset: Star Detail
+      key_columns:
+      - habitable_zone_inner_au
+      name_column: habitable_zone_inner_au
+      folder: Stellar Formula Measures
+      description: Habitable Zone Inner Boundary in AU - the square root of the luminosity over 1.1. 0.00085
+        to 23.95 on 2207 stars, averaging 1.296. This figure is computed at the Star Detail grain; 'Habitable
+        Zone Inner AU' is the same quantity at the Planet Detail grain, where it averages 1.212. The readings
+        disagree because the grains differ, so say which basis you mean, and ask if the question does
+        not.
+    - unique_name: Star Habitable Zone Outer
+      label: Star Habitable Zone Outer
+      dataset: Star Detail
+      key_columns:
+      - habitable_zone_outer_au
+      name_column: habitable_zone_outer_au
+      folder: Stellar Formula Measures
+      description: Habitable Zone Outer Boundary in AU - the square root of the luminosity over 0.53.
+        0.00122 to 34.50 on 2207 stars, averaging 1.866. This figure is computed at the Star Detail grain;
+        'Habitable Zone Outer AU' is the same quantity at the Planet Detail grain, where it averages 1.747.
+        The readings disagree because the grains differ, so say which basis you mean, and ask if the question
+        does not.
+    - unique_name: Stellar Density
+      label: Stellar Density
+      dataset: Star Detail
+      key_columns:
+      - stellar_density_kg_m3
+      name_column: stellar_density_kg_m3
+      folder: Stellar Formula Measures
+      description: 'Stellar Density - the star''s mass over the volume of a sphere of its radius, in KILOGRAMS
+        PER CUBIC METRE: the solar-unit mass times 1.98847E30 over four-thirds pi times the cube of the
+        solar-unit radius times 6.957E8. 0.0138 to 30,839,868 on the 2117 stars with both a mass and a
+        radius, averaging 16,571; a pulsar in the catalogue sits far above any ordinary star on this figure.
+        The twin Stellar Density (Solar Units) leaves both inputs in solar units. Physical constants are
+        the standard published values, written out and composed inside the formula rather than pre-multiplied:
+        G = 6.67430E-11, solar mass 1.98847E30 kg, solar radius 6.957E8 m, astronomical unit 1.496E11
+        m, Jupiter mass 1.898E27 kg, Jupiter radius 7.1492E7 m, 109.2 Earth radii per solar radius.'
+    - unique_name: Stellar Density (Solar Units)
+      label: Stellar Density (Solar Units)
+      dataset: Star Detail
+      key_columns:
+      - stellar_density_solar
+      name_column: stellar_density_solar
+      folder: Stellar Formula Measures
+      description: The same formula evaluated with the mass in solar masses and the radius in solar radii,
+        so the unit is solar masses per cubic solar radius. 2.3e-06 to 5222 on 2117 stars, averaging 2.806.
+        Divide-free and ranking-identical to Stellar Density.
+    - unique_name: Gravitational Parameter
+      label: Gravitational Parameter
+      dataset: Star Detail
+      key_columns:
+      - gravitational_parameter
+      name_column: gravitational_parameter
+      folder: Stellar Formula Measures
+      description: 'Standard gravitational parameter of the star, in cubic metres per second squared -
+        the gravitational constant times the stellar mass in kilograms, 6.67430E-11 times the solar-unit
+        mass times 1.98847E30. 2.65e+18 to 5.18e+20 on the 2357 stars with a mass, averaging 1.33e+20.
+        Physical constants are the standard published values, written out and composed inside the formula
+        rather than pre-multiplied: G = 6.67430E-11, solar mass 1.98847E30 kg, solar radius 6.957E8 m,
+        astronomical unit 1.496E11 m, Jupiter mass 1.898E27 kg, Jupiter radius 7.1492E7 m, 109.2 Earth
+        radii per solar radius.'
