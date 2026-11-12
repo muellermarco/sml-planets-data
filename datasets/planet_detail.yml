@@ -37,199 +37,228 @@ sql: "SELECT q.*,\n  CASE WHEN q.orbital_period_days IS NOT NULL THEN 1 ELSE 0 E
   \                                  AS planet,\n        max(CASE WHEN i.facilityname = 'kep' THEN 1 ELSE\
   \ 0 END) AS kepler_flag,\n        max(CASE WHEN i.facilityname = 'k2' THEN 1 ELSE 0 END)  AS k2_flag,\n\
   \        max(CASE WHEN i.facilityname = 'ttv' THEN 1 ELSE 0 END) AS ttv_flag,\n        count(*)    \
-  \                                    AS observation_count\n    FROM public.planet_instrument_observations\
-  \ io\n    JOIN public.instruments_surveys i ON i.instrumentref = io.facilitylink\n    GROUP BY io.subjectlink\n\
-  ),\nordered AS (\n    SELECT\n        pp.planetref                                    AS planet,\n \
-  \       pp.hostlink                                     AS star,\n        oo.period                \
-  \                       AS period,\n        lead(oo.period) OVER (\n            PARTITION BY pp.hostlink\n\
-  \            ORDER BY oo.period)                         AS next_period\n    FROM public.planets pp\n\
-  \    LEFT JOIN public.orbital_characteristics oo ON oo.bodylink = pp.planetref\n)\nSELECT\n    p.planetref\
-  \                                         AS planet,\n    p.hostlink                               \
-  \           AS star,\n    s.hostplname                                        AS host_star_name,\n \
-  \   concat(s.hostplname, ' ', p.completter)             AS planet_name,\n    p.completter          \
-  \                              AS companion_letter,\n    p.notecount::double precision             \
-  \          AS note_count,\n    p.discmethod                                        AS discovery_method_stored,\n\
+  \                                    AS observation_count\n    FROM bird.planets_data.planet_instrument_observations\
+  \ io\n    JOIN bird.planets_data.instruments_surveys i ON i.instrumentref = io.facilitylink\n    GROUP\
+  \ BY io.subjectlink\n),\nordered AS (\n    SELECT\n        pp.planetref                            \
+  \        AS planet,\n        pp.hostlink                                     AS star,\n        oo.period\
+  \                                       AS period,\n        lead(oo.period) OVER (\n            PARTITION\
+  \ BY pp.hostlink\n            ORDER BY oo.period)                         AS next_period\n    FROM bird.planets_data.planets\
+  \ pp\n    LEFT JOIN bird.planets_data.orbital_characteristics oo ON oo.bodylink = pp.planetref\n)\n\
+  SELECT\n    p.planetref                                         AS planet,\n    p.hostlink         \
+  \                                 AS star,\n    s.hostplname                                       \
+  \ AS host_star_name,\n    concat(s.hostplname, ' ', p.completter)             AS planet_name,\n    p.completter\
+  \                                        AS companion_letter,\n    CAST(p.notecount AS DOUBLE)     \
+  \                  AS note_count,\n    p.discmethod                                        AS discovery_method_stored,\n\
   \    CASE WHEN lower(trim(p.discmethod)) IN ('radvel', 'rv', 'rv method', 'radial velocity', 'doppler')\
   \ THEN 'Radial Velocity' WHEN lower(trim(p.discmethod)) IN ('transit', 'tr', 'transit method', 'photometry',\
   \ 'photometric') THEN 'Transit' WHEN lower(trim(p.discmethod)) IN ('direct imaging', 'di', 'imaging',\
   \ 'img', 'direct') THEN 'Imaging' WHEN lower(trim(p.discmethod)) IN ('ttv', 'transit timing variations',\
   \ 'transit timing', 'ttv method', 'timing var') THEN 'TTV' WHEN lower(trim(p.discmethod)) IN ('microlensing',\
-  \ 'ml', 'lensing', 'gravitational') OR trim(p.discmethod) = concat(chr(956), 'Lens') THEN 'Microlensing'\
-  \ ELSE 'Other' END                                AS discovery_method,\n    CASE WHEN CASE WHEN lower(trim(p.discmethod))\
-  \ IN ('radvel', 'rv', 'rv method', 'radial velocity', 'doppler') THEN 'Radial Velocity' WHEN lower(trim(p.discmethod))\
+  \ 'ml', 'lensing', 'gravitational') OR trim(p.discmethod) = concat(decode(unhex('CEBC'), 'UTF-8'), 'Lens')\
+  \ THEN 'Microlensing' ELSE 'Other' END                                AS discovery_method,\n    CASE\
+  \ WHEN CASE WHEN lower(trim(p.discmethod)) IN ('radvel', 'rv', 'rv method', 'radial velocity', 'doppler')\
+  \ THEN 'Radial Velocity' WHEN lower(trim(p.discmethod)) IN ('transit', 'tr', 'transit method', 'photometry',\
+  \ 'photometric') THEN 'Transit' WHEN lower(trim(p.discmethod)) IN ('direct imaging', 'di', 'imaging',\
+  \ 'img', 'direct') THEN 'Imaging' WHEN lower(trim(p.discmethod)) IN ('ttv', 'transit timing variations',\
+  \ 'transit timing', 'ttv method', 'timing var') THEN 'TTV' WHEN lower(trim(p.discmethod)) IN ('microlensing',\
+  \ 'ml', 'lensing', 'gravitational') OR trim(p.discmethod) = concat(decode(unhex('CEBC'), 'UTF-8'), 'Lens')\
+  \ THEN 'Microlensing' ELSE 'Other' END = 'Transit' THEN 1 ELSE 0 END                               \
+  \       AS transit_discovery_indicator,\n    CASE WHEN CASE WHEN lower(trim(p.discmethod)) IN ('radvel',\
+  \ 'rv', 'rv method', 'radial velocity', 'doppler') THEN 'Radial Velocity' WHEN lower(trim(p.discmethod))\
   \ IN ('transit', 'tr', 'transit method', 'photometry', 'photometric') THEN 'Transit' WHEN lower(trim(p.discmethod))\
   \ IN ('direct imaging', 'di', 'imaging', 'img', 'direct') THEN 'Imaging' WHEN lower(trim(p.discmethod))\
   \ IN ('ttv', 'transit timing variations', 'transit timing', 'ttv method', 'timing var') THEN 'TTV' WHEN\
   \ lower(trim(p.discmethod)) IN ('microlensing', 'ml', 'lensing', 'gravitational') OR trim(p.discmethod)\
-  \ = concat(chr(956), 'Lens') THEN 'Microlensing' ELSE 'Other' END = 'Transit' THEN 1 ELSE 0 END    \
-  \                                  AS transit_discovery_indicator,\n    CASE WHEN CASE WHEN lower(trim(p.discmethod))\
-  \ IN ('radvel', 'rv', 'rv method', 'radial velocity', 'doppler') THEN 'Radial Velocity' WHEN lower(trim(p.discmethod))\
-  \ IN ('transit', 'tr', 'transit method', 'photometry', 'photometric') THEN 'Transit' WHEN lower(trim(p.discmethod))\
-  \ IN ('direct imaging', 'di', 'imaging', 'img', 'direct') THEN 'Imaging' WHEN lower(trim(p.discmethod))\
-  \ IN ('ttv', 'transit timing variations', 'transit timing', 'ttv method', 'timing var') THEN 'TTV' WHEN\
-  \ lower(trim(p.discmethod)) IN ('microlensing', 'ml', 'lensing', 'gravitational') OR trim(p.discmethod)\
-  \ = concat(chr(956), 'Lens') THEN 'Microlensing' ELSE 'Other' END = 'Radial Velocity' THEN 1 ELSE 0\
-  \ END                                       AS radial_velocity_indicator,\n    (o.period)::text::numeric\
-  \                                        AS orbital_period_days,\n    (o.period / 365.25)          \
-  \              AS orbital_period_years,\n    (o.semimajor)::text::numeric                          \
-  \           AS semi_major_axis_au,\n    (o.eccentricity)::text::numeric                            \
-  \               AS eccentricity,\n    (o.inclination)::text::numeric                               \
-  \           AS inclination_degrees,\n    (ph.massjup)::text::numeric                               \
-  \         AS planet_mass_jupiter,\n    (ph.massjup * 317.83)                                       \
-  \     AS planet_mass_earth,\n    (ph.radjup)::text::numeric                                        \
-  \ AS planet_radius_jupiter,\n    (ph.radjup * 11.209)                                             AS\
-  \ planet_radius_earth,\n    (ph.densvalue)::text::numeric                                       AS planet_density,\n\
+  \ = concat(decode(unhex('CEBC'), 'UTF-8'), 'Lens') THEN 'Microlensing' ELSE 'Other' END = 'Radial Velocity'\
+  \ THEN 1 ELSE 0 END                                       AS radial_velocity_indicator,\n    CAST(CAST(CAST((o.period)\
+  \ AS FLOAT) AS STRING) AS DECIMAL(38,10))                                        AS orbital_period_days,\n\
+  \    (o.period / 365.25)                        AS orbital_period_years,\n    CAST(CAST(CAST((o.semimajor)\
+  \ AS FLOAT) AS STRING) AS DECIMAL(38,10))                                     AS semi_major_axis_au,\n\
+  \    CAST(CAST(CAST((o.eccentricity) AS FLOAT) AS STRING) AS DECIMAL(38,10))                       \
+  \                    AS eccentricity,\n    CAST(CAST(CAST((o.inclination) AS FLOAT) AS STRING) AS DECIMAL(38,10))\
+  \                                          AS inclination_degrees,\n    CAST(CAST(CAST((ph.massjup)\
+  \ AS FLOAT) AS STRING) AS DECIMAL(38,10))                                        AS planet_mass_jupiter,\n\
+  \    (ph.massjup * 317.83)                                            AS planet_mass_earth,\n    CAST(CAST(CAST((ph.radjup)\
+  \ AS FLOAT) AS STRING) AS DECIMAL(38,10))                                         AS planet_radius_jupiter,\n\
+  \    (ph.radjup * 11.209)                                             AS planet_radius_earth,\n    CAST(CAST(CAST((ph.densvalue)\
+  \ AS FLOAT) AS STRING) AS DECIMAL(38,10))                                       AS planet_density,\n\
   \    ((ph.massjup * 317.83) / NULLIF(POWER((ph.radjup * 11.209), 2), 0))                           \
   \        AS surface_gravity,\n    ((ph.massjup * 317.83) / NULLIF((ph.radjup * 11.209), 0))        \
   \                         AS mass_radius_ratio,\n    (SQRT(2 * 6.67430E-11 * ph.massjup * 1.898E27 /\
   \ NULLIF(ph.radjup * 7.1492E7, 0)) / 1000)                       AS escape_velocity_kms,\n    SQRT(2\
   \ * 6.67430E-11 * ph.massjup * 1.898E27 / NULLIF(ph.radjup * 7.1492E7, 0))                         \
-  \       AS escape_velocity_ms,\n    (SQRT((6.67430E-11 * (s.stellarprops->'physical'->>'Mass_Value')::real\
-  \ * 1.98847E30) / NULLIF(o.semimajor * 1.496E11, 0)) / 1000)                      AS orbital_velocity_kms,\n\
-  \    SQRT((6.67430E-11 * (s.stellarprops->'physical'->>'Mass_Value')::real * 1.98847E30) / NULLIF(o.semimajor\
-  \ * 1.496E11, 0))                               AS orbital_velocity_ms,\n    ((s.stellarprops->'physical'->>'Temp_Value')::real\
-  \ * SQRT((s.stellarprops->'physical'->>'Radius_Value')::real * 6.957E8 / NULLIF(2 * o.semimajor * 1.496E11,\
-  \ 0)))                                           AS equilibrium_temperature,\n    POWER((ph.radjup *\
-  \ 11.209) / NULLIF((s.stellarprops->'physical'->>'Radius_Value')::real * 109.2, 0), 2)             \
-  \                        AS transit_depth,\n    (POWER((ph.radjup * 11.209) / NULLIF((s.stellarprops->'physical'->>'Radius_Value')::real\
-  \ * 109.2, 0), 2) * 100)                                 AS transit_depth_percent,\n    ((ph.massjup\
-  \ * 1.898E27) / NULLIF((s.stellarprops->'physical'->>'Mass_Value')::real * 1.98847E30, 0))         \
-  \                               AS planet_star_mass_ratio,\n    (POWER(o.semimajor, 3) / NULLIF(POWER(o.period\
-  \ / 365.25, 2), 0))                                       AS kepler_derived_stellar_mass,\n    ((POWER(o.semimajor,\
-  \ 3) / NULLIF(POWER(o.period / 365.25, 2), 0)) - (s.stellarprops->'physical'->>'Mass_Value')::real)\
-  \                                       AS kepler_mass_difference,\n    abs(((POWER(o.semimajor, 3)\
-  \ / NULLIF(POWER(o.period / 365.25, 2), 0)) - (s.stellarprops->'physical'->>'Mass_Value')::real))  \
-  \                                AS kepler_mass_absolute_difference,\n    ((o.semimajor - SQRT((POWER((s.stellarprops->'physical'->>'Radius_Value')::real,\
-  \ 2) * POWER((s.stellarprops->'physical'->>'Temp_Value')::real / 5778, 4)) / 1.1)) / NULLIF(SQRT((POWER((s.stellarprops->'physical'->>'Radius_Value')::real,\
-  \ 2) * POWER((s.stellarprops->'physical'->>'Temp_Value')::real / 5778, 4)) / 0.53) - SQRT((POWER((s.stellarprops->'physical'->>'Radius_Value')::real,\
-  \ 2) * POWER((s.stellarprops->'physical'->>'Temp_Value')::real / 5778, 4)) / 1.1), 0))             \
-  \                           AS goldilocks_value,\n    (ord.next_period)::text::numeric             \
-  \                AS next_planet_period_days,\n    (ord.next_period / NULLIF(o.period, 0))          \
-  \   AS next_planet_period_ratio,\n    (s.stellarprops->'physical'->>'Mass_Value')::numeric         \
-  \                           AS host_stellar_mass,\n    (s.stellarprops->'physical'->>'Radius_Value')::numeric\
-  \                                  AS host_stellar_radius,\n    (s.stellarprops->'physical'->>'Temp_Value')::numeric\
-  \                                    AS host_stellar_temperature,\n    (POWER((s.stellarprops->'physical'->>'Radius_Value')::real,\
-  \ 2) * POWER((s.stellarprops->'physical'->>'Temp_Value')::real / 5778, 4))                         \
-  \               AS host_stellar_luminosity,\n    SQRT((POWER((s.stellarprops->'physical'->>'Radius_Value')::real,\
-  \ 2) * POWER((s.stellarprops->'physical'->>'Temp_Value')::real / 5778, 4)) / 1.1)                  \
-  \                        AS habitable_zone_inner_au,\n    SQRT((POWER((s.stellarprops->'physical'->>'Radius_Value')::real,\
-  \ 2) * POWER((s.stellarprops->'physical'->>'Temp_Value')::real / 5778, 4)) / 0.53)                 \
-  \                         AS habitable_zone_outer_au,\n    (s.stellardist)::text::numeric          \
-  \                     AS stellar_distance_pc,\n    (s.stellardist * 3.26156)                       AS\
-  \ stellar_distance_ly,\n    CASE WHEN CASE WHEN (q.limitflags->'stellar_limits'->>'Dist_Lim')::double\
-  \ precision = 1 THEN 'Yes' WHEN (q.limitflags->'stellar_limits'->>'Dist_Lim')::double precision IS NOT\
-  \ NULL THEN 'No' END = 'No'\n          AND CASE WHEN (s.stellarprops->'photometry'->>'Mag_Blend')::double\
-  \ precision = 1 THEN 'Yes' WHEN (s.stellarprops->'photometry'->>'Mag_Blend')::double precision IS NOT\
-  \ NULL THEN 'No' END = 'No'\n         THEN s.stellardist * 3.26156 END           AS stellar_distance_ly_clean,\n\
-  \    s.compcount::double precision                       AS companion_count,\n    (((q.perioderr1 -\
-  \ q.perioderr2) / 2.0) / NULLIF(o.period, 0) * 100.0)                                        AS period_relative_uncertainty,\n\
-  \    (((q.masserr1 - q.masserr2) / 2.0) / NULLIF(ph.massjup, 0) * 100.0)                           \
-  \               AS mass_relative_uncertainty,\n    (((q.raderr1 - q.raderr2) / 2.0) / NULLIF(ph.radjup,\
-  \ 0) * 100.0)                                        AS radius_relative_uncertainty,\n    (((q.semimajerr1\
-  \ - q.semimajerr2) / 2.0) / NULLIF(o.semimajor, 0) * 100.0)                                     AS semi_major_relative_uncertainty,\n\
-  \    (((q.eccerr1 - q.eccerr2) / 2.0) / NULLIF(o.eccentricity, 0) * 100.0)                         \
-  \                  AS eccentricity_relative_uncertainty,\n    (((q.inclerr1 - q.inclerr2) / 2.0) / NULLIF(o.inclination,\
-  \ 0) * 100.0)                                          AS inclination_relative_uncertainty,\n    (((q.denserr1\
-  \ - q.denserr2) / 2.0) / NULLIF(ph.densvalue, 0) * 100.0)                                       AS density_relative_uncertainty,\n\
-  \    q.masssource                                        AS mass_source,\n    CASE WHEN q.masssource\
-  \ = 'Msini' THEN 'Yes'\n         WHEN q.masssource IS NOT NULL THEN 'No' END    AS minimum_mass_status,\n\
-  \    q.updatestamp                                       AS record_update_date,\n    date_part('year',\
-  \ q.updatestamp)                    AS record_update_year,\n    (q.limitflags->'planetary_limits'->>'Period_Lim')::double\
-  \ precision                         AS period_limit_flag,\n    (q.limitflags->'planetary_limits'->>'Semimaj_Lim')::double\
-  \ precision                        AS semi_major_limit_flag,\n    (q.limitflags->'planetary_limits'->>'Ecc_Lim')::double\
-  \ precision                            AS eccentricity_limit_flag,\n    (q.limitflags->'planetary_limits'->>'Incl_Lim')::double\
-  \ precision                           AS inclination_limit_flag,\n    (q.limitflags->'planetary_limits'->>'Mass_Lim')::double\
-  \ precision                           AS mass_limit_flag,\n    (q.limitflags->'planetary_limits'->>'Rad_Lim')::double\
-  \ precision                            AS radius_limit_flag,\n    (q.limitflags->'planetary_limits'->>'Dens_Lim')::double\
-  \ precision                           AS density_limit_flag,\n    (q.limitflags->'stellar_limits'->>'Dist_Lim')::double\
-  \ precision                           AS distance_limit_flag,\n    (q.limitflags->'stellar_limits'->>'Temp_Lim')::double\
-  \ precision                           AS temperature_limit_flag,\n    (q.limitflags->'stellar_limits'->>'OptMag_Lim')::double\
-  \ precision                         AS magnitude_limit_flag,\n    (q.limitflags->'stellar_limits'->>'StellarRad_Lim')::double\
-  \ precision                     AS stellar_radius_limit_flag,\n    (q.limitflags->'stellar_limits'->>'StellarMass_Lim')::double\
-  \ precision                    AS stellar_mass_limit_flag,\n    CASE WHEN (q.limitflags->'planetary_limits'->>'Period_Lim')::double\
-  \ precision = 1 THEN 'Yes' WHEN (q.limitflags->'planetary_limits'->>'Period_Lim')::double precision\
-  \ IS NOT NULL THEN 'No' END                AS period_upper_limit,\n    CASE WHEN (q.limitflags->'planetary_limits'->>'Ecc_Lim')::double\
-  \ precision = 1 THEN 'Yes' WHEN (q.limitflags->'planetary_limits'->>'Ecc_Lim')::double precision IS\
-  \ NOT NULL THEN 'No' END                   AS eccentricity_upper_limit,\n    CASE WHEN (q.limitflags->'planetary_limits'->>'Incl_Lim')::double\
-  \ precision = 1 THEN 'Yes' WHEN (q.limitflags->'planetary_limits'->>'Incl_Lim')::double precision IS\
-  \ NOT NULL THEN 'No' END                  AS inclination_upper_limit,\n    CASE WHEN (q.limitflags->'planetary_limits'->>'Mass_Lim')::double\
-  \ precision = 1 THEN 'Yes' WHEN (q.limitflags->'planetary_limits'->>'Mass_Lim')::double precision IS\
-  \ NOT NULL THEN 'No' END                  AS mass_upper_limit,\n    CASE WHEN (q.limitflags->'planetary_limits'->>'Rad_Lim')::double\
-  \ precision = 1 THEN 'Yes' WHEN (q.limitflags->'planetary_limits'->>'Rad_Lim')::double precision IS\
-  \ NOT NULL THEN 'No' END                   AS radius_upper_limit,\n    CASE WHEN (q.limitflags->'planetary_limits'->>'Dens_Lim')::double\
-  \ precision = 1 THEN 'Yes' WHEN (q.limitflags->'planetary_limits'->>'Dens_Lim')::double precision IS\
-  \ NOT NULL THEN 'No' END                  AS density_upper_limit,\n    CASE WHEN (q.limitflags->'stellar_limits'->>'Dist_Lim')::double\
-  \ precision = 1 THEN 'Yes' WHEN (q.limitflags->'stellar_limits'->>'Dist_Lim')::double precision IS NOT\
-  \ NULL THEN 'No' END                  AS distance_upper_limit,\n    CASE WHEN (q.limitflags->'stellar_limits'->>'Temp_Lim')::double\
-  \ precision = 1 THEN 'Yes' WHEN (q.limitflags->'stellar_limits'->>'Temp_Lim')::double precision IS NOT\
-  \ NULL THEN 'No' END                  AS stellar_temperature_upper_limit,\n    CASE WHEN (q.limitflags->'stellar_limits'->>'StellarMass_Lim')::double\
-  \ precision = 1 THEN 'Yes' WHEN (q.limitflags->'stellar_limits'->>'StellarMass_Lim')::double precision\
-  \ IS NOT NULL THEN 'No' END           AS stellar_mass_upper_limit,\n    CASE WHEN (q.limitflags->'planetary_limits'->>'Rad_Lim')::double\
-  \ precision = 1 THEN 1 ELSE 0 END\n                                                        AS radius_upper_limit_indicator,\n\
-  \    CASE WHEN (q.limitflags->'planetary_limits'->>'Mass_Lim')::double precision = 1 THEN 1 ELSE 0 END\n\
-  \                                                        AS mass_upper_limit_indicator,\n    CASE WHEN\
-  \ (q.limitflags->'stellar_limits'->>'Dist_Lim')::double precision = 1 THEN 1 ELSE 0 END\n          \
-  \                                              AS distance_upper_limit_indicator,\n    (s.stellarprops->'physical'->>'Temp_Blend')::double\
-  \ precision                         AS temperature_blend_flag,\n    (s.stellarprops->'physical'->>'Mass_Blend')::double\
-  \ precision                         AS stellar_mass_blend_flag,\n    (s.stellarprops->'physical'->>'Rad_Blend')::double\
-  \ precision                          AS stellar_radius_blend_flag,\n    (s.stellarprops->'photometry'->>'Mag_Blend')::double\
-  \ precision                          AS magnitude_blend_flag,\n    CASE WHEN (s.stellarprops->'physical'->>'Temp_Blend')::double\
-  \ precision = 1 THEN 'Yes' WHEN (s.stellarprops->'physical'->>'Temp_Blend')::double precision IS NOT\
-  \ NULL THEN 'No' END                AS temperature_blended,\n    CASE WHEN (s.stellarprops->'photometry'->>'Mag_Blend')::double\
-  \ precision = 1 THEN 'Yes' WHEN (s.stellarprops->'photometry'->>'Mag_Blend')::double precision IS NOT\
-  \ NULL THEN 'No' END                 AS magnitude_blended,\n    CASE WHEN (s.stellarprops->'physical'->>'Temp_Blend')::double\
-  \ precision = 1 THEN 1 ELSE 0 END\n                                                        AS temperature_blend_indicator,\n\
-  \    CASE WHEN (s.stellarprops->'photometry'->>'Mag_Blend')::double precision = 1 THEN 1 ELSE 0 END\n\
-  \                                                        AS magnitude_blend_indicator,\n    CASE WHEN\
-  \ COALESCE((s.stellarprops->'physical'->>'Temp_Blend')::double precision, 0) = 1\n              OR COALESCE((s.stellarprops->'physical'->>'Mass_Blend')::double\
-  \ precision, 0) = 1\n              OR COALESCE((s.stellarprops->'physical'->>'Rad_Blend')::double precision,\
-  \ 0) = 1\n              OR COALESCE((s.stellarprops->'photometry'->>'Mag_Blend')::double precision,\
-  \ 0) = 1\n         THEN 'Yes' ELSE 'No' END                       AS any_stellar_blend,\n    COALESCE(obs.kepler_flag,\
-  \ 0)                        AS kepler_observation_indicator,\n    COALESCE(obs.k2_flag, 0)         \
-  \                   AS k2_observation_indicator,\n    COALESCE(obs.ttv_flag, 0)                    \
-  \       AS ttv_observation_indicator,\n    COALESCE(obs.observation_count, 0)::double precision AS observation_count,\n\
-  \    CASE WHEN obs.planet IS NULL THEN 'No' ELSE 'Yes' END AS observed_by_a_survey,\n    CASE WHEN ph.massjup\
-  \ > 0.1 THEN 'Yes' WHEN ph.massjup <= 0.1 THEN 'No' END                      AS gas_giant_planet,\n\
-  \    CASE WHEN ph.massjup > 0.1 THEN 1 ELSE 0 END           AS gas_giant_indicator,\n    CASE WHEN ph.densvalue\
-  \ > 3 THEN 'Yes' WHEN ph.densvalue <= 3 THEN 'No' END                              AS rocky_planet,\n\
-  \    CASE WHEN ph.densvalue > 3 THEN 1 ELSE 0 END               AS rocky_indicator,\n    CASE WHEN o.period\
-  \ < 10 THEN 'Yes' WHEN o.period >= 10 THEN 'No' END                              AS short_period_planet,\n\
-  \    CASE WHEN o.period < 10 THEN 1 ELSE 0 END               AS short_period_indicator,\n    CASE WHEN\
-  \ ph.massjup > 0.1 AND o.period < 10 THEN 'Yes' WHEN ph.massjup <= 0.1 OR o.period >= 10 THEN 'No' END\n\
-  \                                                        AS hot_jupiter,\n    CASE WHEN ph.massjup >\
-  \ 0.1 AND o.period < 10 THEN 1 ELSE 0 END\n                                                        AS\
-  \ hot_jupiter_indicator,\n    CASE WHEN ph.densvalue > 3 AND (ph.massjup * 317.83) BETWEEN 1 AND 10\
-  \ THEN 'Yes' WHEN ph.densvalue <= 3 OR ((ph.massjup * 317.83) < 1 OR (ph.massjup * 317.83) > 10) THEN\
-  \ 'No' END\n                                                        AS super_earth,\n    CASE WHEN ph.densvalue\
-  \ > 3 AND (ph.massjup * 317.83) BETWEEN 1 AND 10 THEN 1 ELSE 0 END\n                               \
-  \                         AS super_earth_indicator,\n    CASE WHEN o.semimajor BETWEEN SQRT((POWER((s.stellarprops->'physical'->>'Radius_Value')::real,\
-  \ 2) * POWER((s.stellarprops->'physical'->>'Temp_Value')::real / 5778, 4)) / 1.1) AND SQRT((POWER((s.stellarprops->'physical'->>'Radius_Value')::real,\
-  \ 2) * POWER((s.stellarprops->'physical'->>'Temp_Value')::real / 5778, 4)) / 0.53) THEN 'Yes' WHEN (o.semimajor\
-  \ < SQRT((POWER((s.stellarprops->'physical'->>'Radius_Value')::real, 2) * POWER((s.stellarprops->'physical'->>'Temp_Value')::real\
-  \ / 5778, 4)) / 1.1) OR o.semimajor > SQRT((POWER((s.stellarprops->'physical'->>'Radius_Value')::real,\
-  \ 2) * POWER((s.stellarprops->'physical'->>'Temp_Value')::real / 5778, 4)) / 0.53)) THEN 'No' END  \
-  \                                  AS planet_in_habitable_zone,\n    CASE WHEN o.semimajor BETWEEN SQRT((POWER((s.stellarprops->'physical'->>'Radius_Value')::real,\
-  \ 2) * POWER((s.stellarprops->'physical'->>'Temp_Value')::real / 5778, 4)) / 1.1) AND SQRT((POWER((s.stellarprops->'physical'->>'Radius_Value')::real,\
-  \ 2) * POWER((s.stellarprops->'physical'->>'Temp_Value')::real / 5778, 4)) / 0.53) THEN 1 ELSE 0 END\
-  \                  AS habitable_zone_indicator,\n    CASE WHEN ph.densvalue > 3 AND o.semimajor BETWEEN\
-  \ SQRT((POWER((s.stellarprops->'physical'->>'Radius_Value')::real, 2) * POWER((s.stellarprops->'physical'->>'Temp_Value')::real\
-  \ / 5778, 4)) / 1.1) AND SQRT((POWER((s.stellarprops->'physical'->>'Radius_Value')::real, 2) * POWER((s.stellarprops->'physical'->>'Temp_Value')::real\
-  \ / 5778, 4)) / 0.53) THEN 'Yes' WHEN ph.densvalue <= 3 OR (o.semimajor < SQRT((POWER((s.stellarprops->'physical'->>'Radius_Value')::real,\
-  \ 2) * POWER((s.stellarprops->'physical'->>'Temp_Value')::real / 5778, 4)) / 1.1) OR o.semimajor > SQRT((POWER((s.stellarprops->'physical'->>'Radius_Value')::real,\
-  \ 2) * POWER((s.stellarprops->'physical'->>'Temp_Value')::real / 5778, 4)) / 0.53)) THEN 'No' END\n\
-  \                                                        AS potentially_habitable,\n    CASE WHEN ph.densvalue\
-  \ > 3 AND o.semimajor BETWEEN SQRT((POWER((s.stellarprops->'physical'->>'Radius_Value')::real, 2) *\
-  \ POWER((s.stellarprops->'physical'->>'Temp_Value')::real / 5778, 4)) / 1.1) AND SQRT((POWER((s.stellarprops->'physical'->>'Radius_Value')::real,\
-  \ 2) * POWER((s.stellarprops->'physical'->>'Temp_Value')::real / 5778, 4)) / 0.53) THEN 1 ELSE 0 END\
-  \    AS potentially_habitable_indicator,\n    CASE WHEN o.eccentricity > 0.25 THEN 'Yes' WHEN o.eccentricity\
-  \ <= 0.25 THEN 'No' END             AS high_eccentricity_planet,\n    CASE WHEN o.eccentricity > 0.25\
-  \ THEN 1 ELSE 0 END            AS high_eccentricity_indicator,\n    CASE WHEN o.inclination > 90 THEN\
-  \ 'Yes' WHEN o.inclination <= 90 THEN 'No' END               AS retrograde_orbit,\n    CASE WHEN o.inclination\
-  \ > 90 THEN 1 ELSE 0 END             AS retrograde_indicator,\n    CASE WHEN o.inclination >= 90 THEN\
-  \ 'Yes' WHEN o.inclination < 90 THEN 'No' END               AS retrograde_orbit_inclusive,\n    CASE\
-  \ WHEN o.inclination >= 90 THEN 1 ELSE 0 END            AS retrograde_inclusive_indicator,\n    CASE\
-  \ WHEN ph.massjup > 0.1 AND ph.densvalue < 0.5 THEN 'Yes' WHEN ph.massjup <= 0.1 OR ph.densvalue >=\
-  \ 0.5 THEN 'No' END\n                                                        AS inflated_gas_giant,\n\
+  \       AS escape_velocity_ms,\n    (SQRT((6.67430E-11 * CAST((get_json_object(s.stellarprops, '$.physical.Mass_Value'))\
+  \ AS FLOAT) * 1.98847E30) / NULLIF(o.semimajor * 1.496E11, 0)) / 1000)                      AS orbital_velocity_kms,\n\
+  \    SQRT((6.67430E-11 * CAST((get_json_object(s.stellarprops, '$.physical.Mass_Value')) AS FLOAT) *\
+  \ 1.98847E30) / NULLIF(o.semimajor * 1.496E11, 0))                               AS orbital_velocity_ms,\n\
+  \    (CAST((get_json_object(s.stellarprops, '$.physical.Temp_Value')) AS FLOAT) * SQRT(CAST((get_json_object(s.stellarprops,\
+  \ '$.physical.Radius_Value')) AS FLOAT) * 6.957E8 / NULLIF(2 * o.semimajor * 1.496E11, 0)))        \
+  \                                   AS equilibrium_temperature,\n    POWER((ph.radjup * 11.209) / NULLIF(CAST((get_json_object(s.stellarprops,\
+  \ '$.physical.Radius_Value')) AS FLOAT) * 109.2, 0), 2)                                     AS transit_depth,\n\
+  \    (POWER((ph.radjup * 11.209) / NULLIF(CAST((get_json_object(s.stellarprops, '$.physical.Radius_Value'))\
+  \ AS FLOAT) * 109.2, 0), 2) * 100)                                 AS transit_depth_percent,\n    ((ph.massjup\
+  \ * 1.898E27) / NULLIF(CAST((get_json_object(s.stellarprops, '$.physical.Mass_Value')) AS FLOAT) * 1.98847E30,\
+  \ 0))                                        AS planet_star_mass_ratio,\n    (POWER(o.semimajor, 3)\
+  \ / NULLIF(POWER(o.period / 365.25, 2), 0))                                       AS kepler_derived_stellar_mass,\n\
+  \    ((POWER(o.semimajor, 3) / NULLIF(POWER(o.period / 365.25, 2), 0)) - CAST((get_json_object(s.stellarprops,\
+  \ '$.physical.Mass_Value')) AS FLOAT))                                       AS kepler_mass_difference,\n\
+  \    abs(((POWER(o.semimajor, 3) / NULLIF(POWER(o.period / 365.25, 2), 0)) - CAST((get_json_object(s.stellarprops,\
+  \ '$.physical.Mass_Value')) AS FLOAT)))                                  AS kepler_mass_absolute_difference,\n\
+  \    ((o.semimajor - SQRT((POWER(CAST((get_json_object(s.stellarprops, '$.physical.Radius_Value')) AS\
+  \ FLOAT), 2) * POWER(CAST((get_json_object(s.stellarprops, '$.physical.Temp_Value')) AS FLOAT) / 5778,\
+  \ 4)) / 1.1)) / NULLIF(SQRT((POWER(CAST((get_json_object(s.stellarprops, '$.physical.Radius_Value'))\
+  \ AS FLOAT), 2) * POWER(CAST((get_json_object(s.stellarprops, '$.physical.Temp_Value')) AS FLOAT) /\
+  \ 5778, 4)) / 0.53) - SQRT((POWER(CAST((get_json_object(s.stellarprops, '$.physical.Radius_Value'))\
+  \ AS FLOAT), 2) * POWER(CAST((get_json_object(s.stellarprops, '$.physical.Temp_Value')) AS FLOAT) /\
+  \ 5778, 4)) / 1.1), 0))                                        AS goldilocks_value,\n    CAST(CAST(CAST((ord.next_period)\
+  \ AS FLOAT) AS STRING) AS DECIMAL(38,10))                             AS next_planet_period_days,\n\
+  \    (ord.next_period / NULLIF(o.period, 0))             AS next_planet_period_ratio,\n    CAST((get_json_object(s.stellarprops,\
+  \ '$.physical.Mass_Value')) AS DECIMAL(38,10))                                    AS host_stellar_mass,\n\
+  \    CAST((get_json_object(s.stellarprops, '$.physical.Radius_Value')) AS DECIMAL(38,10))          \
+  \                        AS host_stellar_radius,\n    CAST((get_json_object(s.stellarprops, '$.physical.Temp_Value'))\
+  \ AS DECIMAL(38,10))                                    AS host_stellar_temperature,\n    (POWER(CAST((get_json_object(s.stellarprops,\
+  \ '$.physical.Radius_Value')) AS FLOAT), 2) * POWER(CAST((get_json_object(s.stellarprops, '$.physical.Temp_Value'))\
+  \ AS FLOAT) / 5778, 4))                                        AS host_stellar_luminosity,\n    SQRT((POWER(CAST((get_json_object(s.stellarprops,\
+  \ '$.physical.Radius_Value')) AS FLOAT), 2) * POWER(CAST((get_json_object(s.stellarprops, '$.physical.Temp_Value'))\
+  \ AS FLOAT) / 5778, 4)) / 1.1)                                          AS habitable_zone_inner_au,\n\
+  \    SQRT((POWER(CAST((get_json_object(s.stellarprops, '$.physical.Radius_Value')) AS FLOAT), 2) * POWER(CAST((get_json_object(s.stellarprops,\
+  \ '$.physical.Temp_Value')) AS FLOAT) / 5778, 4)) / 0.53)                                          AS\
+  \ habitable_zone_outer_au,\n    CAST(CAST(CAST((s.stellardist) AS FLOAT) AS STRING) AS DECIMAL(38,10))\
+  \                               AS stellar_distance_pc,\n    (s.stellardist * 3.26156)             \
+  \          AS stellar_distance_ly,\n    CASE WHEN CASE WHEN CAST((get_json_object(q.limitflags, '$.stellar_limits.Dist_Lim'))\
+  \ AS DOUBLE) = 1 THEN 'Yes' WHEN CAST((get_json_object(q.limitflags, '$.stellar_limits.Dist_Lim')) AS\
+  \ DOUBLE) IS NOT NULL THEN 'No' END = 'No'\n          AND CASE WHEN CAST((get_json_object(s.stellarprops,\
+  \ '$.photometry.Mag_Blend')) AS DOUBLE) = 1 THEN 'Yes' WHEN CAST((get_json_object(s.stellarprops, '$.photometry.Mag_Blend'))\
+  \ AS DOUBLE) IS NOT NULL THEN 'No' END = 'No'\n         THEN s.stellardist * 3.26156 END           AS\
+  \ stellar_distance_ly_clean,\n    CAST(s.compcount AS DOUBLE)                       AS companion_count,\n\
+  \    (((q.perioderr1 - q.perioderr2) / 2.0) / NULLIF(o.period, 0) * 100.0)                         \
+  \               AS period_relative_uncertainty,\n    (((q.masserr1 - q.masserr2) / 2.0) / NULLIF(ph.massjup,\
+  \ 0) * 100.0)                                          AS mass_relative_uncertainty,\n    (((q.raderr1\
+  \ - q.raderr2) / 2.0) / NULLIF(ph.radjup, 0) * 100.0)                                        AS radius_relative_uncertainty,\n\
+  \    (((q.semimajerr1 - q.semimajerr2) / 2.0) / NULLIF(o.semimajor, 0) * 100.0)                    \
+  \                 AS semi_major_relative_uncertainty,\n    (((q.eccerr1 - q.eccerr2) / 2.0) / NULLIF(o.eccentricity,\
+  \ 0) * 100.0)                                           AS eccentricity_relative_uncertainty,\n    (((q.inclerr1\
+  \ - q.inclerr2) / 2.0) / NULLIF(o.inclination, 0) * 100.0)                                         \
+  \ AS inclination_relative_uncertainty,\n    (((q.denserr1 - q.denserr2) / 2.0) / NULLIF(ph.densvalue,\
+  \ 0) * 100.0)                                       AS density_relative_uncertainty,\n    q.masssource\
+  \                                        AS mass_source,\n    CASE WHEN q.masssource = 'Msini' THEN\
+  \ 'Yes'\n         WHEN q.masssource IS NOT NULL THEN 'No' END    AS minimum_mass_status,\n    q.updatestamp\
+  \                                       AS record_update_date,\n    CAST(year(q.updatestamp) AS DOUBLE)\
+  \                    AS record_update_year,\n    CAST((get_json_object(q.limitflags, '$.planetary_limits.Period_Lim'))\
+  \ AS DOUBLE)                         AS period_limit_flag,\n    CAST((get_json_object(q.limitflags,\
+  \ '$.planetary_limits.Semimaj_Lim')) AS DOUBLE)                        AS semi_major_limit_flag,\n \
+  \   CAST((get_json_object(q.limitflags, '$.planetary_limits.Ecc_Lim')) AS DOUBLE)                  \
+  \          AS eccentricity_limit_flag,\n    CAST((get_json_object(q.limitflags, '$.planetary_limits.Incl_Lim'))\
+  \ AS DOUBLE)                           AS inclination_limit_flag,\n    CAST((get_json_object(q.limitflags,\
+  \ '$.planetary_limits.Mass_Lim')) AS DOUBLE)                           AS mass_limit_flag,\n    CAST((get_json_object(q.limitflags,\
+  \ '$.planetary_limits.Rad_Lim')) AS DOUBLE)                            AS radius_limit_flag,\n    CAST((get_json_object(q.limitflags,\
+  \ '$.planetary_limits.Dens_Lim')) AS DOUBLE)                           AS density_limit_flag,\n    CAST((get_json_object(q.limitflags,\
+  \ '$.stellar_limits.Dist_Lim')) AS DOUBLE)                           AS distance_limit_flag,\n    CAST((get_json_object(q.limitflags,\
+  \ '$.stellar_limits.Temp_Lim')) AS DOUBLE)                           AS temperature_limit_flag,\n  \
+  \  CAST((get_json_object(q.limitflags, '$.stellar_limits.OptMag_Lim')) AS DOUBLE)                  \
+  \       AS magnitude_limit_flag,\n    CAST((get_json_object(q.limitflags, '$.stellar_limits.StellarRad_Lim'))\
+  \ AS DOUBLE)                     AS stellar_radius_limit_flag,\n    CAST((get_json_object(q.limitflags,\
+  \ '$.stellar_limits.StellarMass_Lim')) AS DOUBLE)                    AS stellar_mass_limit_flag,\n \
+  \   CASE WHEN CAST((get_json_object(q.limitflags, '$.planetary_limits.Period_Lim')) AS DOUBLE) = 1 THEN\
+  \ 'Yes' WHEN CAST((get_json_object(q.limitflags, '$.planetary_limits.Period_Lim')) AS DOUBLE) IS NOT\
+  \ NULL THEN 'No' END                AS period_upper_limit,\n    CASE WHEN CAST((get_json_object(q.limitflags,\
+  \ '$.planetary_limits.Ecc_Lim')) AS DOUBLE) = 1 THEN 'Yes' WHEN CAST((get_json_object(q.limitflags,\
+  \ '$.planetary_limits.Ecc_Lim')) AS DOUBLE) IS NOT NULL THEN 'No' END                   AS eccentricity_upper_limit,\n\
+  \    CASE WHEN CAST((get_json_object(q.limitflags, '$.planetary_limits.Incl_Lim')) AS DOUBLE) = 1 THEN\
+  \ 'Yes' WHEN CAST((get_json_object(q.limitflags, '$.planetary_limits.Incl_Lim')) AS DOUBLE) IS NOT NULL\
+  \ THEN 'No' END                  AS inclination_upper_limit,\n    CASE WHEN CAST((get_json_object(q.limitflags,\
+  \ '$.planetary_limits.Mass_Lim')) AS DOUBLE) = 1 THEN 'Yes' WHEN CAST((get_json_object(q.limitflags,\
+  \ '$.planetary_limits.Mass_Lim')) AS DOUBLE) IS NOT NULL THEN 'No' END                  AS mass_upper_limit,\n\
+  \    CASE WHEN CAST((get_json_object(q.limitflags, '$.planetary_limits.Rad_Lim')) AS DOUBLE) = 1 THEN\
+  \ 'Yes' WHEN CAST((get_json_object(q.limitflags, '$.planetary_limits.Rad_Lim')) AS DOUBLE) IS NOT NULL\
+  \ THEN 'No' END                   AS radius_upper_limit,\n    CASE WHEN CAST((get_json_object(q.limitflags,\
+  \ '$.planetary_limits.Dens_Lim')) AS DOUBLE) = 1 THEN 'Yes' WHEN CAST((get_json_object(q.limitflags,\
+  \ '$.planetary_limits.Dens_Lim')) AS DOUBLE) IS NOT NULL THEN 'No' END                  AS density_upper_limit,\n\
+  \    CASE WHEN CAST((get_json_object(q.limitflags, '$.stellar_limits.Dist_Lim')) AS DOUBLE) = 1 THEN\
+  \ 'Yes' WHEN CAST((get_json_object(q.limitflags, '$.stellar_limits.Dist_Lim')) AS DOUBLE) IS NOT NULL\
+  \ THEN 'No' END                  AS distance_upper_limit,\n    CASE WHEN CAST((get_json_object(q.limitflags,\
+  \ '$.stellar_limits.Temp_Lim')) AS DOUBLE) = 1 THEN 'Yes' WHEN CAST((get_json_object(q.limitflags, '$.stellar_limits.Temp_Lim'))\
+  \ AS DOUBLE) IS NOT NULL THEN 'No' END                  AS stellar_temperature_upper_limit,\n    CASE\
+  \ WHEN CAST((get_json_object(q.limitflags, '$.stellar_limits.StellarMass_Lim')) AS DOUBLE) = 1 THEN\
+  \ 'Yes' WHEN CAST((get_json_object(q.limitflags, '$.stellar_limits.StellarMass_Lim')) AS DOUBLE) IS\
+  \ NOT NULL THEN 'No' END           AS stellar_mass_upper_limit,\n    CASE WHEN CAST((get_json_object(q.limitflags,\
+  \ '$.planetary_limits.Rad_Lim')) AS DOUBLE) = 1 THEN 1 ELSE 0 END\n                                \
+  \                        AS radius_upper_limit_indicator,\n    CASE WHEN CAST((get_json_object(q.limitflags,\
+  \ '$.planetary_limits.Mass_Lim')) AS DOUBLE) = 1 THEN 1 ELSE 0 END\n                               \
+  \                         AS mass_upper_limit_indicator,\n    CASE WHEN CAST((get_json_object(q.limitflags,\
+  \ '$.stellar_limits.Dist_Lim')) AS DOUBLE) = 1 THEN 1 ELSE 0 END\n                                 \
+  \                       AS distance_upper_limit_indicator,\n    CAST((get_json_object(s.stellarprops,\
+  \ '$.physical.Temp_Blend')) AS DOUBLE)                         AS temperature_blend_flag,\n    CAST((get_json_object(s.stellarprops,\
+  \ '$.physical.Mass_Blend')) AS DOUBLE)                         AS stellar_mass_blend_flag,\n    CAST((get_json_object(s.stellarprops,\
+  \ '$.physical.Rad_Blend')) AS DOUBLE)                          AS stellar_radius_blend_flag,\n    CAST((get_json_object(s.stellarprops,\
+  \ '$.photometry.Mag_Blend')) AS DOUBLE)                          AS magnitude_blend_flag,\n    CASE\
+  \ WHEN CAST((get_json_object(s.stellarprops, '$.physical.Temp_Blend')) AS DOUBLE) = 1 THEN 'Yes' WHEN\
+  \ CAST((get_json_object(s.stellarprops, '$.physical.Temp_Blend')) AS DOUBLE) IS NOT NULL THEN 'No' END\
+  \                AS temperature_blended,\n    CASE WHEN CAST((get_json_object(s.stellarprops, '$.photometry.Mag_Blend'))\
+  \ AS DOUBLE) = 1 THEN 'Yes' WHEN CAST((get_json_object(s.stellarprops, '$.photometry.Mag_Blend')) AS\
+  \ DOUBLE) IS NOT NULL THEN 'No' END                 AS magnitude_blended,\n    CASE WHEN CAST((get_json_object(s.stellarprops,\
+  \ '$.physical.Temp_Blend')) AS DOUBLE) = 1 THEN 1 ELSE 0 END\n                                     \
+  \                   AS temperature_blend_indicator,\n    CASE WHEN CAST((get_json_object(s.stellarprops,\
+  \ '$.photometry.Mag_Blend')) AS DOUBLE) = 1 THEN 1 ELSE 0 END\n                                    \
+  \                    AS magnitude_blend_indicator,\n    CASE WHEN COALESCE(CAST((get_json_object(s.stellarprops,\
+  \ '$.physical.Temp_Blend')) AS DOUBLE), 0) = 1\n              OR COALESCE(CAST((get_json_object(s.stellarprops,\
+  \ '$.physical.Mass_Blend')) AS DOUBLE), 0) = 1\n              OR COALESCE(CAST((get_json_object(s.stellarprops,\
+  \ '$.physical.Rad_Blend')) AS DOUBLE), 0) = 1\n              OR COALESCE(CAST((get_json_object(s.stellarprops,\
+  \ '$.photometry.Mag_Blend')) AS DOUBLE), 0) = 1\n         THEN 'Yes' ELSE 'No' END                 \
+  \      AS any_stellar_blend,\n    COALESCE(obs.kepler_flag, 0)                        AS kepler_observation_indicator,\n\
+  \    COALESCE(obs.k2_flag, 0)                            AS k2_observation_indicator,\n    COALESCE(obs.ttv_flag,\
+  \ 0)                           AS ttv_observation_indicator,\n    CAST(COALESCE(obs.observation_count,\
+  \ 0) AS DOUBLE) AS observation_count,\n    CASE WHEN obs.planet IS NULL THEN 'No' ELSE 'Yes' END AS\
+  \ observed_by_a_survey,\n    CASE WHEN ph.massjup > 0.1 THEN 'Yes' WHEN ph.massjup <= 0.1 THEN 'No'\
+  \ END                      AS gas_giant_planet,\n    CASE WHEN ph.massjup > 0.1 THEN 1 ELSE 0 END  \
+  \         AS gas_giant_indicator,\n    CASE WHEN ph.densvalue > 3 THEN 'Yes' WHEN ph.densvalue <= 3\
+  \ THEN 'No' END                              AS rocky_planet,\n    CASE WHEN ph.densvalue > 3 THEN 1\
+  \ ELSE 0 END               AS rocky_indicator,\n    CASE WHEN o.period < 10 THEN 'Yes' WHEN o.period\
+  \ >= 10 THEN 'No' END                              AS short_period_planet,\n    CASE WHEN o.period <\
+  \ 10 THEN 1 ELSE 0 END               AS short_period_indicator,\n    CASE WHEN ph.massjup > 0.1 AND\
+  \ o.period < 10 THEN 'Yes' WHEN ph.massjup <= 0.1 OR o.period >= 10 THEN 'No' END\n                \
+  \                                        AS hot_jupiter,\n    CASE WHEN ph.massjup > 0.1 AND o.period\
+  \ < 10 THEN 1 ELSE 0 END\n                                                        AS hot_jupiter_indicator,\n\
+  \    CASE WHEN ph.densvalue > 3 AND (ph.massjup * 317.83) BETWEEN 1 AND 10 THEN 'Yes' WHEN ph.densvalue\
+  \ <= 3 OR ((ph.massjup * 317.83) < 1 OR (ph.massjup * 317.83) > 10) THEN 'No' END\n                \
+  \                                        AS super_earth,\n    CASE WHEN ph.densvalue > 3 AND (ph.massjup\
+  \ * 317.83) BETWEEN 1 AND 10 THEN 1 ELSE 0 END\n                                                   \
+  \     AS super_earth_indicator,\n    CASE WHEN o.semimajor BETWEEN SQRT((POWER(CAST((get_json_object(s.stellarprops,\
+  \ '$.physical.Radius_Value')) AS FLOAT), 2) * POWER(CAST((get_json_object(s.stellarprops, '$.physical.Temp_Value'))\
+  \ AS FLOAT) / 5778, 4)) / 1.1) AND SQRT((POWER(CAST((get_json_object(s.stellarprops, '$.physical.Radius_Value'))\
+  \ AS FLOAT), 2) * POWER(CAST((get_json_object(s.stellarprops, '$.physical.Temp_Value')) AS FLOAT) /\
+  \ 5778, 4)) / 0.53) THEN 'Yes' WHEN (o.semimajor < SQRT((POWER(CAST((get_json_object(s.stellarprops,\
+  \ '$.physical.Radius_Value')) AS FLOAT), 2) * POWER(CAST((get_json_object(s.stellarprops, '$.physical.Temp_Value'))\
+  \ AS FLOAT) / 5778, 4)) / 1.1) OR o.semimajor > SQRT((POWER(CAST((get_json_object(s.stellarprops, '$.physical.Radius_Value'))\
+  \ AS FLOAT), 2) * POWER(CAST((get_json_object(s.stellarprops, '$.physical.Temp_Value')) AS FLOAT) /\
+  \ 5778, 4)) / 0.53)) THEN 'No' END                                    AS planet_in_habitable_zone,\n\
+  \    CASE WHEN o.semimajor BETWEEN SQRT((POWER(CAST((get_json_object(s.stellarprops, '$.physical.Radius_Value'))\
+  \ AS FLOAT), 2) * POWER(CAST((get_json_object(s.stellarprops, '$.physical.Temp_Value')) AS FLOAT) /\
+  \ 5778, 4)) / 1.1) AND SQRT((POWER(CAST((get_json_object(s.stellarprops, '$.physical.Radius_Value'))\
+  \ AS FLOAT), 2) * POWER(CAST((get_json_object(s.stellarprops, '$.physical.Temp_Value')) AS FLOAT) /\
+  \ 5778, 4)) / 0.53) THEN 1 ELSE 0 END                  AS habitable_zone_indicator,\n    CASE WHEN ph.densvalue\
+  \ > 3 AND o.semimajor BETWEEN SQRT((POWER(CAST((get_json_object(s.stellarprops, '$.physical.Radius_Value'))\
+  \ AS FLOAT), 2) * POWER(CAST((get_json_object(s.stellarprops, '$.physical.Temp_Value')) AS FLOAT) /\
+  \ 5778, 4)) / 1.1) AND SQRT((POWER(CAST((get_json_object(s.stellarprops, '$.physical.Radius_Value'))\
+  \ AS FLOAT), 2) * POWER(CAST((get_json_object(s.stellarprops, '$.physical.Temp_Value')) AS FLOAT) /\
+  \ 5778, 4)) / 0.53) THEN 'Yes' WHEN ph.densvalue <= 3 OR (o.semimajor < SQRT((POWER(CAST((get_json_object(s.stellarprops,\
+  \ '$.physical.Radius_Value')) AS FLOAT), 2) * POWER(CAST((get_json_object(s.stellarprops, '$.physical.Temp_Value'))\
+  \ AS FLOAT) / 5778, 4)) / 1.1) OR o.semimajor > SQRT((POWER(CAST((get_json_object(s.stellarprops, '$.physical.Radius_Value'))\
+  \ AS FLOAT), 2) * POWER(CAST((get_json_object(s.stellarprops, '$.physical.Temp_Value')) AS FLOAT) /\
+  \ 5778, 4)) / 0.53)) THEN 'No' END\n                                                        AS potentially_habitable,\n\
+  \    CASE WHEN ph.densvalue > 3 AND o.semimajor BETWEEN SQRT((POWER(CAST((get_json_object(s.stellarprops,\
+  \ '$.physical.Radius_Value')) AS FLOAT), 2) * POWER(CAST((get_json_object(s.stellarprops, '$.physical.Temp_Value'))\
+  \ AS FLOAT) / 5778, 4)) / 1.1) AND SQRT((POWER(CAST((get_json_object(s.stellarprops, '$.physical.Radius_Value'))\
+  \ AS FLOAT), 2) * POWER(CAST((get_json_object(s.stellarprops, '$.physical.Temp_Value')) AS FLOAT) /\
+  \ 5778, 4)) / 0.53) THEN 1 ELSE 0 END    AS potentially_habitable_indicator,\n    CASE WHEN o.eccentricity\
+  \ > 0.25 THEN 'Yes' WHEN o.eccentricity <= 0.25 THEN 'No' END             AS high_eccentricity_planet,\n\
+  \    CASE WHEN o.eccentricity > 0.25 THEN 1 ELSE 0 END            AS high_eccentricity_indicator,\n\
+  \    CASE WHEN o.inclination > 90 THEN 'Yes' WHEN o.inclination <= 90 THEN 'No' END               AS\
+  \ retrograde_orbit,\n    CASE WHEN o.inclination > 90 THEN 1 ELSE 0 END             AS retrograde_indicator,\n\
+  \    CASE WHEN o.inclination >= 90 THEN 'Yes' WHEN o.inclination < 90 THEN 'No' END               AS\
+  \ retrograde_orbit_inclusive,\n    CASE WHEN o.inclination >= 90 THEN 1 ELSE 0 END            AS retrograde_inclusive_indicator,\n\
+  \    CASE WHEN ph.massjup > 0.1 AND ph.densvalue < 0.5 THEN 'Yes' WHEN ph.massjup <= 0.1 OR ph.densvalue\
+  \ >= 0.5 THEN 'No' END\n                                                        AS inflated_gas_giant,\n\
   \    CASE WHEN ph.massjup > 0.1 AND ph.densvalue < 0.5 THEN 1 ELSE 0 END\n                         \
   \                               AS inflated_gas_giant_indicator,\n    CASE WHEN s.compcount > 1 THEN\
   \ 'Yes' ELSE 'No' END  AS in_multi_planetary_system,\n    CASE WHEN abs((((q.perioderr1 - q.perioderr2)\
@@ -249,11 +278,11 @@ sql: "SELECT q.*,\n  CASE WHEN q.orbital_period_days IS NOT NULL THEN 1 ELSE 0 E
   \ / NULLIF(o.period, 0) * 100.0)) < 5 AND abs((((q.masserr1 - q.masserr2) / 2.0) / NULLIF(ph.massjup,\
   \ 0) * 100.0)) < 5 AND abs((((q.raderr1 - q.raderr2) / 2.0) / NULLIF(ph.radjup, 0) * 100.0)) < 5 THEN\
   \ 1 ELSE 0 END\n                                                        AS well_characterized_indicator,\n\
-  \    1                                                   AS planet_row_count\nFROM public.planets p\n\
-  JOIN public.stars s ON s.stellarref = p.hostlink\nLEFT JOIN public.orbital_characteristics o ON o.bodylink\
-  \ = p.planetref\nLEFT JOIN public.physical_properties ph ON ph.objectlink = p.planetref\nLEFT JOIN public.data_quality_tracking\
-  \ q ON q.targetlink = p.planetref\nLEFT JOIN obs ON obs.planet = p.planetref\nLEFT JOIN ordered ord\
-  \ ON ord.planet = p.planetref\n) q"
+  \    1                                                   AS planet_row_count\nFROM bird.planets_data.planets\
+  \ p\nJOIN bird.planets_data.stars s ON s.stellarref = p.hostlink\nLEFT JOIN bird.planets_data.orbital_characteristics\
+  \ o ON o.bodylink = p.planetref\nLEFT JOIN bird.planets_data.physical_properties ph ON ph.objectlink\
+  \ = p.planetref\nLEFT JOIN bird.planets_data.data_quality_tracking q ON q.targetlink = p.planetref\n\
+  LEFT JOIN obs ON obs.planet = p.planetref\nLEFT JOIN ordered ord ON ord.planet = p.planetref\n) q"
 columns:
 - name: planet
   data_type: long

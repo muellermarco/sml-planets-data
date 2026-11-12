@@ -28,10 +28,10 @@ sql: "SELECT q.*,\n  CASE WHEN q.stellar_distance_pc IS NOT NULL THEN 1 ELSE 0 E
   FROM (\nWITH ratios AS (\n    SELECT\n        pp.hostlink                                     AS star,\n\
   \        oo.period                                       AS period,\n        lead(oo.period) OVER (\n\
   \            PARTITION BY pp.hostlink\n            ORDER BY oo.period)                         AS next_period\n\
-  \    FROM public.planets pp\n    JOIN public.orbital_characteristics oo ON oo.bodylink = pp.planetref\n\
-  ),\npairs AS (\n    SELECT\n        star,\n        count(*) FILTER (WHERE next_period IS NOT NULL) AS\
-  \ adjacent_pair_count,\n        max(next_period / NULLIF(period, 0))            AS max_ratio,\n    \
-  \    min(next_period / NULLIF(period, 0))            AS min_ratio,\n        avg(next_period / NULLIF(period,\
+  \    FROM bird.planets_data.planets pp\n    JOIN bird.planets_data.orbital_characteristics oo ON oo.bodylink\
+  \ = pp.planetref\n),\npairs AS (\n    SELECT\n        star,\n        count(*) FILTER (WHERE next_period\
+  \ IS NOT NULL) AS adjacent_pair_count,\n        max(next_period / NULLIF(period, 0))            AS max_ratio,\n\
+  \        min(next_period / NULLIF(period, 0))            AS min_ratio,\n        avg(next_period / NULLIF(period,\
   \ 0))            AS avg_ratio,\n        exp(avg(ln(next_period / NULLIF(period, 0))))   AS geo_ratio\n\
   \    FROM ratios\n    GROUP BY star\n),\nper_star AS (\n    SELECT\n        pp.hostlink            \
   \                         AS star,\n        count(*)                                        AS planet_count,\n\
@@ -51,88 +51,99 @@ sql: "SELECT q.*,\n  CASE WHEN q.stellar_distance_pc IS NOT NULL THEN 1 ELSE 0 E
   \ IN ('direct imaging', 'di', 'imaging', 'img', 'direct') THEN 'Imaging' WHEN lower(trim(pp.discmethod))\
   \ IN ('ttv', 'transit timing variations', 'transit timing', 'ttv method', 'timing var') THEN 'TTV' WHEN\
   \ lower(trim(pp.discmethod)) IN ('microlensing', 'ml', 'lensing', 'gravitational') OR trim(pp.discmethod)\
-  \ = concat(chr(956), 'Lens') THEN 'Microlensing' ELSE 'Other' END = 'Transit' THEN 1 ELSE 0 END)   \
-  \     AS transit_discovery_count,\n        sum(CASE WHEN CASE WHEN lower(trim(pp.discmethod)) IN ('radvel',\
-  \ 'rv', 'rv method', 'radial velocity', 'doppler') THEN 'Radial Velocity' WHEN lower(trim(pp.discmethod))\
+  \ = concat(decode(unhex('CEBC'), 'UTF-8'), 'Lens') THEN 'Microlensing' ELSE 'Other' END = 'Transit'\
+  \ THEN 1 ELSE 0 END)        AS transit_discovery_count,\n        sum(CASE WHEN CASE WHEN lower(trim(pp.discmethod))\
+  \ IN ('radvel', 'rv', 'rv method', 'radial velocity', 'doppler') THEN 'Radial Velocity' WHEN lower(trim(pp.discmethod))\
   \ IN ('transit', 'tr', 'transit method', 'photometry', 'photometric') THEN 'Transit' WHEN lower(trim(pp.discmethod))\
   \ IN ('direct imaging', 'di', 'imaging', 'img', 'direct') THEN 'Imaging' WHEN lower(trim(pp.discmethod))\
   \ IN ('ttv', 'transit timing variations', 'transit timing', 'ttv method', 'timing var') THEN 'TTV' WHEN\
   \ lower(trim(pp.discmethod)) IN ('microlensing', 'ml', 'lensing', 'gravitational') OR trim(pp.discmethod)\
-  \ = concat(chr(956), 'Lens') THEN 'Microlensing' ELSE 'Other' END = 'Radial Velocity' THEN 1 ELSE 0\
-  \ END)         AS radial_velocity_count\n    FROM public.planets pp\n    LEFT JOIN public.orbital_characteristics\
-  \ oo ON oo.bodylink = pp.planetref\n    LEFT JOIN public.physical_properties php ON php.objectlink =\
-  \ pp.planetref\n    GROUP BY pp.hostlink\n),\nstar_obs AS (\n    SELECT\n        pp.hostlink       \
-  \                              AS star,\n        max(CASE WHEN i.facilityname = 'kep' THEN 1 ELSE 0\
-  \ END) AS kepler_flag,\n        max(CASE WHEN i.facilityname = 'k2' THEN 1 ELSE 0 END)  AS k2_flag,\n\
-  \        max(CASE WHEN i.facilityname = 'ttv' THEN 1 ELSE 0 END) AS ttv_flag\n    FROM public.planet_instrument_observations\
-  \ io\n    JOIN public.instruments_surveys i ON i.instrumentref = io.facilitylink\n    JOIN public.planets\
-  \ pp ON pp.planetref = io.subjectlink\n    GROUP BY pp.hostlink\n)\nSELECT\n    s.stellarref       \
-  \                                 AS star,\n    s.hostplname                                       \
-  \ AS star_name,\n    (s.stellardist)::text::numeric                               AS stellar_distance_pc,\n\
-  \    (s.stellardist * 3.26156)                       AS stellar_distance_ly,\n    s.compcount::double\
-  \ precision                       AS companion_count,\n    (s.stellarprops->'physical'->>'Mass_Value')::numeric\
-  \                                    AS stellar_mass,\n    (s.stellarprops->'physical'->>'Radius_Value')::numeric\
-  \                                  AS stellar_radius,\n    (s.stellarprops->'physical'->>'Temp_Value')::numeric\
-  \                                    AS stellar_temperature,\n    (s.stellarprops->'photometry'->>'Opt_Mag')::numeric\
-  \                                         AS optical_magnitude,\n    s.stellarprops->'photometry'->>'Photo_Band'\
-  \                                             AS photometric_band_stored,\n    CASE WHEN lower(trim(s.stellarprops->'photometry'->>'Photo_Band'))\
-  \ IN ('v (johnson)', 'johnson', 'v', 'johnson v', 'v-band') THEN 'Johnson V' WHEN lower(trim(s.stellarprops->'photometry'->>'Photo_Band'))\
-  \ IN ('kepler-band', 'kepler', 'kep-b', 'kep') THEN 'Kepler' WHEN lower(trim(s.stellarprops->'photometry'->>'Photo_Band'))\
-  \ = 'k-band' THEN 'K-band' WHEN s.stellarprops->'photometry'->>'Photo_Band' IS NOT NULL THEN 'Other'\
-  \ END                                     AS photometric_band,\n    CASE WHEN lower(trim(s.stellarprops->'photometry'->>'Photo_Band'))\
-  \ IN ('v (johnson)', 'johnson', 'v', 'johnson v') THEN 'Johnson V' WHEN lower(trim(s.stellarprops->'photometry'->>'Photo_Band'))\
-  \ = 'v-band' THEN 'V-band' WHEN lower(trim(s.stellarprops->'photometry'->>'Photo_Band')) IN ('kepler-band',\
-  \ 'kepler', 'kep-b', 'kep') THEN 'Kepler' WHEN lower(trim(s.stellarprops->'photometry'->>'Photo_Band'))\
-  \ = 'k-band' THEN 'K-band' WHEN s.stellarprops->'photometry'->>'Photo_Band' IS NOT NULL THEN 'Other'\
-  \ END                                       AS photometric_band_strict,\n    CASE WHEN lower(trim(s.stellarprops->'photometry'->>'Photo_Band'))\
-  \ IN ('v (johnson)', 'johnson', 'v', 'johnson v', 'v-band') THEN 'V-Band' WHEN lower(trim(s.stellarprops->'photometry'->>'Photo_Band'))\
-  \ IN ('kepler-band', 'kepler', 'kep-b', 'kep') THEN 'Kepler-Band' END                              \
-  \         AS photometric_band_group,\n    (POWER((s.stellarprops->'physical'->>'Radius_Value')::real,\
-  \ 2) * POWER((s.stellarprops->'physical'->>'Temp_Value')::real / 5778, 4))                         \
-  \               AS stellar_luminosity,\n    SQRT((POWER((s.stellarprops->'physical'->>'Radius_Value')::real,\
-  \ 2) * POWER((s.stellarprops->'physical'->>'Temp_Value')::real / 5778, 4)) / 1.1)                  \
-  \                        AS habitable_zone_inner_au,\n    SQRT((POWER((s.stellarprops->'physical'->>'Radius_Value')::real,\
-  \ 2) * POWER((s.stellarprops->'physical'->>'Temp_Value')::real / 5778, 4)) / 0.53)                 \
-  \                         AS habitable_zone_outer_au,\n    (((s.stellarprops->'physical'->>'Mass_Value')::real\
-  \ * 1.98847E30) / NULLIF(4.0/3.0 * PI() * POWER((s.stellarprops->'physical'->>'Radius_Value')::real\
-  \ * 6.957E8, 3), 0))                             AS stellar_density_kg_m3,\n    ((s.stellarprops->'physical'->>'Mass_Value')::real\
-  \ / NULLIF(4.0/3.0 * PI() * POWER((s.stellarprops->'physical'->>'Radius_Value')::real, 3), 0))     \
-  \                        AS stellar_density_solar,\n    (6.67430E-11 * (s.stellarprops->'physical'->>'Mass_Value')::real\
-  \ * 1.98847E30)                                    AS gravitational_parameter,\n    (s.coordsys->>'RA_Decimal')::double\
-  \ precision                         AS right_ascension_degrees,\n    (s.coordsys->>'Dec_Decimal')::double\
-  \ precision                        AS declination_degrees,\n    s.coordsys->>'RA_Text'             \
-  \                       AS right_ascension_text,\n    s.coordsys->>'Dec_Text'                      \
-  \             AS declination_text,\n    (s.stellarprops->'physical'->>'Temp_Blend')::double precision\
-  \                         AS temperature_blend_flag,\n    (s.stellarprops->'physical'->>'Mass_Blend')::double\
-  \ precision                         AS mass_blend_flag,\n    (s.stellarprops->'physical'->>'Rad_Blend')::double\
-  \ precision                          AS radius_blend_flag,\n    (s.stellarprops->'photometry'->>'Mag_Blend')::double\
-  \ precision                          AS magnitude_blend_flag,\n    CASE WHEN (s.stellarprops->'photometry'->>'Mag_Blend')::double\
-  \ precision = 1 THEN 'Yes' WHEN (s.stellarprops->'photometry'->>'Mag_Blend')::double precision IS NOT\
-  \ NULL THEN 'No' END                 AS star_magnitude_blended,\n    CASE WHEN COALESCE((s.stellarprops->'physical'->>'Temp_Blend')::double\
-  \ precision, 0) = 1\n              OR COALESCE((s.stellarprops->'physical'->>'Mass_Blend')::double precision,\
-  \ 0) = 1\n              OR COALESCE((s.stellarprops->'physical'->>'Rad_Blend')::double precision, 0)\
-  \ = 1\n              OR COALESCE((s.stellarprops->'photometry'->>'Mag_Blend')::double precision, 0)\
-  \ = 1\n         THEN 'Yes' ELSE 'No' END                       AS any_blended_measurement,\n    ps.planet_count::double\
-  \ precision                   AS star_planet_count,\n    (ps.shortest_period)::text::numeric       \
-  \                   AS shortest_orbital_period,\n    (ps.longest_period)::text::numeric            \
-  \               AS longest_orbital_period,\n    (ps.innermost_semi_major)::text::numeric           \
-  \          AS innermost_semi_major_axis,\n    (ps.outermost_semi_major)::text::numeric             \
-  \        AS outermost_semi_major_axis,\n    (ps.heaviest_planet_mass)::text::numeric               \
-  \      AS heaviest_planet_mass_jupiter,\n    (ps.largest_planet_radius)::text::numeric             \
-  \       AS largest_planet_radius_jupiter,\n    (ps.densest_planet)::text::numeric                  \
-  \         AS densest_planet_density,\n    ps.gas_giant_count::double precision                AS star_gas_giant_count,\n\
-  \    ps.rocky_count::double precision                    AS star_rocky_planet_count,\n    ps.planets_with_density::double\
-  \ precision           AS star_planets_with_density,\n    ps.planets_with_composition::double precision\
-  \       AS star_planets_with_composition,\n    ps.short_period_count::double precision             AS\
-  \ star_short_period_count,\n    ps.transit_discovery_count::double precision        AS star_transit_discovery_count,\n\
-  \    ps.radial_velocity_count::double precision          AS star_radial_velocity_count,\n    pr.adjacent_pair_count::double\
-  \ precision            AS adjacent_pair_count,\n    pr.max_ratio                                   \
-  \     AS max_adjacent_period_ratio,\n    pr.min_ratio                                        AS min_adjacent_period_ratio,\n\
-  \    pr.avg_ratio                                        AS mean_adjacent_period_ratio,\n    pr.geo_ratio\
-  \                                        AS geometric_mean_adjacent_period_ratio,\n    COALESCE(so.kepler_flag,\
-  \ 0)                         AS kepler_observation_indicator,\n    COALESCE(so.k2_flag, 0)         \
-  \                    AS k2_observation_indicator,\n    COALESCE(so.ttv_flag, 0)                    \
-  \        AS ttv_observation_indicator,\n    CASE WHEN s.compcount > 1 THEN 'Yes' ELSE 'No' END  AS multi_planetary_system,\n\
+  \ = concat(decode(unhex('CEBC'), 'UTF-8'), 'Lens') THEN 'Microlensing' ELSE 'Other' END = 'Radial Velocity'\
+  \ THEN 1 ELSE 0 END)         AS radial_velocity_count\n    FROM bird.planets_data.planets pp\n    LEFT\
+  \ JOIN bird.planets_data.orbital_characteristics oo ON oo.bodylink = pp.planetref\n    LEFT JOIN bird.planets_data.physical_properties\
+  \ php ON php.objectlink = pp.planetref\n    GROUP BY pp.hostlink\n),\nstar_obs AS (\n    SELECT\n  \
+  \      pp.hostlink                                     AS star,\n        max(CASE WHEN i.facilityname\
+  \ = 'kep' THEN 1 ELSE 0 END) AS kepler_flag,\n        max(CASE WHEN i.facilityname = 'k2' THEN 1 ELSE\
+  \ 0 END)  AS k2_flag,\n        max(CASE WHEN i.facilityname = 'ttv' THEN 1 ELSE 0 END) AS ttv_flag\n\
+  \    FROM bird.planets_data.planet_instrument_observations io\n    JOIN bird.planets_data.instruments_surveys\
+  \ i ON i.instrumentref = io.facilitylink\n    JOIN bird.planets_data.planets pp ON pp.planetref = io.subjectlink\n\
+  \    GROUP BY pp.hostlink\n)\nSELECT\n    s.stellarref                                        AS star,\n\
+  \    s.hostplname                                        AS star_name,\n    CAST(CAST(CAST((s.stellardist)\
+  \ AS FLOAT) AS STRING) AS DECIMAL(38,10))                               AS stellar_distance_pc,\n  \
+  \  (s.stellardist * 3.26156)                       AS stellar_distance_ly,\n    CAST(s.compcount AS\
+  \ DOUBLE)                       AS companion_count,\n    CAST((get_json_object(s.stellarprops, '$.physical.Mass_Value'))\
+  \ AS DECIMAL(38,10))                                    AS stellar_mass,\n    CAST((get_json_object(s.stellarprops,\
+  \ '$.physical.Radius_Value')) AS DECIMAL(38,10))                                  AS stellar_radius,\n\
+  \    CAST((get_json_object(s.stellarprops, '$.physical.Temp_Value')) AS DECIMAL(38,10))            \
+  \                        AS stellar_temperature,\n    CAST((get_json_object(s.stellarprops, '$.photometry.Opt_Mag'))\
+  \ AS DECIMAL(38,10))                                         AS optical_magnitude,\n    get_json_object(s.stellarprops,\
+  \ '$.photometry.Photo_Band')                                             AS photometric_band_stored,\n\
+  \    CASE WHEN lower(trim(get_json_object(s.stellarprops, '$.photometry.Photo_Band'))) IN ('v (johnson)',\
+  \ 'johnson', 'v', 'johnson v', 'v-band') THEN 'Johnson V' WHEN lower(trim(get_json_object(s.stellarprops,\
+  \ '$.photometry.Photo_Band'))) IN ('kepler-band', 'kepler', 'kep-b', 'kep') THEN 'Kepler' WHEN lower(trim(get_json_object(s.stellarprops,\
+  \ '$.photometry.Photo_Band'))) = 'k-band' THEN 'K-band' WHEN get_json_object(s.stellarprops, '$.photometry.Photo_Band')\
+  \ IS NOT NULL THEN 'Other' END                                     AS photometric_band,\n    CASE WHEN\
+  \ lower(trim(get_json_object(s.stellarprops, '$.photometry.Photo_Band'))) IN ('v (johnson)', 'johnson',\
+  \ 'v', 'johnson v') THEN 'Johnson V' WHEN lower(trim(get_json_object(s.stellarprops, '$.photometry.Photo_Band')))\
+  \ = 'v-band' THEN 'V-band' WHEN lower(trim(get_json_object(s.stellarprops, '$.photometry.Photo_Band')))\
+  \ IN ('kepler-band', 'kepler', 'kep-b', 'kep') THEN 'Kepler' WHEN lower(trim(get_json_object(s.stellarprops,\
+  \ '$.photometry.Photo_Band'))) = 'k-band' THEN 'K-band' WHEN get_json_object(s.stellarprops, '$.photometry.Photo_Band')\
+  \ IS NOT NULL THEN 'Other' END                                       AS photometric_band_strict,\n \
+  \   CASE WHEN lower(trim(get_json_object(s.stellarprops, '$.photometry.Photo_Band'))) IN ('v (johnson)',\
+  \ 'johnson', 'v', 'johnson v', 'v-band') THEN 'V-Band' WHEN lower(trim(get_json_object(s.stellarprops,\
+  \ '$.photometry.Photo_Band'))) IN ('kepler-band', 'kepler', 'kep-b', 'kep') THEN 'Kepler-Band' END \
+  \                                      AS photometric_band_group,\n    (POWER(CAST((get_json_object(s.stellarprops,\
+  \ '$.physical.Radius_Value')) AS FLOAT), 2) * POWER(CAST((get_json_object(s.stellarprops, '$.physical.Temp_Value'))\
+  \ AS FLOAT) / 5778, 4))                                        AS stellar_luminosity,\n    SQRT((POWER(CAST((get_json_object(s.stellarprops,\
+  \ '$.physical.Radius_Value')) AS FLOAT), 2) * POWER(CAST((get_json_object(s.stellarprops, '$.physical.Temp_Value'))\
+  \ AS FLOAT) / 5778, 4)) / 1.1)                                          AS habitable_zone_inner_au,\n\
+  \    SQRT((POWER(CAST((get_json_object(s.stellarprops, '$.physical.Radius_Value')) AS FLOAT), 2) * POWER(CAST((get_json_object(s.stellarprops,\
+  \ '$.physical.Temp_Value')) AS FLOAT) / 5778, 4)) / 0.53)                                          AS\
+  \ habitable_zone_outer_au,\n    ((CAST((get_json_object(s.stellarprops, '$.physical.Mass_Value')) AS\
+  \ FLOAT) * 1.98847E30) / NULLIF(4.0/3.0 * PI() * POWER(CAST((get_json_object(s.stellarprops, '$.physical.Radius_Value'))\
+  \ AS FLOAT) * 6.957E8, 3), 0))                             AS stellar_density_kg_m3,\n    (CAST((get_json_object(s.stellarprops,\
+  \ '$.physical.Mass_Value')) AS FLOAT) / NULLIF(4.0/3.0 * PI() * POWER(CAST((get_json_object(s.stellarprops,\
+  \ '$.physical.Radius_Value')) AS FLOAT), 3), 0))                             AS stellar_density_solar,\n\
+  \    (6.67430E-11 * CAST((get_json_object(s.stellarprops, '$.physical.Mass_Value')) AS FLOAT) * 1.98847E30)\
+  \                                    AS gravitational_parameter,\n    CAST((get_json_object(s.coordsys,\
+  \ '$.RA_Decimal')) AS DOUBLE)                         AS right_ascension_degrees,\n    CAST((get_json_object(s.coordsys,\
+  \ '$.Dec_Decimal')) AS DOUBLE)                        AS declination_degrees,\n    get_json_object(s.coordsys,\
+  \ '$.RA_Text')                                    AS right_ascension_text,\n    get_json_object(s.coordsys,\
+  \ '$.Dec_Text')                                   AS declination_text,\n    CAST((get_json_object(s.stellarprops,\
+  \ '$.physical.Temp_Blend')) AS DOUBLE)                         AS temperature_blend_flag,\n    CAST((get_json_object(s.stellarprops,\
+  \ '$.physical.Mass_Blend')) AS DOUBLE)                         AS mass_blend_flag,\n    CAST((get_json_object(s.stellarprops,\
+  \ '$.physical.Rad_Blend')) AS DOUBLE)                          AS radius_blend_flag,\n    CAST((get_json_object(s.stellarprops,\
+  \ '$.photometry.Mag_Blend')) AS DOUBLE)                          AS magnitude_blend_flag,\n    CASE\
+  \ WHEN CAST((get_json_object(s.stellarprops, '$.photometry.Mag_Blend')) AS DOUBLE) = 1 THEN 'Yes' WHEN\
+  \ CAST((get_json_object(s.stellarprops, '$.photometry.Mag_Blend')) AS DOUBLE) IS NOT NULL THEN 'No'\
+  \ END                 AS star_magnitude_blended,\n    CASE WHEN COALESCE(CAST((get_json_object(s.stellarprops,\
+  \ '$.physical.Temp_Blend')) AS DOUBLE), 0) = 1\n              OR COALESCE(CAST((get_json_object(s.stellarprops,\
+  \ '$.physical.Mass_Blend')) AS DOUBLE), 0) = 1\n              OR COALESCE(CAST((get_json_object(s.stellarprops,\
+  \ '$.physical.Rad_Blend')) AS DOUBLE), 0) = 1\n              OR COALESCE(CAST((get_json_object(s.stellarprops,\
+  \ '$.photometry.Mag_Blend')) AS DOUBLE), 0) = 1\n         THEN 'Yes' ELSE 'No' END                 \
+  \      AS any_blended_measurement,\n    CAST(ps.planet_count AS DOUBLE)                   AS star_planet_count,\n\
+  \    CAST(CAST(CAST((ps.shortest_period) AS FLOAT) AS STRING) AS DECIMAL(38,10))                   \
+  \       AS shortest_orbital_period,\n    CAST(CAST(CAST((ps.longest_period) AS FLOAT) AS STRING) AS\
+  \ DECIMAL(38,10))                           AS longest_orbital_period,\n    CAST(CAST(CAST((ps.innermost_semi_major)\
+  \ AS FLOAT) AS STRING) AS DECIMAL(38,10))                     AS innermost_semi_major_axis,\n    CAST(CAST(CAST((ps.outermost_semi_major)\
+  \ AS FLOAT) AS STRING) AS DECIMAL(38,10))                     AS outermost_semi_major_axis,\n    CAST(CAST(CAST((ps.heaviest_planet_mass)\
+  \ AS FLOAT) AS STRING) AS DECIMAL(38,10))                     AS heaviest_planet_mass_jupiter,\n   \
+  \ CAST(CAST(CAST((ps.largest_planet_radius) AS FLOAT) AS STRING) AS DECIMAL(38,10))                \
+  \    AS largest_planet_radius_jupiter,\n    CAST(CAST(CAST((ps.densest_planet) AS FLOAT) AS STRING)\
+  \ AS DECIMAL(38,10))                           AS densest_planet_density,\n    CAST(ps.gas_giant_count\
+  \ AS DOUBLE)                AS star_gas_giant_count,\n    CAST(ps.rocky_count AS DOUBLE)           \
+  \         AS star_rocky_planet_count,\n    CAST(ps.planets_with_density AS DOUBLE)           AS star_planets_with_density,\n\
+  \    CAST(ps.planets_with_composition AS DOUBLE)       AS star_planets_with_composition,\n    CAST(ps.short_period_count\
+  \ AS DOUBLE)             AS star_short_period_count,\n    CAST(ps.transit_discovery_count AS DOUBLE)\
+  \        AS star_transit_discovery_count,\n    CAST(ps.radial_velocity_count AS DOUBLE)          AS\
+  \ star_radial_velocity_count,\n    CAST(pr.adjacent_pair_count AS DOUBLE)            AS adjacent_pair_count,\n\
+  \    pr.max_ratio                                        AS max_adjacent_period_ratio,\n    pr.min_ratio\
+  \                                        AS min_adjacent_period_ratio,\n    pr.avg_ratio           \
+  \                             AS mean_adjacent_period_ratio,\n    pr.geo_ratio                     \
+  \                   AS geometric_mean_adjacent_period_ratio,\n    COALESCE(so.kepler_flag, 0)      \
+  \                   AS kepler_observation_indicator,\n    COALESCE(so.k2_flag, 0)                  \
+  \           AS k2_observation_indicator,\n    COALESCE(so.ttv_flag, 0)                            AS\
+  \ ttv_observation_indicator,\n    CASE WHEN s.compcount > 1 THEN 'Yes' ELSE 'No' END  AS multi_planetary_system,\n\
   \    CASE WHEN s.compcount > 1 THEN 1 ELSE 0 END         AS multi_planetary_indicator,\n    CASE WHEN\
   \ ps.planet_count > 1 THEN 'Yes' ELSE 'No' END\n                                                   \
   \     AS multiple_planet_rows,\n    CASE WHEN ps.planets_with_composition = 0 THEN NULL\n         WHEN\
@@ -147,9 +158,9 @@ sql: "SELECT q.*,\n  CASE WHEN q.stellar_distance_pc IS NOT NULL THEN 1 ELSE 0 E
   \ 1 ELSE 0 END\n                                                        AS gas_giants_only_indicator,\n\
   \    CASE WHEN ps.rocky_count = ps.planets_with_density\n              AND ps.planets_with_density >\
   \ 0 THEN 'Yes'\n         WHEN ps.planets_with_density > 0 THEN 'No' END  AS all_density_measured_rocky,\n\
-  \    1                                                   AS star_row_count\nFROM public.stars s\nLEFT\
-  \ JOIN per_star ps ON ps.star = s.stellarref\nLEFT JOIN pairs pr ON pr.star = s.stellarref\nLEFT JOIN\
-  \ star_obs so ON so.star = s.stellarref\n) q"
+  \    1                                                   AS star_row_count\nFROM bird.planets_data.stars\
+  \ s\nLEFT JOIN per_star ps ON ps.star = s.stellarref\nLEFT JOIN pairs pr ON pr.star = s.stellarref\n\
+  LEFT JOIN star_obs so ON so.star = s.stellarref\n) q"
 columns:
 - name: star
   data_type: long
