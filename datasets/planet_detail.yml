@@ -404,8 +404,8 @@ sql: >-
           max(CASE WHEN i.facilityname = 'k2' THEN 1 ELSE 0 END)  AS k2_flag,
           max(CASE WHEN i.facilityname = 'ttv' THEN 1 ELSE 0 END) AS ttv_flag,
           count(*)                                        AS observation_count
-      FROM bird.planets_data.planet_instrument_observations io
-      JOIN bird.planets_data.instruments_surveys i ON i.instrumentref = io.facilitylink
+      FROM dna_fcty_tda.brid.planet_instrument_observations io
+      JOIN dna_fcty_tda.brid.instruments_surveys i ON i.instrumentref = io.facilitylink
       GROUP BY io.subjectlink
   ),
 
@@ -417,8 +417,8 @@ sql: >-
           lead(oo.period) OVER (
               PARTITION BY pp.hostlink
               ORDER BY oo.period)                         AS next_period
-      FROM bird.planets_data.planets pp
-      LEFT JOIN bird.planets_data.orbital_characteristics oo ON oo.bodylink = pp.planetref
+      FROM dna_fcty_tda.brid.planets pp
+      LEFT JOIN dna_fcty_tda.brid.orbital_characteristics oo ON oo.bodylink = pp.planetref
   )
 
   SELECT
@@ -566,17 +566,17 @@ sql: >-
       CASE WHEN abs((((q.perioderr1 - q.perioderr2) / 2.0) / NULLIF(o.period, 0) * 100.0)) < 5 AND abs((((q.masserr1 - q.masserr2) / 2.0) / NULLIF(ph.massjup, 0) * 100.0)) < 5 AND abs((((q.raderr1 - q.raderr2) / 2.0) / NULLIF(ph.radjup, 0) * 100.0)) < 5 THEN 1 ELSE 0 END
                                                           AS well_characterized_indicator,
       1                                                   AS planet_row_count
-  FROM bird.planets_data.planets p
+  FROM dna_fcty_tda.brid.planets p
 
-  JOIN bird.planets_data.stars s ON s.stellarref = p.hostlink
+  JOIN dna_fcty_tda.brid.stars s ON s.stellarref = p.hostlink
 
-  LEFT JOIN bird.planets_data.orbital_characteristics o ON o.bodylink =
+  LEFT JOIN dna_fcty_tda.brid.orbital_characteristics o ON o.bodylink =
   p.planetref
 
-  LEFT JOIN bird.planets_data.physical_properties ph ON ph.objectlink =
+  LEFT JOIN dna_fcty_tda.brid.physical_properties ph ON ph.objectlink =
   p.planetref
 
-  LEFT JOIN bird.planets_data.data_quality_tracking q ON q.targetlink =
+  LEFT JOIN dna_fcty_tda.brid.data_quality_tracking q ON q.targetlink =
   p.planetref
 
   LEFT JOIN obs ON obs.planet = p.planetref

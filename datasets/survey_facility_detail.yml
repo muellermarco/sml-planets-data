@@ -20,4 +20,4 @@ sql: |-
            WHEN 'k2' THEN 'K2 mission'
            WHEN 'ttv' THEN 'Transit timing variations' END AS facility_description,
       1                                                   AS facility_row_count
-  FROM bird.planets_data.instruments_surveys i
+  FROM dna_fcty_tda.brid.instruments_surveys i
