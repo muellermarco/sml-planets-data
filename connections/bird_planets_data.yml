@@ -1,6 +1,6 @@
 unique_name: bird_planets_data
 object_type: connection
 label: bird_planets_data
-as_connection: ARPSandbox
+as_connection: ${bird_as_connection}
 database: ${bird_database}
 schema: ${bird_schema}
