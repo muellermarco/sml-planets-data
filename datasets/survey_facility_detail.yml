@@ -2,10 +2,10 @@ unique_name: Survey Facility Detail
 object_type: dataset
 label: Survey Facility Detail
 connection_id: bird_planets_data
-sql: "SELECT\n    i.facilityname                                      AS facility,\n    i.instrumentref::double\
-  \ precision                   AS facility_key,\n    CASE i.facilityname WHEN 'kep' THEN 'Kepler mission'\n\
+sql: "SELECT\n    i.facilityname                                      AS facility,\n    CAST(i.instrumentref\
+  \ AS DOUBLE)                   AS facility_key,\n    CASE i.facilityname WHEN 'kep' THEN 'Kepler mission'\n\
   \         WHEN 'k2' THEN 'K2 mission'\n         WHEN 'ttv' THEN 'Transit timing variations' END AS facility_description,\n\
-  \    1                                                   AS facility_row_count\nFROM public.instruments_surveys\
+  \    1                                                   AS facility_row_count\nFROM bird.planets_data.instruments_surveys\
   \ i"
 columns:
 - name: facility
