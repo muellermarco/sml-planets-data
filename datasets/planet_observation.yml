@@ -21,9 +21,9 @@ sql: >-
       p.hostlink                                          AS star,
       i.facilityname                                      AS facility,
       1                                                   AS observation_row_count
-  FROM dna_fcty_tda.brid.planet_instrument_observations io
+  FROM dna_fcty_tda.bird.planet_instrument_observations io
 
-  JOIN dna_fcty_tda.brid.instruments_surveys i ON i.instrumentref =
+  JOIN dna_fcty_tda.bird.instruments_surveys i ON i.instrumentref =
   io.facilitylink
 
-  JOIN dna_fcty_tda.brid.planets p ON p.planetref = io.subjectlink
+  JOIN dna_fcty_tda.bird.planets p ON p.planetref = io.subjectlink

@@ -246,8 +246,8 @@ sql: |-
           lead(oo.period) OVER (
               PARTITION BY pp.hostlink
               ORDER BY oo.period)                         AS next_period
-      FROM dna_fcty_tda.brid.planets pp
-      JOIN dna_fcty_tda.brid.orbital_characteristics oo ON oo.bodylink = pp.planetref
+      FROM dna_fcty_tda.bird.planets pp
+      JOIN dna_fcty_tda.bird.orbital_characteristics oo ON oo.bodylink = pp.planetref
   ),
   pairs AS (
       SELECT
@@ -279,9 +279,9 @@ sql: |-
           sum(CASE WHEN oo.period < 10 THEN 1 ELSE 0 END) AS short_period_count,
           sum(CASE WHEN CASE WHEN lower(trim(pp.discmethod)) IN ('radvel', 'rv', 'rv method', 'radial velocity', 'doppler') THEN 'Radial Velocity' WHEN lower(trim(pp.discmethod)) IN ('transit', 'tr', 'transit method', 'photometry', 'photometric') THEN 'Transit' WHEN lower(trim(pp.discmethod)) IN ('direct imaging', 'di', 'imaging', 'img', 'direct') THEN 'Imaging' WHEN lower(trim(pp.discmethod)) IN ('ttv', 'transit timing variations', 'transit timing', 'ttv method', 'timing var') THEN 'TTV' WHEN lower(trim(pp.discmethod)) IN ('microlensing', 'ml', 'lensing', 'gravitational') OR trim(pp.discmethod) = concat(decode(unhex('CEBC'), 'UTF-8'), 'Lens') THEN 'Microlensing' ELSE 'Other' END = 'Transit' THEN 1 ELSE 0 END)        AS transit_discovery_count,
           sum(CASE WHEN CASE WHEN lower(trim(pp.discmethod)) IN ('radvel', 'rv', 'rv method', 'radial velocity', 'doppler') THEN 'Radial Velocity' WHEN lower(trim(pp.discmethod)) IN ('transit', 'tr', 'transit method', 'photometry', 'photometric') THEN 'Transit' WHEN lower(trim(pp.discmethod)) IN ('direct imaging', 'di', 'imaging', 'img', 'direct') THEN 'Imaging' WHEN lower(trim(pp.discmethod)) IN ('ttv', 'transit timing variations', 'transit timing', 'ttv method', 'timing var') THEN 'TTV' WHEN lower(trim(pp.discmethod)) IN ('microlensing', 'ml', 'lensing', 'gravitational') OR trim(pp.discmethod) = concat(decode(unhex('CEBC'), 'UTF-8'), 'Lens') THEN 'Microlensing' ELSE 'Other' END = 'Radial Velocity' THEN 1 ELSE 0 END)         AS radial_velocity_count
-      FROM dna_fcty_tda.brid.planets pp
-      LEFT JOIN dna_fcty_tda.brid.orbital_characteristics oo ON oo.bodylink = pp.planetref
-      LEFT JOIN dna_fcty_tda.brid.physical_properties php ON php.objectlink = pp.planetref
+      FROM dna_fcty_tda.bird.planets pp
+      LEFT JOIN dna_fcty_tda.bird.orbital_characteristics oo ON oo.bodylink = pp.planetref
+      LEFT JOIN dna_fcty_tda.bird.physical_properties php ON php.objectlink = pp.planetref
       GROUP BY pp.hostlink
   ),
   star_obs AS (
@@ -290,9 +290,9 @@ sql: |-
           max(CASE WHEN i.facilityname = 'kep' THEN 1 ELSE 0 END) AS kepler_flag,
           max(CASE WHEN i.facilityname = 'k2' THEN 1 ELSE 0 END)  AS k2_flag,
           max(CASE WHEN i.facilityname = 'ttv' THEN 1 ELSE 0 END) AS ttv_flag
-      FROM dna_fcty_tda.brid.planet_instrument_observations io
-      JOIN dna_fcty_tda.brid.instruments_surveys i ON i.instrumentref = io.facilitylink
-      JOIN dna_fcty_tda.brid.planets pp ON pp.planetref = io.subjectlink
+      FROM dna_fcty_tda.bird.planet_instrument_observations io
+      JOIN dna_fcty_tda.bird.instruments_surveys i ON i.instrumentref = io.facilitylink
+      JOIN dna_fcty_tda.bird.planets pp ON pp.planetref = io.subjectlink
       GROUP BY pp.hostlink
   )
   SELECT
@@ -373,7 +373,7 @@ sql: |-
                 AND ps.planets_with_density > 0 THEN 'Yes'
            WHEN ps.planets_with_density > 0 THEN 'No' END  AS all_density_measured_rocky,
       1                                                   AS star_row_count
-  FROM dna_fcty_tda.brid.stars s
+  FROM dna_fcty_tda.bird.stars s
   LEFT JOIN per_star ps ON ps.star = s.stellarref
   LEFT JOIN pairs pr ON pr.star = s.stellarref
   LEFT JOIN star_obs so ON so.star = s.stellarref
